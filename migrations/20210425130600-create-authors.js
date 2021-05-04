@@ -15,6 +15,11 @@ module.exports = {
             unique: true,
             allowNull: false
           },
+          role: {
+            allowNull: false,
+            type: Sequelize.ENUM('admin', 'super_admin'),
+            defaultValue: 'admin',
+          },
           avatar: {
             type: Sequelize.STRING,
             defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
