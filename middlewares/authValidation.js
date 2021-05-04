@@ -8,7 +8,6 @@ require('dotenv').config();
  * @exports
  * @class
  */
-
 class AuthValidation {
 
 }
