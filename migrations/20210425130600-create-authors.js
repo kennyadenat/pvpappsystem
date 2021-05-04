@@ -15,12 +15,17 @@ module.exports = {
             unique: true,
             allowNull: false
           },
+          avatar: {
+            type: Sequelize.STRING,
+            defaultValue: ''
+          },
           password: {
             type: Sequelize.STRING,
             allowNull: false
           },
           last_login: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
           },
           firstname: {
             type: Sequelize.STRING,
@@ -31,8 +36,8 @@ module.exports = {
             allowNull: false
           },
           email_notify: {
-            defaultValue: true,
             type: Sequelize.BOOLEAN,
+            defaultValue: true,
           },
           created_at: {
             allowNull: false,

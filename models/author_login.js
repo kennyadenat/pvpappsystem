@@ -2,14 +2,16 @@
 module.exports = (sequelize, DataTypes) => {
   const author_login = sequelize.define('author_login', {
     authors_id: {
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      allowNull: false
     },
     ip_address: {
       type: DataTypes.STRING,
       allowNull: false
     },
     user_agent: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     underscored: true,

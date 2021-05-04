@@ -12,7 +12,13 @@ module.exports = {
           },
           authors_id: {
             type: Sequelize.UUID,
-            onDelete: ''
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'authors',
+              as: 'authors_id',
+              key: 'id'
+            }
           },
           ip_address: {
             type: Sequelize.STRING,

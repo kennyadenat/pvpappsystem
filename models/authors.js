@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       required: true
     },
+    avatar: {
+      type: DataTypes.STRING,
+      defaultValue: ''
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false
@@ -39,6 +43,13 @@ module.exports = (sequelize, DataTypes) => {
     authors.hasMany(models.article, {
       foreignKey: 'authors_id',
       as: 'articles',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
+
+    authors.hasMany(models.author_login, {
+      foreignKey: 'authors_is',
+      as: 'author_logins',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
