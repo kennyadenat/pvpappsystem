@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     body: DataTypes.TEXT,
     header: {
       type: DataTypes.STRING,
-      defaultValue: ''
+      defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
     },
     authors_id: {
       type: DataTypes.UUID,

@@ -15,7 +15,7 @@ module.exports = {
           },
           thumbnail: {
             type: Sequelize.STRING,
-            defaultValue: ''
+            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
           },
           slug: {
             type: Sequelize.STRING,

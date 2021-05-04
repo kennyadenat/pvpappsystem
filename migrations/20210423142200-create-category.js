@@ -17,7 +17,7 @@ module.exports = {
           },
           img_url: {
             type: Sequelize.STRING,
-            defaultValue: ''
+            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
           },
           created_at: {
             allowNull: false,

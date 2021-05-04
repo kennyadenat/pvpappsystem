@@ -33,7 +33,7 @@ module.exports = {
           },
           header: {
             type: Sequelize.STRING,
-            defaultValue: ''
+            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
           },
           authors_id: {
             type: Sequelize.UUID,
@@ -70,7 +70,7 @@ module.exports = {
           thumbnail: {
             allowNull: false,
             type: Sequelize.STRING,
-            defaultValue: '',
+            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg',
           },
           tagsList: {
             type: Sequelize.ARRAY(Sequelize.STRING),
