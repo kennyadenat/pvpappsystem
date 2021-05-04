@@ -20,6 +20,11 @@ module.exports = {
             type: Sequelize.ENUM('admin', 'super_admin'),
             defaultValue: 'admin',
           },
+          strategy: {
+            allowNull: false,
+            type: Sequelize.ENUM('local', 'google', 'linkedin', 'twitter'),
+            defaultValue: 'local',
+          },
           avatar: {
             type: Sequelize.STRING,
             defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'

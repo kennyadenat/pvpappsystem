@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('admin', 'super_admin'),
       defaultValue: 'admin',
     },
+    strategy: {
+      allowNull: false,
+      type: DataTypes.ENUM('local', 'google', 'linkedin', 'twitter'),
+      defaultValue: 'local',
+    },
     avatar: {
       type: DataTypes.STRING,
       defaultValue: ''
