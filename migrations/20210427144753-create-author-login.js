@@ -11,13 +11,16 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           authors_id: {
-            type: Sequelize.STRING
+            type: Sequelize.UUID,
+            onDelete: ''
           },
           ip_address: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
           },
           user_agent: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
           },
           created_at: {
             allowNull: false,

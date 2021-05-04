@@ -7,14 +7,31 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    article_category_id: DataTypes.STRING,
-    article_subcategory_id: DataTypes.STRING,
+    subcategory_id: {
+      type: DataTypes.UUID,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'subcategories',
+        key: 'id',
+        as: 'subcategory_id'
+      }
+    },
     body: DataTypes.TEXT,
     header: {
       type: DataTypes.STRING,
       defaultValue: ''
     },
-    authors_id: DataTypes.STRING,
+    authors_id: {
+      type: DataTypes.UUID,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'authors',
+        key: 'id',
+        as: 'authors_id'
+      }
+    },
     read_time: {
       allowNull: false,
       type: DataTypes.INTEGER,

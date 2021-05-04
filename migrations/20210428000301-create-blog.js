@@ -23,7 +23,7 @@ module.exports = {
             type: Sequelize.TEXT
           },
           authors_id: {
-            type: Sequelize.STRING,
+            type: Sequelize.UUID,
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
             references: {

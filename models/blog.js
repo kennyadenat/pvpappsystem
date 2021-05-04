@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     body: DataTypes.TEXT,
     authors_id: {
-      allowNull: false,
       type: DataTypes.UUID
     },
     header: {
