@@ -4,8 +4,11 @@ const serverResponse = require('../modules/serverResponse');
 const {
   successResponse
 } = serverResponse;
+
+
 /**
- * 
+ * @export
+ * @class AuthController
  */
 class AuthController {
 

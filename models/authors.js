@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     avatar: {
       type: DataTypes.STRING,
-      defaultValue: ''
+      defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
     },
     password: {
       type: DataTypes.STRING,
@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     email_notify: {
       defaultValue: true,
+      type: DataTypes.BOOLEAN,
+    },
+    approved: {
+      defaultValue: false,
       type: DataTypes.BOOLEAN,
     },
   }, {
