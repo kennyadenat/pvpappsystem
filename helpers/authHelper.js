@@ -55,8 +55,8 @@ class AuthHelper {
    * @param {string} password - The user password to be hashed
    * @returns {string} A string of the hashed password
    */
-  static async hashPassword(password, next) {
-    return next(bcrypt.hashSync(password, 10));
+  static async hashPassword(password) {
+    return bcrypt.hashSync(password, 10);
   }
 
   /**
@@ -66,8 +66,8 @@ class AuthHelper {
    * @param {string} hashPassword - The hashed password in the database
    * @returns {string} A hashed password
    */
-  static async comparePassword(password, hashPassword, next) {
-    return next(bcrypt.compareSync(password, hashPassword));
+  static async comparePassword(password, hashPassword) {
+    return bcrypt.compareSync(password, hashPassword);
   }
 
   /**

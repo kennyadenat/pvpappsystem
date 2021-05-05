@@ -4,7 +4,8 @@ const authHelper = require('../helpers/authHelper');
 
 const {
   createToken,
-  hashPassword
+  hashPassword,
+  hashUserData
 } = authHelper;
 
 const {
@@ -35,17 +36,23 @@ class AuthController {
 
     try {
       const {
+        email,
         firstname,
         lastname,
         password
       } = req.body;
 
-      hashPassword(password, (pass) => {
-        console.log(pass);
-      });
+      const hashedPassword = await hashPassword(password);
+
+      const newUser = {
+        firstname: firstname,
+        lastname: lastname,
+        password: hashedPassword
+      };
+
+      const verifyToken = await hashUserData(email);
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }
