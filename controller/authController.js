@@ -1,9 +1,6 @@
 const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const authHelper = require('../helpers/authHelper');
-const {
-  hashPassword
-} = require('../helpers/authHelper');
 
 const {
   createToken,
@@ -34,14 +31,23 @@ class AuthController {
    * @returns {object} returns author signup object
    * @memberof AuthController
    */
-  static async createAuthor(req, res, next) {
-    const {
-      firstname,
-      lastname,
-      password
-    } = req.body;
-    
-    const hashPassword = await hashPassword(password);
+  static async signUp(req, res, next) {
+
+    try {
+      const {
+        firstname,
+        lastname,
+        password
+      } = req.body;
+
+      hashPassword(password, (pass) => {
+        console.log(pass);
+      });
+
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
   }
 
   /**
