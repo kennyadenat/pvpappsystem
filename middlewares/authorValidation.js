@@ -82,7 +82,24 @@ const AuthorValidation = {
     .isLength({
       min: 8
     })
-    .withMessage('Password must be at least 8 characters'),
+    .withMessage('Password must be at least 8 characters')
+    .custom((value, {
+      req
+    }) => {
+      const {
+        firstname,
+        lastname,
+        password
+      } = req.body;
+      const genericWordsArray = [firstname, lastname, 'Password', 'password', 123];
+      const genericWord = genericWordsArray.find(word => password.includes(word));
+
+      if (genericWord) {
+        return false;
+      }
+      return value;
+    })
+    .withMessage("Do not use a common word as the password"),
     (req, res, next) => {
       const errors = validationResult(req);
       const errorMessage = {};

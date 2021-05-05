@@ -11,11 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('admin', 'super_admin'),
       defaultValue: 'admin',
     },
-    strategy: {
-      allowNull: false,
-      type: DataTypes.ENUM('local', 'google', 'linkedin', 'twitter'),
-      defaultValue: 'local',
-    },
     avatar: {
       type: DataTypes.STRING,
       defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
@@ -32,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     lastname: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    token: {
+      type: DataTypes.STRING
     },
     email_notify: {
       defaultValue: true,
