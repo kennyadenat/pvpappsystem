@@ -1,6 +1,12 @@
 const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const authHelper = require('../helpers/authHelper');
+const emailHelper = require('../helpers/emailVerification');
+
+const {
+  sendEmailVerification
+} = emailHelper;
+
 
 const {
   createToken,
@@ -44,13 +50,19 @@ class AuthController {
 
       const hashedPassword = await hashPassword(password);
 
+      const verifyToken = await hashUserData(email);
+      sendEmailVerification(email, firstname, verifyToken);
+
       const newUser = {
+        email: email,
         firstname: firstname,
         lastname: lastname,
-        password: hashedPassword
+        password: hashedPassword,
+        token: verifyToken
       };
 
-      const verifyToken = await hashUserData(email);
+      // create the user after sending the verification email
+
 
     } catch (error) {
       return next(error);
