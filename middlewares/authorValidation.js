@@ -38,11 +38,10 @@ const AuthorValidation = {
         ]
       });
       if (isExist) {
-        return false;
+        throw new Error(`Account with email ${email} already exists.`);
       }
       return true;
-    })
-    .withMessage("email already exists."),
+    }),
     check('firstname')
     .not()
     .isEmpty({
