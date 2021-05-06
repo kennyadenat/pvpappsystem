@@ -4,14 +4,17 @@ const authorValidation = require('../middlewares/authorValidation');
 const authController = require('../controller/authController');
 
 const {
-  signUp
+  signUp,
+  verifyEmail
 } = authController;
 
 const {
   createAuthor
 } = authorValidation;
 
+
 router.post('/signUp', createAuthor, signUp);
+router.post('/verify', verifyEmail);
 
 
 module.exports = router;

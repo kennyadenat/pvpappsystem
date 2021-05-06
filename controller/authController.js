@@ -1,7 +1,9 @@
+const gravatar = require('gravatar');
 const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const authHelper = require('../helpers/authHelper');
 const emailHelper = require('../helpers/emailVerification');
+
 require('dotenv').config();
 
 const {
@@ -24,7 +26,7 @@ const {
 } = serverResponse;
 
 const authorAttributes = ['id', 'email', 'firstname', 'lastname',
-  'role', 'avatar',
+  'role', 'avatar', 'approved', 'token'
 ]
 
 /**
@@ -39,7 +41,7 @@ class AuthController {
    * @param {object} req express request object
    * @param {object} res express response object
    * @param {function} next
-   * @returns {object} returns author signup object
+   * @returns {string} token
    * @memberof AuthController
    */
   static async signUp(req, res, next) {
@@ -53,34 +55,39 @@ class AuthController {
       } = req.body;
 
       const hashedPassword = await hashPassword(password);
-
       // Generate Email Verifiation Token
       const verifyToken = await hashUserData(email);
-
       // Send Email Verification to User to Confirm Email Address
       sendEmailVerification(email, firstname, verifyToken);
+
+      var avatarUrl = gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+      }, true);
 
       const newUser = {
         email: email,
         firstname: firstname,
         lastname: lastname,
-        avatar: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
+        role: 'admin',
+        avatar: avatarUrl
       };
 
       const token = await createToken(newUser);
 
       newUser.password = hashedPassword;
       newUser.token = verifyToken;
-      // create the user after sending the verification email
 
+      // create the user after sending the verification email
       return authors
         .create(newUser)
         .then(newAuthor => {
-          successResponse(res, 201, 'authors', newAuthor);
+          successResponse(res, 201, 'authors', token);
         })
         .catch(error => {
           errorResponse(res, 400, {
-            message: error
+            error: error
           });
         });
 
@@ -89,7 +96,6 @@ class AuthController {
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -101,7 +107,63 @@ class AuthController {
    * @memberof AuthController
    */
   static async verifyEmail(req, res, next) {
+    try {
 
+      const {
+        email,
+        token
+      } = req.query;
+
+      // check if the email address exists
+      const oldAuthor = await authors.findOne({
+        where: {
+          email: email
+        },
+        attributes: authorAttributes
+      });
+
+      if (oldAuthor) {
+        if (oldAuthor.dataValues.approved) {
+          successResponse(res, 200, 'author', {
+            message: 'Your email account has already been verified'
+          })
+        } else if (token === oldAuthor.dataValues.token) {
+          // check if the token are a match and then update . . 
+          await authors.update({
+            approved: true
+          }, {
+            where: {
+              email: email
+            }
+          });
+
+          const newUser = {
+            email: oldAuthor.dataValues.email,
+            firstname: oldAuthor.dataValues.firstname,
+            lastname: oldAuthor.dataValues.lastname,
+            role: 'admin',
+            avatar: oldAuthor.dataValues.avatar
+          };
+
+          // Generate token and send redirect. . . 
+          const newToken = await createToken(newUser);
+          // res.redirect(`${process.env.FRONTEND_URL}/signin?token=${newToken}`);
+          successResponse(res, 200, 'author', newToken);
+
+        } else if (token !== oldAuthor.dataValues.token) {
+          errorResponse(res, 400, {
+            error: 'Your verification credentials are invalid'
+          })
+        }
+      } else {
+        errorResponse(res, 400, {
+          error: 'User does not exist'
+        });
+      }
+
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
@@ -113,9 +175,17 @@ class AuthController {
    * @returns {object} returns user signin object
    * @memberof AuthController
    */
-  static async resendVerification(req, res, next) {
+  static async resendVerification(req, res, next) {}
 
-  }
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next
+   * @returns {string} token
+   * @memberof AuthController 
+   */
+  static async signIn(req, res, next) {}
 
 }
 
