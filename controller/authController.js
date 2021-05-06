@@ -17,7 +17,8 @@ const {
 const {
   createToken,
   hashPassword,
-  hashUserData
+  hashUserData,
+  comparePassword
 } = authHelper;
 
 const {
@@ -185,7 +186,54 @@ class AuthController {
    * @returns {string} token
    * @memberof AuthController 
    */
-  static async signIn(req, res, next) {}
+  static async signIn(req, res, next) {
+    try {
+
+
+      const oneAuthor = await authors.findOne({
+        where: {
+          email: req.body.email
+        }
+      });
+
+      if (oneAuthor) {
+        const {
+          email,
+          firstname,
+          lastname,
+          avatar,
+          role,
+          password
+        } = oneAuthor.dataValues;
+        const passwordValue = await comparePassword(req.body.password, password);
+
+        console.log(passwordValue)
+        if (passwordValue) {
+          const newUser = {
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            role: role,
+            avatar: avatar
+          };
+
+          const newToken = await createToken(newUser);
+          successResponse(res, 200, 'author', newToken);
+
+        }
+        errorResponse(res, 400, {
+          error: 'Password mismatch. Please try again!.'
+        });
+      } else {
+        errorResponse(res, 400, {
+          error: 'The user account does not exist.'
+        });
+      }
+
+    } catch (error) {
+      return next(error);
+    }
+  }
 
 }
 
