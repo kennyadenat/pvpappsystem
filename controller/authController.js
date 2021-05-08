@@ -7,7 +7,8 @@ const emailHelper = require('../helpers/emailVerification');
 require('dotenv').config();
 
 const {
-  sendEmailVerification
+  sendEmailVerification,
+  sendPasswordReset
 } = emailHelper;
 
 const {
@@ -233,6 +234,60 @@ class AuthController {
     } catch (error) {
       return next(error);
     }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {string} email link
+   * @memberof AuthController
+   */
+  static async forgotPassword(req, res, next) {
+    try {
+
+      const {
+        email
+      } = req.body;
+
+      const oneAuthor = await authors.findOne({
+        where: {
+          email: email
+        }
+      });
+      if (!oneAuthor) {
+        errorResponse(res, 400, 'Account does not exist')
+      }
+      const {
+        firstname,
+        id
+      } = oneAuthor.dataValues;
+      const resetToken = createToken({
+        email: email,
+        id: id
+      });
+      sendPasswordReset(firstname, email, resetToken);
+      successResponse(res, 201, {
+        message: 'Password reset link sent to your email'
+      });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {string} Message Success
+   * @memberof AuthController
+   */
+  static async resetPasword(req, res, next) {
+    const {} = req.query;
   }
 
 }

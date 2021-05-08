@@ -6,7 +6,8 @@ const authController = require('../controller/authController');
 const {
   signUp,
   signIn,
-  verifyEmail
+  verifyEmail,
+  forgotPassword
 } = authController;
 
 const {
@@ -18,6 +19,8 @@ const {
 router.post('/signUp', createAuthor, signUp);
 router.post('/verify', verifyEmail);
 router.post('/signin', signAuthor, signIn);
+router.post('/forgot', forgotPassword);
+
 
 
 module.exports = router;
