@@ -7,12 +7,15 @@ const {
   signUp,
   signIn,
   verifyEmail,
-  forgotPassword
+  resendVerification,
+  forgotPassword,
+  resetPasword
 } = authController;
 
 const {
   createAuthor,
-  signAuthor
+  signAuthor,
+  validateEmail
 } = authorValidation;
 
 
@@ -20,7 +23,7 @@ router.post('/signUp', createAuthor, signUp);
 router.post('/verify', verifyEmail);
 router.post('/signin', signAuthor, signIn);
 router.post('/forgot', forgotPassword);
-
+router.post('/reset', resetPasword);
 
 
 module.exports = router;

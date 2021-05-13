@@ -3,6 +3,7 @@ const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const authHelper = require('../helpers/authHelper');
 const emailHelper = require('../helpers/emailVerification');
+const markUps = require('../helpers/markUps');
 
 require('dotenv').config();
 
@@ -19,7 +20,8 @@ const {
   createToken,
   hashPassword,
   hashUserData,
-  comparePassword
+  comparePassword,
+  verifyToken
 } = authHelper;
 
 const {
@@ -27,9 +29,26 @@ const {
   errorResponse
 } = serverResponse;
 
-const authorAttributes = ['id', 'email', 'firstname', 'lastname',
-  'role', 'avatar', 'approved', 'token'
-]
+const {
+  incorrectCredentials
+} = markUps;
+
+const authorAttributes = [
+  'id',
+  'email',
+  'firstname',
+  'lastname',
+  'role',
+  'avatar',
+  'approved',
+  'token'
+];
+
+const oneAuthorAttr = [
+  'id',
+  'email',
+  'firstname'
+];
 
 /**
  * @export
@@ -208,7 +227,6 @@ class AuthController {
         } = oneAuthor.dataValues;
         const passwordValue = await comparePassword(req.body.password, password);
 
-        console.log(passwordValue)
         if (passwordValue) {
           const newUser = {
             email: email,
@@ -264,13 +282,14 @@ class AuthController {
         firstname,
         id
       } = oneAuthor.dataValues;
-      const resetToken = createToken({
+      const resetToken = await createToken({
         email: email,
         id: id
       });
       sendPasswordReset(firstname, email, resetToken);
-      successResponse(res, 201, {
-        message: 'Password reset link sent to your email'
+      successResponse(res, 200, 'message', {
+        message: 'Password reset link sent to your email',
+        token: resetToken
       });
 
     } catch (error) {
@@ -287,7 +306,36 @@ class AuthController {
    * @memberof AuthController
    */
   static async resetPasword(req, res, next) {
-    const {} = req.query;
+    const {
+      email,
+      password,
+      token
+    } = req.body;
+
+    // check if the email address exists
+    const oneAuthor = await authors.findOne({
+      where: {
+        email: email
+      },
+      attributes: oneAuthorAttr
+    });
+
+    // check if the token generated is the same
+    if (oneAuthor) {
+      await verifyToken(token, (cb) => {
+        if (cb.err) {
+          errorResponse(res, 400, 'Invalid Token');
+        };
+
+        successResponse(res, 200, 'token', cb.token);
+        console.log(cb.token);
+      });
+
+
+    } else {
+      res.setHeader('Content-Type', 'text/html');
+      return res.send(incorrectCredentials);
+    }
   }
 
 }

@@ -17,7 +17,7 @@ class AuthHelper {
    * @param {object} payload - The user credential {id, isAdmin}
    * @return {string} access token
    */
-  static createToken(payload) {
+  static async createToken(payload) {
     return jwt.sign(payload, SECRET_KEY, {
       expiresIn: '24d'
     });
@@ -28,7 +28,7 @@ class AuthHelper {
    * @param {object} payload - The user credential {id, isAdmin}
    * @return {string} access token
    */
-  static returnToken(payload, res) {
+  static async returnToken(payload, res) {
     const token = this.createToken(payload);
     return res.status(200).send({
       fullname: `${payload.fullname}`,
@@ -45,8 +45,19 @@ class AuthHelper {
    * @param {string} token - The user credential {id, isAdmin}
    * @return {object} access token values
    */
-  static verifyToken(token) {
-    return jwt.verify(token, SECRET_KEY);
+  static async verifyToken(token, cb) {
+    jwt.verify(token, SECRET_KEY, (err, verifiedJwt) => {
+
+      if (err) {
+        return cb({
+          err: err
+        });
+      } else {
+        return cb({
+          token: verifiedJwt
+        });
+      }
+    });
   }
 
   /**
