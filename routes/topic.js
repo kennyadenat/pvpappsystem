@@ -3,6 +3,9 @@ const router = express.Router();
 const topicController = require('../controller/topicController');
 const topicValidation = require('../middlewares/topicValidation');
 
+const {
+  topicVal
+} = topicValidation;
 
 const {
   createTopic
@@ -10,7 +13,7 @@ const {
 
 
 
-router.post('/createtopic', createTopic);
+router.post('/createtopic', topicVal, createTopic);
 
 
 module.exports = router;

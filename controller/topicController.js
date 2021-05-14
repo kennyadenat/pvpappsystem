@@ -61,6 +61,34 @@ class TopicController {
     }
   }
 
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next
+   * @returns {object} 
+   * @memberof TopicController
+   */
+  static async createSubtopic(req, res, next) {
+
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object} object
+   * @memberof TopicController
+   */
+  static async updateTopic(req, res, next) {
+    try {
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 }
 
 module.exports = TopicController;
