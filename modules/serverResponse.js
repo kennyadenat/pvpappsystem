@@ -31,7 +31,7 @@ class ServerResponse {
    * @static
    * @param {object} res
    * @param {number} status
-   *  @param {string} key
+   * @param {string} key
    * @param {object} data
    * @returns {object} - data
    * @memberof ServerResponse

@@ -146,9 +146,9 @@ class AuthController {
 
       if (oldAuthor) {
         if (oldAuthor.dataValues.approved) {
-          successResponse(res, 200, 'author', {
-            message: 'Your email account has already been verified'
-          })
+          successResponse(res, 200, 'author',
+            'Your email account has already been verified'
+          )
         } else if (token === oldAuthor.dataValues.token) {
           // check if the token are a match and then update . . 
           await authors.update({
@@ -197,7 +197,13 @@ class AuthController {
    * @returns {object} returns user signin object
    * @memberof AuthController
    */
-  static async resendVerification(req, res, next) {}
+  static async resendVerification(req, res, next) {
+    try {
+
+    } catch (error) {
+      return next(error);
+    }
+  }
 
   /**
    * 
