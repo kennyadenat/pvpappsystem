@@ -47,7 +47,8 @@ const authorAttributes = [
 const oneAuthorAttr = [
   'id',
   'email',
-  'firstname'
+  'firstname',
+  'password'
 ];
 
 /**
@@ -297,6 +298,7 @@ class AuthController {
     }
   }
 
+
   /**
    * 
    * @param {object} req 
@@ -322,15 +324,38 @@ class AuthController {
 
     // check if the token generated is the same
     if (oneAuthor) {
-      await verifyToken(token, (cb) => {
-        if (cb.err) {
-          errorResponse(res, 400, 'Invalid Token');
-        };
 
-        successResponse(res, 200, 'token', cb.token);
-        console.log(cb.token);
-      });
+      try {
 
+        const oneToken = await verifyToken(token);
+        // compare password t ensure its different from last used password
+        const passValue = await comparePassword(password, oneAuthor.dataValues.password);
+        if (passValue) {
+          errorResponse(res, 400, 'Cant use old password. please change to a new one');
+        } else {
+
+          const newPassword = await hashPassword(password);
+          const passOption = {
+            password: newPassword
+          };
+
+          return oneAuthor
+            .update(passOption, {
+              fields: Object.keys(passOption)
+            }, {
+              oneAuthorAttr
+            })
+            .then((classRes) => {
+              successResponse(res, 200, 'success', 'Password successfully changed.');
+            }) // Send back the updated todo.
+            .catch((error) => {
+              errorResponse(res, 400, error);
+            });
+        }
+
+      } catch (error) {
+        errorResponse(res, 400, 'Invalid Token. Please resend verification');
+      }
 
     } else {
       res.setHeader('Content-Type', 'text/html');

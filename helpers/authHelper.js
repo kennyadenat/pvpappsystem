@@ -19,7 +19,18 @@ class AuthHelper {
    */
   static async createToken(payload) {
     return jwt.sign(payload, SECRET_KEY, {
-      expiresIn: '24d'
+      expiresIn: '100s'
+    });
+  }
+
+  /**
+   * 
+   * @param {object} payload 
+   * @returns {string} reset token
+   */
+  static async resetToken(payload) {
+    return jwt.sign(payload, SECRET_KEY, {
+      expiresIn: '100s'
     });
   }
 
@@ -46,18 +57,20 @@ class AuthHelper {
    * @return {object} access token values
    */
   static async verifyToken(token, cb) {
-    jwt.verify(token, SECRET_KEY, (err, verifiedJwt) => {
+    // jwt.verify(token, SECRET_KEY, (err, verifiedJwt) => {
 
-      if (err) {
-        return cb({
-          err: err
-        });
-      } else {
-        return cb({
-          token: verifiedJwt
-        });
-      }
-    });
+    //   if (err) {
+    //     return cb({
+    //       err: 'Invalid Token'
+    //     });
+    //   } else {
+    //     return cb({
+    //       token: verifiedJwt
+    //     });
+    //   }
+    // });
+
+    jwt.verify(token, SECRET_KEY);
   }
 
   /**
