@@ -1,6 +1,8 @@
 const models = require('../models');
 const slugify = require('slugify');
 const serverResponse = require('../modules/serverResponse');
+const paginate = require('../helpers/paginateHelper');
+const paginateCount = require('../helpers/paginateCountHelper');
 
 const {
   successResponse,
@@ -33,8 +35,36 @@ const subtopicAttr = [
 class TopicController {
 
 
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
   static async getTopics(req, res, next) {
     try {
+
+      const {
+        page,
+        size
+      } = req.query;
+
+      return pvp_topic
+        .findAndCountAll({
+          attributes: topicAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        })
+        .then((response) => {
+          successResponse(res, 200, 'topics', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          errorResponse(res, 200, error);
+        })
 
     } catch (error) {
       return next(error);

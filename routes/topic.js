@@ -8,12 +8,15 @@ const {
 } = topicValidation;
 
 const {
-  createTopic
+  createTopic,
+  createSubtopic,
+  getTopics,
+  updateTopic
 } = topicController;
 
 
 
 router.post('/createtopic', topicVal, createTopic);
-
+router.post('/gettopic', getTopics);
 
 module.exports = router;
