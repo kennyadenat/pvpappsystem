@@ -12,13 +12,35 @@ const {
   pvp_subtopic
 } = models;
 
+const topicAttr = [
+  'title',
+  'slug',
+  'thumbnail',
+  'overview'
+];
 
+const subtopicAttr = [
+  'title',
+  'slug',
+  'thumbnail',
+  'body'
+];
 
 /**
  * @exports
  * @class TopicController
  */
 class TopicController {
+
+
+  static async getTopics(req, res, next) {
+    try {
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 
   /**
    * 
@@ -61,6 +83,7 @@ class TopicController {
     }
   }
 
+
   /**
    * 
    * @param {object} req 
@@ -70,7 +93,36 @@ class TopicController {
    * @memberof TopicController
    */
   static async createSubtopic(req, res, next) {
+    try {
 
+      const {
+        title,
+        pvp_topic_id,
+        thumbnail,
+        body
+      } = req.body;
+
+      const newSubtopic = {
+        pvp_topic_id: pvp_topic_id,
+        title: title.toLowerCase(),
+        thumbnail: thumbnail,
+        slug: slugify(title, {
+          lower: true
+        }),
+        body: body,
+      };
+
+      pvp_subtopic.create(newSubtopic)
+        .then((response) => {
+          successResponse(res, 200, 'subtopic', response);
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error);
+        });
+
+    } catch (error) {
+      return next(error);
+    }
   }
 
   /**
@@ -83,6 +135,8 @@ class TopicController {
    */
   static async updateTopic(req, res, next) {
     try {
+
+      const {} = req.body;
 
     } catch (error) {
       return next(error);
