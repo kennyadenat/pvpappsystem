@@ -162,12 +162,76 @@ class TopicController {
    * @param {function} next 
    * @returns {object} object
    * @memberof TopicController
+   * 
    */
   static async updateTopic(req, res, next) {
     try {
 
       const {} = req.body;
 
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * Removes a Topic
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async removeTopic(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+      return pvp_topic
+        .findByPk(id)
+        .then(topicRes => {
+          if (!topicRes) {
+            errorResponse(res, 400, 'Topic Not Found');
+          } else {
+            return topicRes
+              .destroy()
+              .then(() => successResponse(res, 201, 'topics', 'Topic Successfully Deleted'))
+              .catch(error => serverErrorResponsess());
+          }
+        })
+        .catch(error => serverErrorResponsess());
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async removeSubTopic(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+      return pvp_subtopic
+        .findByPk(id)
+        .then(topicRes => {
+          if (!topicRes) {
+            errorResponse(res, 400, 'Sub Topic Not Found');
+          } else {
+            return topicRes
+              .destroy()
+              .then(() => successResponse(res, 201, 'subtopic', 'Sub Topic Successfully Deleted'))
+              .catch(error => serverErrorResponsess());
+          }
+        })
+        .catch(error => serverErrorResponsess());
     } catch (error) {
       return next(error);
     }

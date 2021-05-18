@@ -15,8 +15,8 @@ const {
 } = topicController;
 
 
-
 router.post('/createtopic', topicVal, createTopic);
 router.post('/gettopic', getTopics);
+router.post('updatetopic', updateTopic);
 
 module.exports = router;
