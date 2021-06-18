@@ -68,14 +68,15 @@ class AuthController {
     try {
       const {
         email,
-        password
+        password,
+        role
       } = req.body;
 
       const hashedPassword = await hashPassword(password);
       // Generate Email Verifiation Token
       const verifyToken = await hashUserData(email);
       // Send Email Verification to User to Confirm Email Address
-      sendEmailVerification(email, firstname, verifyToken);
+      sendEmailVerification(email, verifyToken);
 
       var avatarUrl = gravatar.url(email, {
         s: '200',
@@ -85,7 +86,7 @@ class AuthController {
 
       const newUser = {
         email: email,
-        role: 'admin',
+        role: role,
         avatar: avatarUrl
       };
 

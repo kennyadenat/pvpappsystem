@@ -28,10 +28,10 @@ class EmailVerification {
    * @memberof EmailVerification
    * @returns {function} - returns a function call
    */
-  static async sendEmailVerification(email, firstname, verifyToken) {
+  static async sendEmailVerification(email, verifyToken) {
 
     const content = `<img src=${APP_LOGO}>
-                    <br><h1>Welcome ${firstname}</h1><br>
+                    <br><h1>Welcome ${email}</h1><br>
                     <h2>Please click the link below to confirm your email</h2><br>
                     <h2> <a href = '${FRONTEND_URL_EMAIL_VERIFICATION}?email=${email}&token=${verifyToken}'> Confirm Email </a></h2>`;
 
