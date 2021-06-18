@@ -10,7 +10,8 @@ const {
 
 const {
   topicVal,
-  subtopicVal
+  subtopicVal,
+  siteVal
 } = topicValidation;
 
 const {
@@ -24,7 +25,7 @@ const {
 
 router.post('/createtopic', verifyToken, topicVal, createTopic);
 router.post('/createsubtopic', verifyToken, subtopicVal, createSubtopic);
-router.post('/createsite', verifyToken, createSite);
+router.post('/createsite', siteVal, verifyToken, createSite);
 router.post('/gettopic', getTopics);
 router.post('/updatetopic', verifyToken, updateTopic);
 
