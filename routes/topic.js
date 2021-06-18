@@ -19,6 +19,8 @@ const {
   createSubtopic,
   createSite,
   getTopics,
+  getAllSites,
+  getAllTopic,
   updateTopic
 } = topicController;
 
@@ -27,6 +29,8 @@ router.post('/createtopic', verifyToken, topicVal, createTopic);
 router.post('/createsubtopic', verifyToken, subtopicVal, createSubtopic);
 router.post('/createsite', siteVal, verifyToken, createSite);
 router.post('/gettopic', getTopics);
+router.post('/getalltopic', getAllTopic);
+router.post('/getallsite', getAllSites);
 router.post('/updatetopic', verifyToken, updateTopic);
 
 module.exports = router;

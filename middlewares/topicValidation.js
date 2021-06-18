@@ -1,3 +1,4 @@
+const slugify = require('slugify');
 const models = require('../models');
 const {
   check,
@@ -69,9 +70,12 @@ const TopicValidation = {
     })
     .withMessage('title must be between 2 to 244 charaters long')
     .custom(async (title) => {
+      const slugs = slugify(title, {
+        lower: true
+      });
       const isExist = await pvp_topic.findOne({
         where: {
-          title: title
+          slug: slugs
         },
         attributes: [
           'id',
@@ -123,9 +127,12 @@ const TopicValidation = {
     })
     .withMessage('title must be between 2 to 244 charaters long')
     .custom(async (title) => {
+      const slugs = slugify(title, {
+        lower: true
+      });
       const isExist = await pvp_subtopic.findOne({
         where: {
-          title: title
+          slug: slugs
         },
         attributes: [
           'id',

@@ -15,7 +15,13 @@ const {
   site_page
 } = models;
 
+const siteAttr = [
+  'id',
+  'name',
+];
+
 const topicAttr = [
+  'id',
   'title',
   'slug',
   'overview'
@@ -31,6 +37,72 @@ const subtopicAttr = [
  * @class TopicController
  */
 class TopicController {
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async getAllTopic(req, res, next) {
+
+    try {
+      return pvp_topic
+        .findAll({
+          order: [
+            ['created_at', 'ASC'],
+          ],
+          attributes: topicAttr,
+          include: [{
+            model: pvp_subtopic,
+            as: 'pvp_subtopics',
+            attributes: subtopicAttr
+          }]
+        })
+        .then(response => {
+          successResponse(res, 200, 'site', response);
+        })
+        .catch(error => {
+          errorResponse(res, 200, error);
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async getAllSites(req, res, next) {
+    try {
+
+      return site_page
+        .findAll({
+          order: [
+            ['name', 'ASC'],
+          ],
+          attributes: siteAttr,
+        })
+        .then(response => {
+          successResponse(res, 200, 'site', response);
+        })
+        .catch(error => {
+          errorResponse(res, 200, error);
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
 
 
   /**
@@ -120,7 +192,7 @@ class TopicController {
       } = req.body;
 
       const newTopic = {
-        title: title.toLowerCase(),
+        title: title,
         site_page_id: site_page_id,
         overview: overview,
         slug: slugify(title, {
@@ -133,10 +205,12 @@ class TopicController {
           successResponse(res, 200, 'topic', response)
         })
         .catch((error) => {
+          console.log('am here', error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -160,7 +234,7 @@ class TopicController {
 
       const newSubtopic = {
         pvp_topic_id: pvp_topic_id,
-        title: title.toLowerCase(),
+        title: title,
         slug: slugify(title, {
           lower: true
         })
