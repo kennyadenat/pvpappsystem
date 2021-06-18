@@ -18,14 +18,14 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true
           },
-          article_subcategory_id: {
+          pvp_subtopic_id: {
             type: Sequelize.UUID,
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
             references: {
-              model: 'subcategories',
+              model: 'pvp_subtopics',
               key: 'id',
-              as: 'article_subcategory_id'
+              as: 'pvp_subtopic_id'
             }
           },
           body: {

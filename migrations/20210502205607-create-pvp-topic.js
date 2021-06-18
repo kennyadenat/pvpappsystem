@@ -11,7 +11,17 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           title: {
-            type: Sequelize.STRING
+            type: Sequelize.TEXT
+          },
+          site_page_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'site_pages',
+              key: 'id',
+              as: 'site_page_id'
+            }
           },
           slug: {
             type: Sequelize.STRING,

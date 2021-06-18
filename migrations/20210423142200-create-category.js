@@ -15,20 +15,6 @@ module.exports = {
             unique: true,
             allowNull: false
           },
-          img_url: {
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-          },
-           site_page_id: {
-            type: Sequelize.UUID,
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-            references: {
-              model: 'site_pages',
-              key: 'id',
-              as: 'site_page_id'
-            }
-          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,
