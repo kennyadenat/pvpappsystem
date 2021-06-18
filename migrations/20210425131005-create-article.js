@@ -31,10 +31,6 @@ module.exports = {
           body: {
             type: Sequelize.TEXT
           },
-          header: {
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-          },
           authors_id: {
             type: Sequelize.UUID,
             onDelete: 'CASCADE',
@@ -58,19 +54,6 @@ module.exports = {
             allowNull: false,
             type: Sequelize.ENUM('draft', 'published', 'trash'),
             defaultValue: 'draft',
-          },
-          up_vote: {
-            type: Sequelize.INTEGER,
-            defaultValue: 0
-          },
-          down_vote: {
-            type: Sequelize.INTEGER,
-            defaultValue: 0
-          },
-          thumbnail: {
-            allowNull: false,
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg',
           },
           tagsList: {
             type: Sequelize.ARRAY(Sequelize.STRING),

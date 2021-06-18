@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     body: DataTypes.TEXT,
-    header: {
-      type: DataTypes.STRING,
-      defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-    },
     authors_id: {
       type: DataTypes.UUID,
       onDelete: 'CASCADE',
@@ -45,19 +41,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.ENUM('draft', 'published', 'trash'),
       defaultValue: 'draft',
-    },
-    up_vote: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    down_vote: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    thumbnail: {
-      allowNull: false,
-      type: DataTypes.STRING,
-      defaultValue: '',
     },
     tagsList: {
       type: DataTypes.ARRAY(DataTypes.STRING),

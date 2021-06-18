@@ -13,10 +13,6 @@ module.exports = {
           title: {
             type: Sequelize.STRING
           },
-          thumbnail: {
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-          },
           slug: {
             type: Sequelize.STRING,
             unique: true,

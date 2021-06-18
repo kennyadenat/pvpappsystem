@@ -58,6 +58,11 @@ class Authentication {
     }
   }
 
+
+  static async verifyAdmin(req, res, next) {
+
+  }
+
 }
 
 module.exports = Authentication;

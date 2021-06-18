@@ -24,17 +24,10 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false
           },
-          thumbnail: {
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-          },
           slug: {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false
-          },
-          body: {
-            type: Sequelize.TEXT
           },
           created_at: {
             allowNull: false,

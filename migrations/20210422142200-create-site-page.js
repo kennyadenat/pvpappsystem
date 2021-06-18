@@ -3,31 +3,17 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('categories', {
+        return queryInterface.createTable('site_pages', {
           id: {
             allowNull: false,
-            primaryKey: true,
             type: Sequelize.UUID,
+            primaryKey: true,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          title: {
+          name: {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false
-          },
-          img_url: {
-            type: Sequelize.STRING,
-            defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
-          },
-           site_page_id: {
-            type: Sequelize.UUID,
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-            references: {
-              model: 'site_pages',
-              key: 'id',
-              as: 'site_page_id'
-            }
           },
           created_at: {
             allowNull: false,
@@ -36,13 +22,13 @@ module.exports = {
           },
           updated_at: {
             allowNull: false,
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+             type: Sequelize.DATE,
+               defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
           }
         });
-      });
+      })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('categories');
+    return queryInterface.dropTable('site_pages');
   }
 };
