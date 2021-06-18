@@ -11,7 +11,8 @@ const {
 } = serverResponse;
 const {
   pvp_topic,
-  pvp_subtopic
+  pvp_subtopic,
+  site_page
 } = models;
 
 const topicAttr = [
@@ -68,6 +69,38 @@ class TopicController {
     }
   }
 
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object} object
+   * @memberof TopicController
+   */
+  static async createSite(req, res, next) {
+    try {
+
+      const {
+        name
+      } = req.body;
+
+      const newSite = {
+        name: name.toLowerCase()
+      };
+
+      site_page.create(newSite)
+        .then((response) => {
+          successResponse(res, 200, 'site', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 
   /**
    * 
@@ -82,19 +115,18 @@ class TopicController {
 
       const {
         title,
+        site_page_id,
         overview
       } = req.body;
 
       const newTopic = {
         title: title.toLowerCase(),
+        site_page_id: site_page_id,
         overview: overview,
         slug: slugify(title, {
           lower: true
-        }),
-        overview: overview
+        })
       };
-
-      successResponse(res, 200, 'resp', newTopic);
 
       pvp_topic.create(newTopic)
         .then((response) => {

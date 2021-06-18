@@ -8,6 +8,11 @@ const {
   SECRET_KEY
 } = process.env;
 
+const {
+  successResponse,
+  errorResponse
+} = serverResponse;
+
 /**
  * 
  * @exports
@@ -43,8 +48,10 @@ class Authentication {
             message: 'Invalid token provided',
           });
         }
-
-        if (decoded.role !== 'teacher') {
+        console.log({
+          decoded
+        });
+        if (decoded.role !== 'super_admin') {
           return errorResponse(res, 401, {
             message: 'You are not authorized to view this page',
           });

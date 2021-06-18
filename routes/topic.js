@@ -9,18 +9,22 @@ const {
 } = authentication;
 
 const {
-  topicVal
+  topicVal,
+  subtopicVal
 } = topicValidation;
 
 const {
   createTopic,
   createSubtopic,
+  createSite,
   getTopics,
   updateTopic
 } = topicController;
 
 
 router.post('/createtopic', verifyToken, topicVal, createTopic);
+router.post('/createsubtopic', verifyToken, subtopicVal, createSubtopic);
+router.post('/createsite', verifyToken, createSite);
 router.post('/gettopic', getTopics);
 router.post('/updatetopic', verifyToken, updateTopic);
 

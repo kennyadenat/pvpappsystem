@@ -19,7 +19,7 @@ class AuthHelper {
    */
   static async createToken(payload) {
     return jwt.sign(payload, SECRET_KEY, {
-      expiresIn: '100s'
+      expiresIn: '1d'
     });
   }
 
@@ -30,7 +30,7 @@ class AuthHelper {
    */
   static async resetToken(payload) {
     return jwt.sign(payload, SECRET_KEY, {
-      expiresIn: '100s'
+      expiresIn: '1d'
     });
   }
 

@@ -218,8 +218,6 @@ class AuthController {
       if (oneAuthor) {
         const {
           email,
-          firstname,
-          lastname,
           avatar,
           role,
           password
@@ -236,10 +234,12 @@ class AuthController {
           const newToken = await createToken(newUser);
           successResponse(res, 200, 'author', newToken);
 
+        } else {
+          errorResponse(res, 400, {
+            error: 'Password mismatch. Please try again!.'
+          });
         }
-        errorResponse(res, 400, {
-          error: 'Password mismatch. Please try again!.'
-        });
+
       } else {
         errorResponse(res, 400, {
           error: 'The user account does not exist.'
@@ -272,22 +272,24 @@ class AuthController {
           email: email
         }
       });
+
       if (!oneAuthor) {
         errorResponse(res, 400, 'Account does not exist')
+      } else {
+        const {
+          firstname,
+          id
+        } = oneAuthor.dataValues;
+        const resetToken = await createToken({
+          email: email,
+          id: id
+        });
+        sendPasswordReset(firstname, email, resetToken);
+        successResponse(res, 200, 'message', {
+          message: 'Password reset link sent to your email',
+          token: resetToken
+        });
       }
-      const {
-        firstname,
-        id
-      } = oneAuthor.dataValues;
-      const resetToken = await createToken({
-        email: email,
-        id: id
-      });
-      sendPasswordReset(firstname, email, resetToken);
-      successResponse(res, 200, 'message', {
-        message: 'Password reset link sent to your email',
-        token: resetToken
-      });
 
     } catch (error) {
       return next(error);

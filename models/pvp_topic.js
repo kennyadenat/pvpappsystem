@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const pvp_topic = sequelize.define('pvp_topic', {
     title: DataTypes.TEXT,
+    site_page_id: DataTypes.STRING,
     slug: {
       type: DataTypes.STRING,
       unique: true,

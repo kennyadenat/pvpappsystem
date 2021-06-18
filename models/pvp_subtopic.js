@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const pvp_subtopic = sequelize.define('pvp_subtopic', {
-    pvp_topic_id: DataTypes.STRING,
+    pvp_topic_id: DataTypes.UUID,
     title: DataTypes.TEXT,
     slug: {
       type: DataTypes.STRING,
