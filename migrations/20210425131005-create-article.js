@@ -10,9 +10,6 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          title: {
-            type: Sequelize.TEXT
-          },
           slug: {
             allowNull: false,
             type: Sequelize.STRING,

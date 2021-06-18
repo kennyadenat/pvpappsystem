@@ -1,11 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const pvp_topic = sequelize.define('pvp_topic', {
-    title: DataTypes.STRING,
-    thumbnail: {
-      type: DataTypes.STRING,
-      defaultValue: ''
-    },
+    title: DataTypes.TEXT,
     slug: {
       type: DataTypes.STRING,
       unique: true,
@@ -20,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
     pvp_topic.hasMany(models.pvp_subtopic, {
       foreignKey: 'pvp_topic_id',
       as: 'pvp_subtopics',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
+
+    pvp_topic.belongsTo(models.site_page, {
+      foreignKey: 'site_page_id',
+      as: 'site_pages',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });

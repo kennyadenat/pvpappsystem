@@ -7,14 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    subcategory_id: {
+    pvp_subtopic_id: {
       type: DataTypes.UUID,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
       references: {
-        model: 'subcategories',
+        model: 'pvp_subtopics',
         key: 'id',
-        as: 'subcategory_id'
+        as: 'pvp_subtopic_id'
       }
     },
     body: DataTypes.TEXT,
