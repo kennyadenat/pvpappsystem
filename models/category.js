@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   category.associate = (models) => {
-    // associations can be defined here
-    category.hasMany(models.subcategory, {
+
+    category.hasMany(models.blog, {
       foreignKey: 'category_id',
-      as: 'subcategories',
+      as: 'blogs',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });

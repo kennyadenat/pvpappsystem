@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    last_login: DataTypes.DATE,
+    last_login: {
+      type: DataTypes.DATE
+    },
     firstname: {
       type: DataTypes.STRING,
       allowNull: false
@@ -60,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     authors.hasMany(models.author_login, {
-      foreignKey: 'authors_is',
+      foreignKey: 'authors_id',
       as: 'author_logins',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'

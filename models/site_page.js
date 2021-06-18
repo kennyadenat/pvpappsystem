@@ -7,9 +7,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   site_page.associate = (models) => {
     // associations can be defined here
-    site_page.hasMany(models.category, {
-      foreignKey: 'site_page_id',
-      as: 'categories',
+    site_page.hasMany(models.pvp_topic, {
+      foreignKey: 'pvp_topic_id',
+      as: 'pvp_topics',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });

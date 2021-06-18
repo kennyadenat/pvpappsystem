@@ -45,6 +45,11 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
           },
+          blog_type: {
+            allowNull: false,
+            type: Sequelize.ENUM('blog', 'news'),
+            defaultValue: 'blog',
+          },
           status: {
             allowNull: false,
             type: Sequelize.ENUM('draft', 'published', 'trash'),

@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    blog_type: {
+      allowNull: false,
+      type: DataTypes.ENUM('blog', 'news'),
+      defaultValue: 'blog',
+    },
     status: {
       allowNull: false,
       type: DataTypes.ENUM('draft', 'published', 'trash'),
@@ -55,6 +60,13 @@ module.exports = (sequelize, DataTypes) => {
     blog.belongsTo(models.authors, {
       foreignKey: 'authors_id',
       as: 'authors',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
+
+    blog.belongsTo(models.category, {
+      foreignKey: 'category_id',
+      as: 'categories',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });

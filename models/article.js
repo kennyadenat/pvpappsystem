@@ -58,6 +58,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    article.belongsTo(models.pvp_subtopic, {
+      foreignKey: 'pvp_subtopic_id',
+      as: 'pvp_subtopics',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return article;
 };
