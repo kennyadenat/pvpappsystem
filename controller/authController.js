@@ -68,8 +68,6 @@ class AuthController {
     try {
       const {
         email,
-        firstname,
-        lastname,
         password
       } = req.body;
 
@@ -87,8 +85,6 @@ class AuthController {
 
       const newUser = {
         email: email,
-        firstname: firstname,
-        lastname: lastname,
         role: 'admin',
         avatar: avatarUrl
       };

@@ -59,11 +59,10 @@ const AuthorValidation = {
       req
     }) => {
       const {
-        firstname,
-        lastname,
+        email,
         password
       } = req.body;
-      const genericWordsArray = [firstname, lastname, 'Password', 'password', 123];
+      const genericWordsArray = [email, 'Password', 'password', 123];
       const genericWord = genericWordsArray.find(word => password.includes(word));
 
       if (genericWord) {
