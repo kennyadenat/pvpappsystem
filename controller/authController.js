@@ -36,8 +36,6 @@ const {
 const authorAttributes = [
   'id',
   'email',
-  'firstname',
-  'lastname',
   'role',
   'avatar',
   'approved',
@@ -47,7 +45,6 @@ const authorAttributes = [
 const oneAuthorAttr = [
   'id',
   'email',
-  'firstname',
   'password'
 ];
 
@@ -161,8 +158,6 @@ class AuthController {
 
           const newUser = {
             email: oldAuthor.dataValues.email,
-            firstname: oldAuthor.dataValues.firstname,
-            lastname: oldAuthor.dataValues.lastname,
             role: 'admin',
             avatar: oldAuthor.dataValues.avatar
           };
@@ -237,8 +232,6 @@ class AuthController {
         if (passwordValue) {
           const newUser = {
             email: email,
-            firstname: firstname,
-            lastname: lastname,
             role: role,
             avatar: avatar
           };

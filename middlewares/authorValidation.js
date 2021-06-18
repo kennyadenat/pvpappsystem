@@ -42,34 +42,6 @@ const AuthorValidation = {
       }
       return true;
     }),
-    check('firstname')
-    .not()
-    .isEmpty({
-      ignore_whitespace: true
-    })
-    .withMessage('Firstname is required')
-    .trim()
-    .isLength({
-      min: 3,
-      max: 15
-    })
-    .withMessage('First name must be between 3 to 15 characters')
-    .matches((/^[a-z]{1,}[\s]{0,1}[-']{0,1}[a-z]+$/i))
-    .withMessage('First name can only contain letters'),
-    check('lastname')
-    .not()
-    .isEmpty({
-      ignore_whitespace: true
-    })
-    .withMessage('Lastname is required')
-    .trim()
-    .isLength({
-      min: 3,
-      max: 15
-    })
-    .withMessage('Last name must be between 3 to 15 characters')
-    .matches((/^[a-z]{1,}[\s]{0,1}[-']{0,1}[a-z]+$/i))
-    .withMessage('Last name can only contain letters'),
     check('password')
     .not()
     .isEmpty({

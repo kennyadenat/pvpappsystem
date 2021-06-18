@@ -22,14 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     last_login: {
       type: DataTypes.DATE
     },
-    firstname: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    lastname: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     token: {
       type: DataTypes.STRING
     },

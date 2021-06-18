@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "Iremide-09",
-    "database": "pvp_webdb",
+    "database": "pvpwebsite",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
