@@ -17,15 +17,12 @@ const {
 const topicAttr = [
   'title',
   'slug',
-  'thumbnail',
   'overview'
 ];
 
 const subtopicAttr = [
   'title',
   'slug',
-  'thumbnail',
-  'body'
 ];
 
 /**
@@ -85,13 +82,12 @@ class TopicController {
 
       const {
         title,
-        thumbnail,
         overview
       } = req.body;
 
       const newTopic = {
         title: title.toLowerCase(),
-        thumbnail: thumbnail,
+        overview: overview,
         slug: slugify(title, {
           lower: true
         }),
@@ -128,18 +124,14 @@ class TopicController {
       const {
         title,
         pvp_topic_id,
-        thumbnail,
-        body
       } = req.body;
 
       const newSubtopic = {
         pvp_topic_id: pvp_topic_id,
         title: title.toLowerCase(),
-        thumbnail: thumbnail,
         slug: slugify(title, {
           lower: true
-        }),
-        body: body,
+        })
       };
 
       pvp_subtopic.create(newSubtopic)
