@@ -139,6 +139,7 @@ const TopicValidation = {
           'title',
         ]
       });
+      console.log(isExist);
       if (isExist) {
         throw new Error(`This sub topic title already exists.`);
       }

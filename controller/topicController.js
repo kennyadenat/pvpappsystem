@@ -113,6 +113,46 @@ class TopicController {
    * @returns {object}
    * @memberof TopicController
    */
+  static async getOneSite(req, res, next) {
+    try {
+
+      const {
+        site
+      } = req.query;
+
+      return site_page
+        .findOne({
+          where: {
+            name: site
+          },
+          attributes: siteAttr,
+          include: [{
+            model: pvp_topic,
+            as: 'pvp_topics',
+            attributes: topicAttr,
+            include: [{
+              model: pvp_subtopic,
+              as: 'pvp_subtopics',
+              attributes: subtopicAttr,
+            }]
+          }]
+        }).then((response) => successResponse(res, 200, 'topic', response))
+        .catch((error) => errorResponse(res, 200, error));
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
   static async getTopics(req, res, next) {
     try {
 
@@ -245,10 +285,12 @@ class TopicController {
           successResponse(res, 200, 'subtopic', response);
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error);
         });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

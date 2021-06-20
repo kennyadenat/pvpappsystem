@@ -232,7 +232,12 @@ class AuthController {
           };
 
           const newToken = await createToken(newUser);
-          successResponse(res, 200, 'author', newToken);
+          const tokenUser = {
+            token: newToken,
+            email: email,
+            role: role
+          }
+          successResponse(res, 200, 'author', tokenUser);
 
         } else {
           errorResponse(res, 400, {

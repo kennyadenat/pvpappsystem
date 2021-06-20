@@ -48,9 +48,7 @@ class Authentication {
             message: 'Invalid token provided',
           });
         }
-        console.log({
-          decoded
-        });
+
         if (decoded.role !== 'super_admin') {
           return errorResponse(res, 401, {
             message: 'You are not authorized to view this page',
