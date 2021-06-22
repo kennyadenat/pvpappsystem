@@ -10,6 +10,10 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
+          title: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
           slug: {
             allowNull: false,
             type: Sequelize.STRING,
@@ -52,7 +56,7 @@ module.exports = {
             type: Sequelize.ENUM('draft', 'published', 'trash'),
             defaultValue: 'draft',
           },
-          tagsList: {
+          tags: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
           },

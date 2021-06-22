@@ -6,11 +6,7 @@ var router = express.Router();
 const homeRoutes = require('./home');
 const authRoutes = require('./auth');
 const topicRoutes = require('./topic');
-
-
-
-
-
+const articleRoutes = require('./article');
 
 
 
@@ -19,6 +15,6 @@ const topicRoutes = require('./topic');
 router.use(homeRoutes);
 router.use('/author', authRoutes);
 router.use('/topic', topicRoutes);
-
+router.use('/article', articleRoutes);
 
 module.exports = router;

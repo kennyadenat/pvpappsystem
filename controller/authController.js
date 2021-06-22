@@ -217,6 +217,7 @@ class AuthController {
 
       if (oneAuthor) {
         const {
+          id,
           email,
           avatar,
           role,
@@ -233,6 +234,7 @@ class AuthController {
 
           const newToken = await createToken(newUser);
           const tokenUser = {
+            id: id,
             token: newToken,
             email: email,
             role: role

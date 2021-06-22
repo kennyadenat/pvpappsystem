@@ -9,6 +9,7 @@ const {
   errorResponse,
   serverErrorResponsess
 } = serverResponse;
+
 const {
   pvp_topic,
   pvp_subtopic,
@@ -28,6 +29,7 @@ const topicAttr = [
 ];
 
 const subtopicAttr = [
+  'id',
   'title',
   'slug',
 ];
