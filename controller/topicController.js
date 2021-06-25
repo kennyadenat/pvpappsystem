@@ -13,7 +13,8 @@ const {
 const {
   pvp_topic,
   pvp_subtopic,
-  site_page
+  site_page,
+  article
 } = models;
 
 const siteAttr = [
@@ -26,6 +27,10 @@ const topicAttr = [
   'title',
   'slug',
   'overview'
+];
+
+const articleAttr = [
+  'id'
 ];
 
 const subtopicAttr = [
@@ -136,10 +141,15 @@ class TopicController {
               model: pvp_subtopic,
               as: 'pvp_subtopics',
               attributes: subtopicAttr,
+              include: [{
+                model: article,
+                as: 'articles',
+                attributes: articleAttr,
+              }]
             }]
           }]
         }).then((response) => successResponse(res, 200, 'topic', response))
-        .catch((error) => errorResponse(res, 200, error));
+        .catch((error) => errorResponse(res, 400, error));
 
     } catch (error) {
       return next(error);

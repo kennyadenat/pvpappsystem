@@ -10,14 +10,17 @@ const {
 } = authentication;
 
 const {
-  articleVal
+  articleVal,
 } = articleValidation;
 
 const {
-  createArticle
+  createArticle,
+  getOneArticle,
+  updateArticle
 } = articleController;
 
 router.post('/createarticle', verifyToken, articleVal, createArticle);
-
+router.post('/updatearticle', verifyToken, updateArticle);
+router.post('/onearticle', getOneArticle);
 
 module.exports = router;
