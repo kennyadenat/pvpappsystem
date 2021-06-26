@@ -82,7 +82,6 @@ class ArticleController {
           successResponse(res, 200, 'article', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -121,13 +120,11 @@ class ArticleController {
             })
             .then((response) => successResponse(res, 200, 'article', response)) // Send back the updated todo.
             .catch((error) => {
-              console.log(error);
               errorResponse(res, 400, error)
             });
 
         })
         .catch((error) => {
-          console.log(error);
           return next(error);
         });
     } catch (error) {
@@ -155,7 +152,6 @@ class ArticleController {
           },
           attributes: articleAttr,
         }).then((response) => {
-          console.log('cosole', response);
           if (response) {
             successResponse(res, 200, 'article', response);
           } else {

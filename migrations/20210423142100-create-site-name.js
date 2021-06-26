@@ -3,27 +3,17 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('categories', {
+        return queryInterface.createTable('site_names', {
           id: {
             allowNull: false,
-            primaryKey: true,
             type: Sequelize.UUID,
+            primaryKey: true,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          title: {
+          name: {
             type: Sequelize.STRING,
             unique: true,
             allowNull: false
-          },
-          site_name_id: {
-            type: Sequelize.UUID,
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-            references: {
-              model: 'site_names',
-              key: 'id',
-              as: 'site_name_id'
-            }
           },
           created_at: {
             allowNull: false,
@@ -36,9 +26,10 @@ module.exports = {
             defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
           }
         });
-      });
+      })
+
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('categories');
+    return queryInterface.dropTable('site_names');
   }
 };

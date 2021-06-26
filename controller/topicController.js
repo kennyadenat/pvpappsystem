@@ -257,12 +257,10 @@ class TopicController {
           successResponse(res, 200, 'topic', response)
         })
         .catch((error) => {
-          console.log('am here', error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }
@@ -297,12 +295,10 @@ class TopicController {
           successResponse(res, 200, 'subtopic', response);
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error);
         });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }

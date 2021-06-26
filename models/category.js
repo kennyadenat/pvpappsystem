@@ -14,6 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    category.belongsTo(models.site_name, {
+      foreignKey: 'site_name_id',
+      as: 'site_names',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return category;
 };
