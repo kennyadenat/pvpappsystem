@@ -166,7 +166,7 @@ class ArticleController {
   }
 
   /**
-   * 
+   *  
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
@@ -175,6 +175,17 @@ class ArticleController {
    */
   static async getEditArticle(req, res, next) {
 
+  }
+
+  static async getUploads(req, res, next) {
+    try {
+
+
+      console.log('params', req.body);
+
+    } catch (error) {
+
+    }
   }
 
 }

@@ -9,7 +9,8 @@ const {
 const {
   pvp_topic,
   pvp_subtopic,
-  site_page
+  site_page,
+  category
 } = models;
 
 
@@ -160,7 +161,52 @@ const TopicValidation = {
       }
       return next();
     }
-  ]
+  ],
+  catVal: [
+    check('title')
+    .not()
+    .isEmpty({
+      ignore_whitespace: true
+    })
+    .withMessage('title cannot be empty')
+    .isLength({
+      min: 2,
+      max: 244
+    })
+    .withMessage('title must be between 2 to 244 charaters long')
+    .custom(async (title, body) => {
+      console.log(body.req.body);
+      const isExist = await category.findOne({
+        where: {
+          title: title,
+          site_name_id: body.req.body.site_name_id
+        },
+        attributes: [
+          'id',
+          'title',
+        ]
+      });
+      if (isExist) {
+        throw new Error(`This category title already exists.`);
+      }
+      return true;
+    }),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      const errorMessage = {};
+      if (!errors.isEmpty()) {
+        errors.array({
+          onlyFirstError: true
+        }).forEach((error) => {
+          errorMessage[error.param] = error.msg;
+        });
+        return res.status(400).json({
+          errors: errorMessage,
+        });
+      }
+      return next();
+    }
+  ],
 }
 
 module.exports = TopicValidation

@@ -2,7 +2,6 @@
 module.exports = (sequelize, DataTypes) => {
   const category = sequelize.define('category', {
     title: DataTypes.STRING,
-    img_url: DataTypes.STRING
   }, {
     underscored: true,
   });

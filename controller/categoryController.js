@@ -82,24 +82,21 @@ class CategoryController {
 
       const {
         title,
-        site_page_id,
-        overview
+        site_name_id,
       } = req.body;
 
-      const newTopic = {
+      const newCat = {
         title: title,
-        site_page_id: site_page_id,
-        overview: overview,
-        slug: slugify(title, {
-          lower: true
-        })
+        site_name_id: site_name_id
       };
 
-      pvp_topic.create(newTopic)
+      category.create(newCat)
         .then((response) => {
-          successResponse(res, 200, 'topic', response)
+          successResponse(res, 200, 'cat', response)
         })
         .catch((error) => {
+
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -178,7 +175,6 @@ class CategoryController {
         });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }

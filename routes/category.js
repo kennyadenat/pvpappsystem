@@ -9,8 +9,8 @@ const {
 } = authentication;
 
 const {
-  topicVal,
-  siteVal
+  siteVal,
+  catVal
 } = topicValidation;
 
 const {
@@ -21,7 +21,7 @@ const {
 } = categoryController;
 
 router.post('/createsite', siteVal, verifyToken, createSite);
-router.post('/createcategory', verifyToken, topicVal, createCategory);
+router.post('/createtopic', catVal, verifyToken, createCategory);
 router.post('/getallsite', getAllSites);
 router.post('/getonesite', getOneSite);
 

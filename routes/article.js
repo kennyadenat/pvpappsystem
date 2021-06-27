@@ -16,11 +16,13 @@ const {
 const {
   createArticle,
   getOneArticle,
-  updateArticle
+  updateArticle,
+  getUploads
 } = articleController;
 
 router.post('/createarticle', verifyToken, articleVal, createArticle);
 router.post('/updatearticle', verifyToken, updateArticle);
 router.post('/onearticle', getOneArticle);
+router.post('/getupload', getUploads);
 
 module.exports = router;
