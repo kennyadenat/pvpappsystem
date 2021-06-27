@@ -12,7 +12,8 @@ const {
 
 const {
   site_name,
-  category
+  category,
+  blog
 } = models;
 
 const siteAttr = [
@@ -37,7 +38,6 @@ class CategoryController {
 
 
   /**
-   * 
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
@@ -172,9 +172,13 @@ class CategoryController {
             }]
           }]
         }).then((response) => successResponse(res, 200, 'topic', response))
-        .catch((error) => errorResponse(res, 400, error));
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

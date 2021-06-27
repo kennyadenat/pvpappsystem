@@ -19,6 +19,16 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true
           },
+          category_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'categories',
+              key: 'id',
+              as: 'category_id'
+            }
+          },
           body: {
             type: Sequelize.TEXT
           },
