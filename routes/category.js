@@ -17,12 +17,14 @@ const {
   createSite,
   createCategory,
   getAllSites,
-  getOneSite
+  getOneSite,
+  getAllCategory
 } = categoryController;
 
 router.post('/createsite', siteVal, verifyToken, createSite);
 router.post('/createtopic', catVal, verifyToken, createCategory);
 router.post('/getallsite', getAllSites);
+router.post('/getallcat', getAllCategory);
 router.post('/getonesite', getOneSite);
 
 

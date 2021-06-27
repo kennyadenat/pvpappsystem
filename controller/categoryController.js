@@ -86,7 +86,7 @@ class CategoryController {
       } = req.body;
 
       const newCat = {
-        title: title,
+        title: title.toLowerCase(),
         site_name_id: site_name_id
       };
 
@@ -136,6 +136,32 @@ class CategoryController {
     }
   }
 
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   */
+  static async getAllCategory(req, res, next) {
+    try {
+
+      return category
+        .findAll({
+          order: [
+            ['title', 'ASC'],
+          ],
+          attributes: catAttr,
+        })
+        .then(response => {
+          successResponse(res, 200, 'cat', response);
+        })
+        .catch(error => {
+          errorResponse(res, 200, error);
+        });
+    } catch (error) {
+      return next(error);
+    }
+  }
 
   /**
    * 
