@@ -31,11 +31,17 @@ class NewsController {
 
     try {
 
-      imageUploads(req.file, (err, image) => {
-
+      imageUploads(req.file, (image) => {
+        if (image.err) {
+          console.log('false')
+        } else {
+          console.log('true');
+          console.log(image.data);
+        }
       });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

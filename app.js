@@ -14,6 +14,9 @@ require('dotenv').config();
 const routes = require('./routes');
 var API_PREFIX = '/api/v1';
 
+const date = new Date();
+console.log(date);
+
 
 var app = express();
 app.use(compression());

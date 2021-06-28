@@ -6,7 +6,7 @@ const fs = require('fs');
 dotenv.config();
 
 
-const imageUploads = (files, errs, next) => {
+const imageUploads = (files, next) => {
 
   try {
 
@@ -17,28 +17,32 @@ const imageUploads = (files, errs, next) => {
       region: process.env.AWS_REGION //E.g us-east-1
     });
 
+    const date = new Date();
+
     var params = {
       ACL: 'public-read',
       Bucket: process.env.AWS_BUCKET,
       Body: fs.createReadStream(files.path),
-      Key: `news/${files.originalname}`
+      Key: `news/${date}${files.originalname}`
     };
 
     s3.upload(params, (err, data) => {
       if (err) {
-        console.log('Error occured while trying to upload to S3 bucket', err);
-        return errs(err);
+        //   console.log('Error occured while trying to upload to S3 bucket', err);
+        return next({
+          err: err
+        });
       }
 
       if (data) {
         fs.unlinkSync(files.path); // Empty temp folder
         const locationUrl = data.Location;
-        console.log(data);
-        return next(locationUrl);
+        return next({
+          data: locationUrl
+        });
       }
     });
   } catch (error) {
-    console.log(error);
     return errs(error);
   }
 
