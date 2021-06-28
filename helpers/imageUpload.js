@@ -26,22 +26,25 @@ const imageUploads = (files, next) => {
       Key: `news/${date}${files.originalname}`
     };
 
-    s3.upload(params, (err, data) => {
-      if (err) {
-        //   console.log('Error occured while trying to upload to S3 bucket', err);
-        return next({
-          err: err
-        });
-      }
+    fs.unlinkSync(files.path);
 
-      if (data) {
-        fs.unlinkSync(files.path); // Empty temp folder
-        const locationUrl = data.Location;
-        return next({
-          data: locationUrl
-        });
-      }
-    });
+    // s3.upload(params, (err, data) => {
+    //   if (err) {
+    //     //   console.log('Error occured while trying to upload to S3 bucket', err);
+    //     return next({
+    //       err: err
+    //     });
+    //   }
+
+    //   if (data) {
+    //     fs.unlinkSync(files.path); // Empty temp folder
+    //     const locationUrl = data.Location;
+    //     return next({
+    //       data: locationUrl
+    //     });
+    //   }
+    // });
+
   } catch (error) {
     return errs(error);
   }
