@@ -4,6 +4,8 @@ var express = require('express');
 var path = require('path');
 const session = require('express-session');
 var cookieParser = require('cookie-parser');
+// const formData = require("express-form-data");
+const os = require("os");
 var logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
@@ -35,6 +37,21 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
+
+// const optionsUpload = {
+//   uploadDir: os.tmpdir(),
+//   autoClean: true
+// };
+
+// // parse data with connect-multiparty. 
+// app.use(formData.parse(optionsUpload));
+// // delete from the request all empty files (size == 0)
+// app.use(formData.format());
+// // change the file objects to fs.ReadStream 
+// app.use(formData.stream());
+// // union the body and the files
+// app.use(formData.union());
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

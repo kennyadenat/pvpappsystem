@@ -3,6 +3,9 @@ const slugify = require('slugify');
 const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
+const imageUploads = require('../helpers/imageUpload');
+const fs = require('fs');
+
 
 const {
   successResponse,
@@ -28,8 +31,12 @@ class NewsController {
 
     try {
 
-    } catch (error) {
+      imageUploads(req.file, (err, image) => {
 
+      });
+
+    } catch (error) {
+      return next(error);
     }
   }
 
