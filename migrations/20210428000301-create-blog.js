@@ -78,7 +78,7 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg',
           },
-          tagsList: {
+          tags: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
           },

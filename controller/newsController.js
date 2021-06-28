@@ -49,7 +49,8 @@ class NewsController {
       imageUploads(req.file, (image) => {
         if (image.err) {
           console.log(image.err);
-          serverErrorResponsess('Could not process your request');
+          errorResponse(res, 400, 'Could not process your request')
+          //   serverErrorResponsess('Could not process your request');
         } else {
 
           const newContent = {
@@ -61,7 +62,7 @@ class NewsController {
             blog_type: blog_type,
             category_id: category_id,
             status: status,
-            tagsList: tags ? JSON.parse(tags) : [],
+            tags: tags ? JSON.parse(tags) : [],
             slug: slugify(title, {
               lower: true
             })

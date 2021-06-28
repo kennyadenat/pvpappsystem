@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: '',
     },
-    tagsList: {
+    tags: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
