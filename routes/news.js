@@ -11,7 +11,9 @@ const {
 
 
 const {
-  createNews
+  createNews,
+  getLandingItems,
+  getOnePost
 } = newsController;
 
 
@@ -23,5 +25,7 @@ router.post('/createnews', verifyToken, multer({
 }).single(
   'header'
 ), createNews);
+router.post('/getnews', getLandingItems);
+router.post('/getonenews', getOnePost);
 
 module.exports = router;

@@ -10,12 +10,46 @@ const fs = require('fs');
 const {
   successResponse,
   errorResponse,
-  serverErrorResponsess
+  serverErrorResponse
 } = serverResponse;
 
 const {
-  blog
+  blog,
+  category,
+  authors
 } = models;
+
+const oneNews = [
+  'id',
+  'title',
+  'header',
+  'slug',
+  'created_at'
+];
+
+const catAttr = [
+  'title'
+];
+
+const onePost = [
+  'id',
+  'title',
+  'header',
+  'body',
+  'slug',
+  'read_time',
+  'read_count',
+  'blog_type',
+  'up_vote',
+  'down_vote',
+  'tags',
+  'created_at'
+];
+
+const authorAttr = [
+  'email',
+  'avatar'
+];
 
 class NewsController {
 
@@ -24,7 +58,7 @@ class NewsController {
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
-   * @returns object
+   * @returns {object}
    * @memberof NewsController
    */
   static async createNews(req, res, next) {
@@ -42,13 +76,8 @@ class NewsController {
         blog_type
       } = req.body;
 
-      console.log(tags);
-
-      console.log(JSON.parse(tags));
-
       imageUploads(req.file, (image) => {
         if (image.err) {
-          console.log(image.err);
           errorResponse(res, 400, 'Could not process your request')
           //   serverErrorResponsess('Could not process your request');
         } else {
@@ -68,23 +97,112 @@ class NewsController {
             })
           };
 
-          console.log({
-            newContent
-          })
-
           blog.create(newContent)
             .then((response) => {
               successResponse(res, 200, blog_type, response)
             })
             .catch((error) => {
-              console.log(error);
               errorResponse(res, 400, error)
             });
         }
       });
 
     } catch (error) {
-      console.log(error);
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof NewsController
+   */
+  static async getLandingItems(req, res, next) {
+
+    try {
+
+      const {
+        blog_type,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      blog
+        .findAndCountAll({
+          where: {
+            blog_type: blog_type
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: oneNews,
+          include: [{
+            model: category,
+            as: 'categories',
+            attributes: catAttr
+          }],
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, blog_type, paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof NewsController
+   */
+  static async getOnePost(req, res, next) {
+
+    try {
+
+      const {
+        slug
+      } = req.query;
+
+      blog.findOne({
+          where: {
+            slug: slug
+          },
+          attributes: onePost,
+          include: [{
+            model: category,
+            as: 'categories',
+            attributes: catAttr
+          }, {
+            model: authors,
+            as: 'authors',
+            attributes: authorAttr
+          }]
+        }).then((response) => {
+          successResponse(res, 200, 'news', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
       return next(error);
     }
   }

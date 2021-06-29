@@ -14,6 +14,9 @@ const paginationObject = (items, page, pageSize) => {
     rows
   } = items;
 
+  console.log(items);
+
+
   const total = Math.floor(count / pageSize);
   const nextPage = total > 0 ? page + 1 : page;
 
