@@ -95,8 +95,6 @@ class CategoryController {
           successResponse(res, 200, 'cat', response)
         })
         .catch((error) => {
-
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -196,7 +194,6 @@ class CategoryController {
           }]
         }).then((response) => successResponse(res, 200, 'topic', response))
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 

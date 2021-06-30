@@ -239,7 +239,6 @@ class TopicController {
    */
   static async createTopic(req, res, next) {
     try {
-      console.log(req.body);
       const {
         title,
         site_page_id,

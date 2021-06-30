@@ -11,9 +11,20 @@ const {
 } = serverResponse;
 
 const {
-  article
+  article,
+  pvp_topic,
+  pvp_subtopic
 } = models;
 
+const topicAttr = [
+  'id',
+  'title'
+];
+
+const subTopicAttr = [
+  'id',
+  'title'
+];
 
 const articleAttr = [
   'id',
@@ -151,6 +162,16 @@ class ArticleController {
             pvp_subtopic_id: id
           },
           attributes: articleAttr,
+          include: [{
+            model: pvp_subtopic,
+            as: 'pvp_subtopics',
+            attributes: topicAttr,
+            include: [{
+              model: pvp_topic,
+              as: 'pvp_topics',
+              attributes: subTopicAttr,
+            }]
+          }]
         }).then((response) => {
           if (response) {
             successResponse(res, 200, 'article', response);
@@ -173,16 +194,11 @@ class ArticleController {
    * @returns {object}
    * @memberof ArticleController
    */
-  static async getEditArticle(req, res, next) {
-
-  }
+  static async getEditArticle(req, res, next) {}
 
   static async getUploads(req, res, next) {
     try {
-
-
       console.log('params', req.body);
-
     } catch (error) {
 
     }
