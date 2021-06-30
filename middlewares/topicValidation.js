@@ -88,17 +88,6 @@ const TopicValidation = {
       }
       return true;
     }),
-    check('overview')
-    .not()
-    .isEmpty({
-      ignore_whitespace: true
-    })
-    .withMessage('overview cannot be empty')
-    .isLength({
-      min: 2,
-      max: 365
-    })
-    .withMessage('overview must be between 2 to 365 charaters long'),
     (req, res, next) => {
       const errors = validationResult(req);
       const errorMessage = {};

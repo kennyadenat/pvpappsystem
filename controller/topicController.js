@@ -22,16 +22,19 @@ const siteAttr = [
   'name',
 ];
 
+
 const topicAttr = [
   'id',
   'title',
   'slug',
-  'overview'
+  'site_page_id'
 ];
+
 
 const articleAttr = [
   'id'
 ];
+
 
 const subtopicAttr = [
   'id',
@@ -236,17 +239,15 @@ class TopicController {
    */
   static async createTopic(req, res, next) {
     try {
-
+      console.log(req.body);
       const {
         title,
         site_page_id,
-        overview
       } = req.body;
 
       const newTopic = {
         title: title,
         site_page_id: site_page_id,
-        overview: overview,
         slug: slugify(title, {
           lower: true
         })
@@ -257,11 +258,68 @@ class TopicController {
           successResponse(res, 200, 'topic', response)
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
       return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async updateTopic(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+
+      return pvp_topic
+        .findByPk(id, {
+          topicAttr,
+          include: [{
+            model: pvp_subtopic,
+            as: 'pvp_subtopics',
+            attributes: subtopicAttr,
+            include: [{
+              model: article,
+              as: 'articles',
+              attributes: articleAttr,
+            }]
+          }]
+        })
+        .then(oneTopic => {
+          if (!oneTopic) {
+            return res.status(404).send({
+              message: 'Topic Not Found',
+            });
+          } else {
+
+            return oneTopic
+              .update(req.body, {
+                fields: Object.keys(req.body)
+              }, {
+                topicAttr,
+              })
+              .then((updatedTopic) => successResponse(res, 200, 'topic', updatedTopic)) // Send back the updated todo.
+              .catch((error) => {
+                errorResponse(res, 400, error)
+              });
+          }
+        })
+        .catch((error) => {
+          res.status(400).send(error)
+        });
+
+    } catch (error) {
+
     }
   }
 
@@ -297,25 +355,6 @@ class TopicController {
         .catch((error) => {
           errorResponse(res, 400, error);
         });
-
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  /**
-   * 
-   * @param {object} req 
-   * @param {object} res 
-   * @param {function} next 
-   * @returns {object} object
-   * @memberof TopicController
-   * 
-   */
-  static async updateTopic(req, res, next) {
-    try {
-
-      const {} = req.body;
 
     } catch (error) {
       return next(error);

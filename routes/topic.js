@@ -27,12 +27,12 @@ const {
 
 
 router.post('/createtopic', verifyToken, topicVal, createTopic);
+router.post('/updatetopic', verifyToken, updateTopic);
 router.post('/createsubtopic', verifyToken, subtopicVal, createSubtopic);
 router.post('/createsite', siteVal, verifyToken, createSite);
 router.post('/gettopic', getTopics);
 router.post('/getalltopic', getAllTopic);
 router.post('/getallsite', getAllSites);
 router.post('/getonesite', getOneSite);
-router.post('/updatetopic', verifyToken, updateTopic);
 
 module.exports = router;
