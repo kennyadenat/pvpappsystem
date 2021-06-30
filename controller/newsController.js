@@ -27,7 +27,24 @@ const oneNews = [
   'created_at'
 ];
 
+const allNews = [
+  'id',
+  'title',
+  'header',
+  'body',
+  'slug',
+  'read_time',
+  'read_count',
+  'blog_type',
+  'up_vote',
+  'down_vote',
+  'tags',
+  'status',
+  'created_at'
+];
+
 const catAttr = [
+  'id',
   'title'
 ];
 
@@ -46,12 +63,74 @@ const onePost = [
   'created_at'
 ];
 
+const editPost = [
+  'id',
+  'title',
+  'header',
+  'body',
+  'read_time',
+  'blog_type',
+  'tags',
+  'status',
+];
+
 const authorAttr = [
   'email',
   'avatar'
 ];
 
 class NewsController {
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof NewsController
+   */
+  static async getAllNews(req, res, next) {
+    try {
+
+      const {
+        blog_type,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      blog
+        .findAndCountAll({
+          where: {
+            blog_type: blog_type
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: allNews,
+          include: [{
+            model: category,
+            as: 'categories',
+            attributes: catAttr
+          }],
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'news', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
 
   /**
    * 
@@ -118,6 +197,27 @@ class NewsController {
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
+   * @returns {object}
+   * @memberof NewsController
+   */
+  static async updateNews(req, res, next) {
+    try {
+
+      console.log('body', req.body);
+
+      console.log('file', req.file);
+
+    } catch (error) {
+
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
    * @returns {array}
    * @memberof NewsController
    */
@@ -152,16 +252,16 @@ class NewsController {
             size
           }),
         }).then((response) => {
-          successResponse(res, 200, blog_type, paginateCount(response, page, size))
+          successResponse(res, 200, 'news', paginateCount(response, page, size))
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
       return next(error);
     }
+
   }
 
 
@@ -204,6 +304,48 @@ class NewsController {
 
     } catch (error) {
       return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof NewsController
+   */
+  static async getPostEdit(req, res, next) {
+
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return blog
+        .findByPk(id, {
+          order: [
+            ['created_at', 'ASC'],
+          ],
+          attributes: editPost,
+          include: [{
+            model: category,
+            as: 'categories',
+            attributes: catAttr
+          }],
+        })
+        .then(response => {
+          if (!response) {
+            errorResponse(res, 400, 'Post Not Founds');
+          } else {
+            successResponse(res, 200, 'news', response)
+          }
+        })
+        .catch(error => errorResponse(res, 400, error));
+    } catch (error) {
+
     }
   }
 

@@ -13,7 +13,10 @@ const {
 const {
   createNews,
   getLandingItems,
-  getOnePost
+  getOnePost,
+  getAllNews,
+  getPostEdit,
+  updateNews
 } = newsController;
 
 
@@ -27,5 +30,15 @@ router.post('/createnews', verifyToken, multer({
 ), createNews);
 router.post('/getnews', getLandingItems);
 router.post('/getonenews', getOnePost);
+router.post('/getallnews', verifyToken, getAllNews);
+router.post('/geteditnews', verifyToken, getPostEdit);
+router.post('/updatenews', verifyToken, multer({
+  dest: 'temp/',
+  limits: {
+    fieldSize: 8 * 1024 * 1024
+  }
+}).single(
+  'header'
+), updateNews);
 
 module.exports = router;
