@@ -203,9 +203,97 @@ class NewsController {
   static async updateNews(req, res, next) {
     try {
 
-      console.log('body', req.body);
+      const {
+        id,
+        title,
+        body,
+        read_time,
+        status,
+        header,
+        tags,
+        category_id,
+      } = req.body;
 
-      console.log('file', req.file);
+      return blog
+        .findByPk(id, {
+          editPost
+        })
+        .then(oneBlog => {
+          if (!oneBlog) {
+            return res.status(404).send({
+              message: 'Post Not Found',
+            });
+          } else {
+
+            if (req.file) {
+
+              // to remove the previous file??
+              imageUploads(req.file, (image) => {
+                if (image.err) {
+                  errorResponse(res, 400, 'Could not process your request')
+                  //   serverErrorResponsess('Could not process your request');
+                } else {
+
+                  const newContent = {
+                    title: title,
+                    body: body,
+                    header: image.data,
+                    read_time: read_time,
+                    category_id: category_id,
+                    status: status,
+                    tags: tags ? JSON.parse(tags) : [],
+                    slug: slugify(title, {
+                      lower: true
+                    })
+                  };
+
+                  return oneBlog
+                    .update(newContent, {
+                      fields: Object.keys(newContent)
+                    }, {
+                      editPost
+                    })
+                    .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
+                    .catch((error) => {
+                      errorResponse(res, 400, error)
+                    });
+
+                }
+              });
+
+            } else {
+
+              const newContent = {
+                title: title,
+                body: body,
+                header: header,
+                read_time: read_time,
+                category_id: category_id,
+                status: status,
+                tags: tags ? JSON.parse(tags) : [],
+                slug: slugify(title, {
+                  lower: true
+                })
+              };
+
+              return oneBlog
+                .update(newContent, {
+                  fields: Object.keys(newContent)
+                }, {
+                  editPost
+                })
+                .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
+                .catch((error) => {
+                  errorResponse(res, 400, error)
+                });
+            }
+          }
+
+        })
+        .catch((error) => {
+          res.status(400).send(error)
+        });
+
 
     } catch (error) {
 
