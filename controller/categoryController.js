@@ -1,13 +1,10 @@
 const models = require('../models');
-const slugify = require('slugify');
 const serverResponse = require('../modules/serverResponse');
-const paginate = require('../helpers/paginateHelper');
-const paginateCount = require('../helpers/paginateCountHelper');
 
 const {
   successResponse,
   errorResponse,
-  serverErrorResponsess
+  serverErrorResponse
 } = serverResponse;
 
 const {
@@ -199,6 +196,42 @@ class CategoryController {
 
     } catch (error) {
       return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof TopicController
+   */
+  static async getOneCat(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+
+      const getSite = await site_name.findOne({
+        where: {
+          name: id.toLowerCase()
+        }
+      });
+
+      category
+        .findAll({
+          where: {
+            site_name_id: getSite.dataValues.id
+          },
+          attributes: catAttr
+        }).then((response) => successResponse(res, 200, 'cat', response))
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+    } catch (error) {
+
     }
   }
 

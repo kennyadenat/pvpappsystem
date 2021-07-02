@@ -18,7 +18,8 @@ const {
   createCategory,
   getAllSites,
   getOneSite,
-  getAllCategory
+  getAllCategory,
+  getOneCat
 } = categoryController;
 
 router.post('/createsite', siteVal, verifyToken, createSite);
@@ -26,6 +27,7 @@ router.post('/createtopic', catVal, verifyToken, createCategory);
 router.post('/getallsite', getAllSites);
 router.post('/getallcat', getAllCategory);
 router.post('/getonesite', getOneSite);
+router.post('/getonecat', getOneCat);
 
 
 module.exports = router;

@@ -14,15 +14,12 @@ const paginationObject = (items, page, pageSize) => {
     rows
   } = items;
 
-  console.log(items);
-
-
-  const total = Math.floor(count / pageSize);
-  const nextPage = total > 0 ? page + 1 : page;
+  const total = Math.floor(Number(count) / Number(pageSize));
+  const nextPage = total > 0 ? Number(page) + 1 : Number(page);
 
   return {
     total: total,
-    currentPage: page,
+    currentPage: Number(page),
     nextPage: nextPage,
     isNext: page < total && total > 0 ? true : false,
     isPrev: page > 0 && total > 0 ? true : false,

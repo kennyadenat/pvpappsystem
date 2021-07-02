@@ -10,17 +10,20 @@
 
 const paginate = ({
   page,
-  pageSize
+  size
 }) => {
+
+  page = Number(page);
+  size = Number(size);
 
   if (!page) {
     page = 0;
   }
-  if (!pageSize) {
-    pageSize = 50;
+  if (!size) {
+    size = 50;
   }
-  const offset = page * pageSize;
-  const limit = pageSize;
+  const offset = page * size;
+  const limit = size;
   return {
     offset,
     limit,

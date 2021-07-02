@@ -40,7 +40,8 @@ const allNews = [
   'down_vote',
   'tags',
   'status',
-  'created_at'
+  'created_at',
+  'updated_at'
 ];
 
 const catAttr = [
