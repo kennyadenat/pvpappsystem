@@ -22,6 +22,16 @@ module.exports = {
             type: Sequelize.TEXT,
             allowNull: false
           },
+          faq_site_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'faq_sites',
+              key: 'id',
+              as: 'faq_site_id'
+            }
+          },
           ref: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],

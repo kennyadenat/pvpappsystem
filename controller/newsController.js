@@ -295,7 +295,6 @@ class NewsController {
           res.status(400).send(error)
         });
 
-
     } catch (error) {
 
     }
@@ -435,6 +434,65 @@ class NewsController {
         .catch(error => errorResponse(res, 400, error));
     } catch (error) {
 
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof NewsController
+   */
+  static async updateViews(req, res, next) {
+
+    try {
+      const {
+        slug
+      } = req.query;
+
+      return blog
+        .findOne({
+          where: {
+            slug: slug
+          }
+        })
+        .then(oneBlog => {
+          if (!oneBlog) {
+            return res.status(404).send({
+              message: 'Post Not Found',
+            });
+          } else {
+            let read_count = oneBlog.dataValues.read_count;
+            read_count = read_count + 1;
+
+            const newContent = {
+              read_count: read_count,
+            };
+
+            return oneBlog
+              .update(newContent, {
+                fields: Object.keys(newContent)
+              }, {
+                editPost
+              })
+              .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
+              .catch((error) => {
+                console.log(error);
+                errorResponse(res, 400, error)
+              });
+          }
+
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(400).send(error)
+        });
+
+    } catch (error) {
+      return next(error);
     }
   }
 

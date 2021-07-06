@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
   });
   faq.associate = function (models) {
     // associations can be defined here
+    faq.belongsTo(models.faq_site, {
+      foreignKey: 'faq_site_id',
+      as: 'faq_sites',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return faq;
 };

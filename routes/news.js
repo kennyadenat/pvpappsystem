@@ -16,7 +16,8 @@ const {
   getOnePost,
   getAllNews,
   getPostEdit,
-  updateNews
+  updateNews,
+  updateViews
 } = newsController;
 
 
@@ -30,6 +31,7 @@ router.post('/createnews', verifyToken, multer({
 ), createNews);
 router.post('/getnews', getLandingItems);
 router.post('/getonenews', getOnePost);
+router.post('/updateViews', updateViews);
 router.post('/getallnews', verifyToken, getAllNews);
 router.post('/geteditnews', verifyToken, getPostEdit);
 router.post('/updatenews', verifyToken, multer({

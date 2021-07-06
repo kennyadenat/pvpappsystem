@@ -3,6 +3,13 @@ const slugify = require('slugify');
 const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
+const {
+  Op,
+  Sequelize
+} = require("sequelize");
+const {
+  sequelize
+} = require('../models');
 
 const {
   successResponse,
@@ -46,6 +53,10 @@ const articleAttrs = [
   'tags',
   'authors_id',
   'pvp_subtopic_id',
+];
+
+const searchAttr = [
+  'title',
 ];
 
 /**
@@ -201,6 +212,54 @@ class ArticleController {
       console.log('params', req.body);
     } catch (error) {
 
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof ArticleController
+   */
+  static async getArticleTopic(req, res, next) {
+    try {
+
+      let whereStatement = {};
+
+      const {
+        q
+      } = req.query;
+
+      let search = ''
+
+      if (q) {
+        search = q.toLowerCase();
+      }
+
+
+      return article
+        .findAll({
+          where: {
+            title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%')
+          },
+          order: [
+            ['title', 'ASC'],
+          ],
+          attributes: searchAttr
+        })
+        .then(articles => {
+          successResponse(res, 200, 'article', articles)
+        })
+        .catch(error => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      console.log(error);
+      return next(error);
     }
   }
 
