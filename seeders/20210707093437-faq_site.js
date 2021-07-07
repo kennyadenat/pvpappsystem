@@ -1,0 +1,34 @@
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    /*
+      Add altering commands here.
+      Return a promise to correctly handle asynchronicity.
+
+      Example:
+      return queryInterface.bulkInsert('People', [{
+        name: 'John Doe',
+        isBetaMember: false
+      }], {});
+    */
+    return queryInterface.bulkInsert('faq_sites', [{
+      name: 'support'
+    }, {
+      name: 'plant variety protection'
+    }, {
+      name: 'payments and fees'
+    }], {});
+  },
+
+  down: (queryInterface, Sequelize) => {
+    /*
+      Add reverting commands here.
+      Return a promise to correctly handle asynchronicity.
+
+      Example:
+      return queryInterface.bulkDelete('People', null, {});
+    */
+    return queryInterface.bulkDelete('faq_sites', null, {});
+  }
+};

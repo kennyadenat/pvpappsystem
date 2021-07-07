@@ -352,6 +352,7 @@ class TopicController {
           successResponse(res, 200, 'subtopic', response);
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error);
         });
 

@@ -86,6 +86,8 @@ class ArticleController {
         title
       } = req.body;
 
+      console.log(req.body);
+
       const newArticle = {
         title: title,
         authors_id: authors_id,
@@ -104,10 +106,12 @@ class ArticleController {
           successResponse(res, 200, 'article', response)
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

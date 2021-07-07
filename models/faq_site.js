@@ -1,5 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
+  // this is for faqs
   const faq_site = sequelize.define('faq_site', {
     name: DataTypes.STRING
   }, {

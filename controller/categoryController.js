@@ -33,7 +33,6 @@ const blogAttr = [
  */
 class CategoryController {
 
-
   /**
    * @param {object} req 
    * @param {object} res 
@@ -130,6 +129,8 @@ class CategoryController {
       return next(error);
     }
   }
+
+
 
   /**
    * 

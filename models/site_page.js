@@ -1,5 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
+  // this is for the articles
   const site_page = sequelize.define('site_page', {
     name: DataTypes.STRING
   }, {

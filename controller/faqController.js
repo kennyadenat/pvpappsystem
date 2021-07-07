@@ -5,8 +5,21 @@ const paginateCount = require('../helpers/paginateCountHelper');
 
 
 const {
-  faq
+  faq,
+  faq_site
 } = models;
+
+const siteAttr = [
+  'id',
+  'name',
+];
+
+const faqAttr = [
+  'id',
+  'question',
+  'answer',
+  'ref'
+];
 
 const {
   successResponse,
@@ -16,11 +29,79 @@ const {
 
 class FaqController {
 
+
+  /**
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object} object
+   * @memberof FaqController
+   */
+  static async createSite(req, res, next) {
+    try {
+
+      const {
+        name
+      } = req.body;
+
+      const newSite = {
+        name: name.toLowerCase()
+      };
+
+      faq_site
+        .create(newSite)
+        .then((response) => {
+          successResponse(res, 200, 'site', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {object} next 
+   * @returns {object}
+   * @memberof FaqController
+   */
+  static async getAllSites(req, res, next) {
+    try {
+
+      return faq_site
+        .findAll({
+          order: [
+            ['name', 'ASC'],
+          ],
+          attributes: siteAttr,
+        })
+        .then(response => {
+          successResponse(res, 200, 'site', response);
+        })
+        .catch(error => {
+          errorResponse(res, 200, error);
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+
   /**
    * 
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
+   * @returns {object}
+   * @memberof FaqController
    */
   static async addFaq(req, res, next) {
     try {
@@ -29,12 +110,14 @@ class FaqController {
         site,
         question,
         answer,
+        faq_site_id,
         ref
       } = req.body;
 
       const newFaq = {
         site: site,
         question: question,
+        faq_site_id: faq_site_id,
         answer: answer,
         ref: ref ? ref : [],
       };
@@ -52,11 +135,14 @@ class FaqController {
     }
   }
 
+
   /**
    * 
    * @param {object} req 
    * @param {object} res 
    * @param {function} next 
+   * @returns {object}
+   * @memberof FaqController
    */
   static async getFaq(req, res, next) {
     try {
@@ -83,6 +169,51 @@ class FaqController {
         .catch((error) => {
           errorResponse(res, 400, error)
         });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {Array}
+   * @memberof FaqController
+   */
+  static async getSiteFaq(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return faq_site
+        .findOne({
+          where: {
+            id: id
+          },
+          order: [
+            ['name', 'ASC'],
+          ],
+          attributes: siteAttr,
+          include: [{
+            model: faq,
+            as: 'faqs',
+            attributes: faqAttr,
+          }]
+        })
+        .then(response => {
+          successResponse(res, 200, 'faq', response);
+        })
+        .catch(error => {
+          console.log(error);
+          errorResponse(res, 400, error);
+        });
+
 
     } catch (error) {
       return next(error);

@@ -21,7 +21,7 @@ const {
   getArticleTopic
 } = articleController;
 
-router.post('/createarticle', verifyToken, articleVal, createArticle);
+router.post('/createarticle', verifyToken, createArticle);
 router.post('/updatearticle', verifyToken, updateArticle);
 router.post('/onearticle', getOneArticle);
 router.post('/getupload', getUploads);

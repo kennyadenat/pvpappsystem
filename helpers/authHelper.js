@@ -83,6 +83,17 @@ class AuthHelper {
     return bcrypt.hashSync(password, 10);
   }
 
+
+  /**
+   * @method hashPasswords
+   * @description Hashes the user inputed password
+   * @param {string} password - The user password to be hashed
+   * @returns {string} A string of the hashed password
+   */
+  static hashPasswords(password) {
+    return bcrypt.hashSync(password, 10);
+  }
+
   /**
    * @method comparePassword
    * @description compares the user inputed password with hashPassword
