@@ -18,7 +18,8 @@ const faqAttr = [
   'id',
   'question',
   'answer',
-  'ref'
+  'ref',
+  'tag',
 ];
 
 const {
@@ -27,6 +28,16 @@ const {
   serverErrorResponse
 } = serverResponse;
 
+function getChar(length) {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
+  }
+  return result;
+}
 class FaqController {
 
 
@@ -119,6 +130,7 @@ class FaqController {
         question: question,
         faq_site_id: faq_site_id,
         answer: answer,
+        tag: getChar(7),
         ref: ref ? ref : [],
       };
 
@@ -195,6 +207,51 @@ class FaqController {
         .findOne({
           where: {
             id: id
+          },
+          order: [
+            ['name', 'ASC'],
+          ],
+          attributes: siteAttr,
+          include: [{
+            model: faq,
+            as: 'faqs',
+            attributes: faqAttr,
+          }]
+        })
+        .then(response => {
+          successResponse(res, 200, 'faq', response);
+        })
+        .catch(error => {
+          console.log(error);
+          errorResponse(res, 400, error);
+        });
+
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {Array}
+   * @memberof FaqController
+   */
+  static async getFaqName(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return faq_site
+        .findOne({
+          where: {
+            name: id
           },
           order: [
             ['name', 'ASC'],

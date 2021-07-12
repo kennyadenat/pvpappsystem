@@ -13,7 +13,7 @@ module.exports = {
       }], {});
     */
     return queryInterface.bulkInsert('faq_sites', [{
-      name: 'support'
+      name: 'support and contact'
     }, {
       name: 'plant variety protection'
     }, {
