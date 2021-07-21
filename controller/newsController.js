@@ -120,6 +120,7 @@ class NewsController {
             size
           }),
         }).then((response) => {
+          console.log('all', response);
           successResponse(res, 200, 'news', paginateCount(response, page, size))
         })
         .catch((error) => {
@@ -156,40 +157,36 @@ class NewsController {
         blog_type
       } = req.body;
 
-      console.log(req.boy);
+      imageUploads(req.file, (image) => {
+        if (image.err) {
+          errorResponse(res, 400, 'Could not process your request')
+          //   serverErrorResponsess('Could not process your request');
+        } else {
 
-      console.log(req.file);
+          const newContent = {
+            authors_id: authors_id,
+            title: title,
+            body: body,
+            header: image.data,
+            read_time: read_time,
+            blog_type: blog_type,
+            category_id: category_id,
+            status: status,
+            tags: tags ? JSON.parse(tags) : [],
+            slug: slugify(title, {
+              lower: true
+            })
+          };
 
-      // imageUploads(req.file, (image) => {
-      //   if (image.err) {
-      //     errorResponse(res, 400, 'Could not process your request')
-      //     //   serverErrorResponsess('Could not process your request');
-      //   } else {
-
-      //     const newContent = {
-      //       authors_id: authors_id,
-      //       title: title,
-      //       body: body,
-      //       header: image.data,
-      //       read_time: read_time,
-      //       blog_type: blog_type,
-      //       category_id: category_id,
-      //       status: status,
-      //       tags: tags ? JSON.parse(tags) : [],
-      //       slug: slugify(title, {
-      //         lower: true
-      //       })
-      //     };
-
-      //     blog.create(newContent)
-      //       .then((response) => {
-      //         successResponse(res, 200, blog_type, response)
-      //       })
-      //       .catch((error) => {
-      //         errorResponse(res, 400, error)
-      //       });
-      //   }
-      // });
+          blog.create(newContent)
+            .then((response) => {
+              successResponse(res, 200, blog_type, response)
+            })
+            .catch((error) => {
+              errorResponse(res, 400, error)
+            });
+        }
+      });
 
     } catch (error) {
       return next(error);
@@ -344,6 +341,7 @@ class NewsController {
             size
           }),
         }).then((response) => {
+          console.log('lan', response);
           successResponse(res, 200, 'news', paginateCount(response, page, size))
         })
         .catch((error) => {

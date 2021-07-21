@@ -32,7 +32,7 @@ router.post('/createnews', verifyToken, multer({
 router.post('/getnews', getLandingItems);
 router.post('/getonenews', getOnePost);
 router.post('/updateViews', updateViews);
-router.post('/getallnews', verifyToken, getAllNews);
+router.post('/getallnews', getAllNews);
 router.post('/geteditnews', verifyToken, getPostEdit);
 router.post('/updatenews', verifyToken, multer({
   dest: 'temp/',
