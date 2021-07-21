@@ -43,6 +43,7 @@ const articleAttr = [
   'status',
   'authors_id',
   'pvp_subtopic_id',
+  'updated_at',
 ];
 
 const articleAttrs = [
@@ -86,8 +87,6 @@ class ArticleController {
         title
       } = req.body;
 
-      console.log(req.body);
-
       const newArticle = {
         title: title,
         authors_id: authors_id,
@@ -111,7 +110,6 @@ class ArticleController {
         });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }

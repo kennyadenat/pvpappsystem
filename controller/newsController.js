@@ -156,36 +156,40 @@ class NewsController {
         blog_type
       } = req.body;
 
-      imageUploads(req.file, (image) => {
-        if (image.err) {
-          errorResponse(res, 400, 'Could not process your request')
-          //   serverErrorResponsess('Could not process your request');
-        } else {
+      console.log(req.boy);
 
-          const newContent = {
-            authors_id: authors_id,
-            title: title,
-            body: body,
-            header: image.data,
-            read_time: read_time,
-            blog_type: blog_type,
-            category_id: category_id,
-            status: status,
-            tags: tags ? JSON.parse(tags) : [],
-            slug: slugify(title, {
-              lower: true
-            })
-          };
+      console.log(req.file);
 
-          blog.create(newContent)
-            .then((response) => {
-              successResponse(res, 200, blog_type, response)
-            })
-            .catch((error) => {
-              errorResponse(res, 400, error)
-            });
-        }
-      });
+      // imageUploads(req.file, (image) => {
+      //   if (image.err) {
+      //     errorResponse(res, 400, 'Could not process your request')
+      //     //   serverErrorResponsess('Could not process your request');
+      //   } else {
+
+      //     const newContent = {
+      //       authors_id: authors_id,
+      //       title: title,
+      //       body: body,
+      //       header: image.data,
+      //       read_time: read_time,
+      //       blog_type: blog_type,
+      //       category_id: category_id,
+      //       status: status,
+      //       tags: tags ? JSON.parse(tags) : [],
+      //       slug: slugify(title, {
+      //         lower: true
+      //       })
+      //     };
+
+      //     blog.create(newContent)
+      //       .then((response) => {
+      //         successResponse(res, 200, blog_type, response)
+      //       })
+      //       .catch((error) => {
+      //         errorResponse(res, 400, error)
+      //       });
+      //   }
+      // });
 
     } catch (error) {
       return next(error);
