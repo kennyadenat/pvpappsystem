@@ -258,46 +258,7 @@ class ImpactController {
   }
 
 
-  /**
-   * 
-   * @param {object} req 
-   * @param {object} res 
-   * @param {function} next 
-   * @returns {object}
-   * @memberof ImpactController
-   */
-  static async getPostEdit(req, res, next) {
 
-    try {
-
-      const {
-        id
-      } = req.query;
-
-      return blog
-        .findByPk(id, {
-          order: [
-            ['created_at', 'ASC'],
-          ],
-          attributes: editPost,
-          include: [{
-            model: category,
-            as: 'categories',
-            attributes: catAttr
-          }],
-        })
-        .then(response => {
-          if (!response) {
-            errorResponse(res, 400, 'Impact Not Founds');
-          } else {
-            successResponse(res, 200, 'impact', response)
-          }
-        })
-        .catch(error => errorResponse(res, 400, error));
-    } catch (error) {
-
-    }
-  }
 
 }
 
