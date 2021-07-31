@@ -3,36 +3,41 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('interviews', {
+        return queryInterface.createTable('fees', {
           id: {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          duration: {
-            type: Sequelize.INTEGER
-          },
-          header: {
-            type: Sequelize.STRING,
-            defaultValue: ''
-          },
-          title: {
-            type: Sequelize.STRING
+          fee_subcategory_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'fee_subcategories',
+              key: 'id',
+              as: 'fee_subcategory_id'
+            }
           },
           description: {
             type: Sequelize.TEXT
           },
-          speaker: {
+          total: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+          },
+          currency: {
+            type: Sequelize.STRING,
+            defaultValue: 'NGN'
+          },
+          additional: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
           },
-          video_url: {
-            type: Sequelize.STRING
-          },
-          interviewdate: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          charges: {
+            type: Sequelize.ARRAY(Sequelize.STRING),
+            defaultValue: [],
           },
           created_at: {
             allowNull: false,
@@ -48,6 +53,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('interviews');
+    return queryInterface.dropTable('fees');
   }
 };

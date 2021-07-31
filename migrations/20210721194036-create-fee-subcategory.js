@@ -10,6 +10,16 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
+          fee_category_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'fee_categories',
+              key: 'id',
+              as: 'fee_category_id'
+            }
+          },
           name: {
             type: Sequelize.STRING,
             unique: true

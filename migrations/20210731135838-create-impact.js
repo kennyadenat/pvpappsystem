@@ -3,15 +3,12 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('interviews', {
+        return queryInterface.createTable('impacts', {
           id: {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
-          },
-          duration: {
-            type: Sequelize.INTEGER
           },
           header: {
             type: Sequelize.STRING,
@@ -23,16 +20,17 @@ module.exports = {
           description: {
             type: Sequelize.TEXT
           },
-          speaker: {
+          body: {
+            type: Sequelize.TEXT
+          },
+          imp_type: {
+            allowNull: false,
+            type: Sequelize.ENUM('success', 'impact'),
+            defaultValue: 'success',
+          },
+          story: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
-          },
-          video_url: {
-            type: Sequelize.STRING
-          },
-          interviewdate: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
           },
           created_at: {
             allowNull: false,
@@ -48,6 +46,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('interviews');
+    return queryInterface.dropTable('impacts');
   }
 };

@@ -1,21 +1,24 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const interview = sequelize.define('interview', {
+  const impact = sequelize.define('impact', {
     header: DataTypes.STRING,
-    duration: DataTypes.INTEGER,
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
-    speaker: {
+    body: DataTypes.TEXT,
+    imp_type: {
+      allowNull: false,
+      type: DataTypes.ENUM('success', 'impact'),
+      defaultValue: 'success',
+    },
+    story: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
-    video_url: DataTypes.STRING,
-    interviewdate: DataTypes.DATE
   }, {
     underscored: true,
   });
-  interview.associate = function (models) {
+  impact.associate = function (models) {
     // associations can be defined here
   };
-  return interview;
+  return impact;
 };
