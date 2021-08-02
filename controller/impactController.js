@@ -24,6 +24,7 @@ const impactAttr = [
   'body',
   'imp_type',
   'story',
+  'updated_at',
 ];
 
 
@@ -38,6 +39,47 @@ class ImpactController {
    * @memberof ImpactController
    */
   static async getAllImpact(req, res, next) {
+    try {
+
+      const {
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      impact
+        .findAndCountAll({
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: impactAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'impact', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof ImpactController
+   */
+  static async getImpacts(req, res, next) {
     try {
 
       const {
@@ -95,31 +137,50 @@ class ImpactController {
         story,
       } = req.body;
 
-      imageUploads(req.file, (image) => {
-        if (image.err) {
-          errorResponse(res, 400, 'Could not process your request')
-          //   serverErrorResponsess('Could not process your request');
-        } else {
+      const newContent = {
+        title: title,
+        body: body,
+        header: 'https://pvpdescriptors.s3.us-east-2.amazonaws.com/news/Sun%20Jul%2018%202021%2002%3A19%3A01%20GMT%2B0100%20%28West%20Africa%20Standard%20Time%29irina-WZbJPdz42VM-unsplash.jpg',
+        description: description,
+        imp_type: imp_type,
+        story: story ? JSON.parse(story) : []
+      };
 
-          const newContent = {
-            title: title,
-            body: body,
-            header: image.data,
-            description: description,
-            imp_type: imp_type,
-            story: story ? JSON.parse(story) : []
-          };
+      impact
+        .create(newContent)
+        .then((response) => {
+          successResponse(res, 200, 'impact', response)
+        })
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
 
-          impact
-            .create(newContent)
-            .then((response) => {
-              successResponse(res, 200, 'impact', response)
-            })
-            .catch((error) => {
-              errorResponse(res, 400, error)
-            });
-        }
-      });
+      // imageUploads(req.file, (image) => {
+      //   if (image.err) {
+      //     errorResponse(res, 400, 'Could not process your request')
+      //     //   serverErrorResponsess('Could not process your request');
+      //   } else {
+
+      //     const newContent = {
+      //       title: title,
+      //       body: body,
+      //       header: image.data,
+      //       description: description,
+      //       imp_type: imp_type,
+      //       story: story ? JSON.parse(story) : []
+      //     };
+
+      //     impact
+      //       .create(newContent)
+      //       .then((response) => {
+      //         successResponse(res, 200, 'impact', response)
+      //       })
+      //       .catch((error) => {
+      //         errorResponse(res, 400, error)
+      //       });
+      //   }
+      // });
 
     } catch (error) {
       return next(error);

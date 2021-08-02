@@ -12,10 +12,11 @@ const {
   getAllImpact,
   createImpact,
   updateImpact,
-  getOneImpact
+  getOneImpact,
+  getImpacts
 } = impactController;
 
-
+router.post('/getimpacts', getImpacts);
 router.post('/getallimpact', getAllImpact);
 router.post('/createimpact', verifyToken, multer({
   dest: 'temp/',

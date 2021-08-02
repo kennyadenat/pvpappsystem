@@ -16,7 +16,8 @@ const {
 } = models;
 
 const topicAttr = ['id', 'name'];
-const subtopicAttr = ['id', 'name'];
+const subtopicAttr = ['id', 'fee_category_id', 'name'];
+const subAttr = ['id', 'name'];
 const feeAttr = [
   'id',
   'description',
@@ -38,6 +39,11 @@ class FeeController {
             ['created_at', 'ASC'],
           ],
           attributes: topicAttr,
+          include: [{
+            model: fee_subcategory,
+            as: 'fee_subcategories',
+            attributes: subAttr
+          }]
         })
         .then(response => {
           successResponse(res, 200, 'fee', response);
@@ -184,7 +190,7 @@ class FeeController {
       } = req.body;
 
       const newTopic = {
-        name: title
+        name: name
       };
 
       fee_category.create(newTopic)

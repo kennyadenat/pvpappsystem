@@ -27,10 +27,10 @@ router.post('/updatefee', verifyToken, updateFee);
 router.post('/createtopic', verifyToken, createTopic);
 router.post('/updatetopic', verifyToken, updateTopic);
 router.post('/createsubtopic', verifyToken, createSubtopic);
-router.post('/updatesubTopic', verifyToken, updateSubTopic);
+router.post('/updatesubtopic', verifyToken, updateSubTopic);
 router.post('/removesubtopic', verifyToken, removeSubTopic);
 router.post('/removetopic', verifyToken, removeTopic);
-router.post('/gettopic', verifyToken, getAllTopic);
-router.post('/getsubtopic', verifyToken, getAllSubTopic);
+router.get('/gettopic', getAllTopic);
+router.get('/getsubtopic', getAllSubTopic);
 
 module.exports = router;
