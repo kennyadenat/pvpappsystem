@@ -18,12 +18,14 @@ const {
   removeSubTopic,
   removeTopic,
   getAllSubTopic,
-  getAllTopic
+  getAllTopic,
+  getOneFee
 } = feeController;
 
 
 router.post('/createfee', verifyToken, createFee);
 router.post('/updatefee', verifyToken, updateFee);
+router.post('/getonefee', getOneFee);
 router.post('/createtopic', verifyToken, createTopic);
 router.post('/updatetopic', verifyToken, updateTopic);
 router.post('/createsubtopic', verifyToken, createSubtopic);

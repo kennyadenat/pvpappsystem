@@ -3,6 +3,7 @@ const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 
+
 const {
   successResponse,
   errorResponse,
@@ -81,6 +82,23 @@ class FeeController {
           errorResponse(res, 200, error);
         });
 
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async getOneFee(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+      fee.findOne({
+          where: {
+            fee_subcategory_id: id
+          }
+        })
+        .then(response => successResponse(res, 200, 'fee', response))
+        .catch(error => errorResponse(res, 400, error))
     } catch (error) {
       return next(error);
     }
