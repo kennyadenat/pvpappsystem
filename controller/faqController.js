@@ -264,10 +264,13 @@ class FaqController {
           }]
         })
         .then(response => {
-          successResponse(res, 200, 'faq', response);
+          if (response == null) {
+            errorResponse(res, 400, 'No Faqs Found');
+          } else {
+            successResponse(res, 200, 'faq', response);
+          }
         })
         .catch(error => {
-          console.log(error);
           errorResponse(res, 400, error);
         });
 

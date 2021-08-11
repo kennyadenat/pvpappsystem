@@ -105,7 +105,6 @@ class ArticleController {
           successResponse(res, 200, 'article', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -256,12 +255,10 @@ class ArticleController {
           successResponse(res, 200, 'article', articles)
         })
         .catch(error => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }

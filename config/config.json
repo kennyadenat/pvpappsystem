@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "govgrrrp",
-    "password": "ZqbaYwx3q7_7MElbLErQldgobidFd7SS",
+    "password": "ZqbaYwx3q7_7MElbLErQldgobi7SS",
     "database": "govgrrrp",
     "host": "batyr.db.elephantsql.com",
     "dialect": "postgres"

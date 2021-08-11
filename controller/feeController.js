@@ -29,6 +29,8 @@ const feeAttr = [
   'charges',
 ];
 
+const subFeeAttr = ['id'];
+
 class FeeController {
 
 
@@ -43,7 +45,12 @@ class FeeController {
           include: [{
             model: fee_subcategory,
             as: 'fee_subcategories',
-            attributes: subAttr
+            attributes: subAttr,
+            include: [{
+              model: fee,
+              as: 'fees',
+              attributes: subFeeAttr
+            }]
           }]
         })
         .then(response => {
@@ -90,14 +97,35 @@ class FeeController {
   static async getOneFee(req, res, next) {
     try {
       const {
-        id
-      } = req.query;
-      fee.findOne({
+        topic,
+        subtopic,
+        currency
+      } = req.body;
+
+
+      return fee.findOne({
           where: {
-            fee_subcategory_id: id
+            fee_subcategory_id: subtopic,
+          },
+          attributes: feeAttr,
+          include: [{
+            model: fee_subcategory,
+            as: 'fee_subcategories',
+            attributes: subAttr,
+            include: [{
+              model: fee_category,
+              as: 'fee_categories',
+              attributes: topicAttr
+            }]
+          }]
+        })
+        .then(response => {
+          if (response) {
+            successResponse(res, 200, 'fee', response);
+          } else {
+            errorResponse(res, 400, 'Fee not Found')
           }
         })
-        .then(response => successResponse(res, 200, 'fee', response))
         .catch(error => errorResponse(res, 400, error))
     } catch (error) {
       return next(error);
@@ -135,12 +163,11 @@ class FeeController {
         charges: charges ? charges : [],
       };
 
-      fee.create(newFee)
+      return fee.create(newFee)
         .then((response) => {
           successResponse(res, 200, 'fee', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -211,7 +238,7 @@ class FeeController {
         name: name
       };
 
-      fee_category.create(newTopic)
+      return fee_category.create(newTopic)
         .then((response) => {
           successResponse(res, 200, 'fee', response)
         })
@@ -291,7 +318,7 @@ class FeeController {
         name: name,
       };
 
-      fee_subcategory
+      return fee_subcategory
         .create(newSubtopic)
         .then((response) => {
           successResponse(res, 200, 'fee', response);

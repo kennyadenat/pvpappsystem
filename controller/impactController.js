@@ -152,7 +152,6 @@ class ImpactController {
           successResponse(res, 200, 'impact', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 

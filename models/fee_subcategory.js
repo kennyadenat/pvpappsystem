@@ -13,6 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    fee_subcategory.hasMany(models.fee, {
+      foreignKey: 'fee_subcategory_id',
+      as: 'fees',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return fee_subcategory;
 };
