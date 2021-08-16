@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
-    
+
   };
   return article;
 };

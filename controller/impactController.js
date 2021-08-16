@@ -21,6 +21,15 @@ const impactAttr = [
   'header',
   'title',
   'description',
+  'imp_type',
+  'updated_at',
+];
+
+const impactOneAttr = [
+  'id',
+  'header',
+  'title',
+  'description',
   'body',
   'imp_type',
   'story',
@@ -304,7 +313,7 @@ class ImpactController {
           where: {
             id: id
           },
-          attributes: impactAttr,
+          attributes: impactOneAttr,
         }).then((response) => {
           successResponse(res, 200, 'impact', response)
         })
