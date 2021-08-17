@@ -3,6 +3,11 @@ module.exports = (sequelize, DataTypes) => {
   const impact = sequelize.define('impact', {
     header: DataTypes.STRING,
     title: DataTypes.STRING,
+    slug: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true,
+    },
     description: DataTypes.TEXT,
     body: DataTypes.TEXT,
     imp_type: {

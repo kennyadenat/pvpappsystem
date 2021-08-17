@@ -9,7 +9,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
+    topic: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
+    },
     video_url: DataTypes.STRING,
+    slug: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true,
+    },
     interviewdate: DataTypes.DATE
   }, {
     underscored: true,

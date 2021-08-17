@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
   });
   speaker.associate = function (models) {
     // associations can be defined here
+    speaker.belongsTo(models.events, {
+      foreignKey: 'event_id',
+      as: 'events',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return speaker;
 };

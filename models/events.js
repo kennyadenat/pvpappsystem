@@ -4,12 +4,14 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     start: DataTypes.DATE,
+    time: DataTypes.STRING,
     end: DataTypes.DATE,
     status: {
       type: DataTypes.ENUM('closed', 'started', 'loading', 'suspended'),
       defaultValue: 'loading'
     },
     type: DataTypes.STRING,
+    zoomlink: DataTypes.STRING,
     header: {
       type: DataTypes.STRING,
       defaultValue: ''
@@ -27,6 +29,19 @@ module.exports = (sequelize, DataTypes) => {
   });
   events.associate = function (models) {
     // associations can be defined here
+    events.hasMany(models.attendee, {
+      foreignKey: 'event_id',
+      as: 'attendees',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
+
+    events.hasMany(models.speaker, {
+      foreignKey: 'event_id',
+      as: 'speakers',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return events;
 };

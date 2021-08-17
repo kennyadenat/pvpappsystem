@@ -3,40 +3,43 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('interviews', {
+        return queryInterface.createTable('attendees', {
           id: {
             allowNull: false,
-            primaryKey: true,
             type: Sequelize.UUID,
+            primaryKey: true,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          duration: {
-            type: Sequelize.INTEGER
-          },
-          header: {
-            type: Sequelize.STRING,
-            defaultValue: ''
-          },
-          title: {
+          email: {
             type: Sequelize.STRING
           },
-          description: {
-            type: Sequelize.TEXT
-          },
-          speaker: {
-            type: Sequelize.ARRAY(Sequelize.STRING),
-            defaultValue: [],
-          },
-          topic: {
-            type: Sequelize.ARRAY(Sequelize.STRING),
-            defaultValue: [],
-          },
-          video_url: {
+          firstname: {
             type: Sequelize.STRING
           },
-          interviewdate: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          lastname: {
+            type: Sequelize.STRING
+          },
+          phone: {
+            type: Sequelize.STRING
+          },
+          organization: {
+            type: Sequelize.STRING
+          },
+          s_id: {
+            type: Sequelize.STRING
+          },
+          state: {
+            type: Sequelize.STRING
+          },
+          event_id: {
+            type: Sequelize.UUID,
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+            references: {
+              model: 'events',
+              key: 'id',
+              as: 'event_id'
+            }
           },
           created_at: {
             allowNull: false,
@@ -52,6 +55,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('interviews');
+    return queryInterface.dropTable('attendees');
   }
 };

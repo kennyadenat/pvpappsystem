@@ -152,7 +152,10 @@ class ImpactController {
         header: 'https://pvpdescriptors.s3.us-east-2.amazonaws.com/news/Sun%20Jul%2018%202021%2002%3A19%3A01%20GMT%2B0100%20%28West%20Africa%20Standard%20Time%29irina-WZbJPdz42VM-unsplash.jpg',
         description: description,
         imp_type: imp_type,
-        story: story ? JSON.parse(story) : []
+        story: story ? JSON.parse(story) : [],
+        slug: slugify(title, {
+          lower: true
+        })
       };
 
       impact
@@ -325,9 +328,6 @@ class ImpactController {
       return next(error);
     }
   }
-
-
-
 
 }
 

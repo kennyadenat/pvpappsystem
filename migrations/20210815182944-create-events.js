@@ -19,6 +19,9 @@ module.exports = {
           start: {
             type: Sequelize.DATE
           },
+          time: {
+            type: Sequelize.STRING
+          },
           end: {
             type: Sequelize.DATE
           },
@@ -26,6 +29,9 @@ module.exports = {
             type: Sequelize.ENUM('closed', 'started', 'loading', 'suspended')
           },
           type: {
+            type: Sequelize.STRING
+          },
+          zoomlink: {
             type: Sequelize.STRING
           },
           header: {
