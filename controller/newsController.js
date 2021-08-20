@@ -27,6 +27,12 @@ const oneNews = [
   'created_at'
 ];
 
+const cNews = [
+  'id',
+  'title',
+  'slug',
+];
+
 const allNews = [
   'id',
   'title',
@@ -492,6 +498,45 @@ class NewsController {
           console.log(error);
           res.status(400).send(error)
         });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof NewsController
+   */
+  static async getTrending(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return blog.findAll({
+          limit: 10,
+          where: {
+            blog_type: id
+          },
+          order: [
+            ['read_count', 'DESC'],
+            ['created_at', 'DESC'],
+            ['title', 'DESC'],
+          ]
+        }).then((response) => {
+          console.log('all', response);
+          successResponse(res, 200, 'news', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });;
+
 
     } catch (error) {
       return next(error);

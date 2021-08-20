@@ -28,7 +28,8 @@ const interviewAttr = [
   'header',
   'title',
   'description',
-  'video_url',
+  'interviewdate',
+  'slug',
   'updated_at',
 ];
 
@@ -101,7 +102,6 @@ class InterviewController {
     try {
 
       const {
-        imp_type,
         page,
         size,
         search,
@@ -110,9 +110,6 @@ class InterviewController {
 
       interview
         .findAndCountAll({
-          where: {
-            imp_type: imp_type
-          },
           order: [
             [`created_at`, 'ASC'],
           ],

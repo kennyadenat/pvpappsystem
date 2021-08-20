@@ -21,6 +21,7 @@ const impactAttr = [
   'header',
   'title',
   'description',
+  'slug',
   'imp_type',
   'updated_at',
 ];
@@ -314,7 +315,7 @@ class ImpactController {
       impact
         .findOne({
           where: {
-            id: id
+            slug: id
           },
           attributes: impactOneAttr,
         }).then((response) => {

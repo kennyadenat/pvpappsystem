@@ -16,7 +16,8 @@ const {
   getAllNews,
   getPostEdit,
   updateNews,
-  updateViews
+  updateViews,
+  getTrending
 } = newsController;
 
 
@@ -41,5 +42,6 @@ router.post('/updatenews', verifyToken, multer({
 }).single(
   'header'
 ), updateNews);
+router.post('/gettrending', getTrending);
 
 module.exports = router;
