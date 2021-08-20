@@ -126,7 +126,6 @@ class NewsController {
             size
           }),
         }).then((response) => {
-          console.log('all', response);
           successResponse(res, 200, 'news', paginateCount(response, page, size))
         })
         .catch((error) => {
@@ -347,7 +346,6 @@ class NewsController {
             size
           }),
         }).then((response) => {
-          console.log('lan', response);
           successResponse(res, 200, 'news', paginateCount(response, page, size))
         })
         .catch((error) => {
@@ -488,14 +486,12 @@ class NewsController {
               })
               .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
               .catch((error) => {
-                console.log(error);
                 errorResponse(res, 400, error)
               });
           }
 
         })
         .catch((error) => {
-          console.log(error);
           res.status(400).send(error)
         });
 
@@ -530,7 +526,6 @@ class NewsController {
             ['title', 'DESC'],
           ]
         }).then((response) => {
-          console.log('all', response);
           successResponse(res, 200, 'news', response)
         })
         .catch((error) => {

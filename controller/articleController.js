@@ -211,7 +211,7 @@ class ArticleController {
 
   static async getUploads(req, res, next) {
     try {
-      console.log('params', req.body);
+
     } catch (error) {
 
     }

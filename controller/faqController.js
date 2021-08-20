@@ -222,7 +222,6 @@ class FaqController {
           successResponse(res, 200, 'faq', response);
         })
         .catch(error => {
-          console.log(error);
           errorResponse(res, 400, error);
         });
 

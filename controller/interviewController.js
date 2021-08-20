@@ -154,65 +154,37 @@ class InterviewController {
         topic
       } = req.body;
 
-      console.log(req.body);
+      imageUploads(req.file, (image) => {
+        if (image.err) {
+          errorResponse(res, 400, 'Could not process your request')
+          //   serverErrorResponsess('Could not process your request');
+        } else {
+          const newContent = {
+            title: title,
+            duration: duration,
+            interviewdate: interviewdate,
+            header: image.data,
+            description: description,
+            video_url: video_url,
+            speaker: speaker ? JSON.parse(speaker) : [],
+            topic: topic ? JSON.parse(topic) : [],
+            slug: slugify(title, {
+              lower: true
+            })
+          };
 
-      const newContent = {
-        title: title,
-        duration: duration,
-        interviewdate: interviewdate,
-        header: 'https://pvpdescriptors.s3.us-east-2.amazonaws.com/news/Sun%20Jul%2018%202021%2002%3A19%3A01%20GMT%2B0100%20%28West%20Africa%20Standard%20Time%29irina-WZbJPdz42VM-unsplash.jpg',
-        description: description,
-        video_url: video_url,
-        speaker: speaker ? JSON.parse(speaker) : [],
-        topic: topic ? JSON.parse(topic) : [],
-        slug: slugify(title, {
-          lower: true
-        })
-      };
-
-      interview
-        .create(newContent)
-        .then((response) => {
-          successResponse(res, 200, 'interview', response)
-        })
-        .catch((error) => {
-          console.log(error);
-          errorResponse(res, 400, error)
-        });
-
-      // imageUploads(req.file, (image) => {
-      //   if (image.err) {
-      //     errorResponse(res, 400, 'Could not process your request')
-      //     //   serverErrorResponsess('Could not process your request');
-      //   } else {
-
-      //     const newContent = {
-      //       title: title,
-      //       duration: duration,
-      //       interviewdate: interviewdate,
-      //       header: image.data,
-      //       description: description,
-      //       video_url: video_url,
-      //       speaker: speaker ? JSON.parse(speaker) : [],
-      //       topic: topic ? JSON.parse(topic) : [],
-      //       slug: slugify(title, {
-      //         lower: true
-      //       })
-      //     };
-
-      //     interview
-      //       .create(newContent)
-      //       .then((response) => {
-      //         successResponse(res, 200, 'interview', response)
-      //       })
-      //       .catch((error) => {
-      //         errorResponse(res, 400, error)
-      //       });
-      //   }
-      // });
+          interview
+            .create(newContent)
+            .then((response) => {
+              successResponse(res, 200, 'interview', response)
+            })
+            .catch((error) => {
+              errorResponse(res, 400, error)
+            });
+        }
+      });
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }
@@ -341,6 +313,63 @@ class InterviewController {
         })
         .catch((error) => {
           errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof InterviewController
+   */
+  static async updateViews(req, res, next) {
+
+    try {
+      const {
+        slug
+      } = req.query;
+
+      return interview
+        .findOne({
+          where: {
+            slug: slug
+          }
+        })
+        .then(oneInterview => {
+          if (!oneInterview) {
+            return res.status(404).send({
+              message: 'Interview Not Found',
+            });
+          } else {
+            let read_count = oneInterview.dataValues.read_count;
+            read_count = read_count + 1;
+
+            const newContent = {
+              read_count: read_count,
+            };
+
+            return oneInterview
+              .update(newContent, {
+                fields: Object.keys(newContent)
+              }, {
+                editPost
+              })
+              .then((updatedInter) => successResponse(res, 204, 'interview', 'Count Updated')) // Send back the updated todo.
+              .catch((error) => {
+                errorResponse(res, 400, error)
+              });
+          }
+
+        })
+        .catch((error) => {
+          res.status(400).send(error)
         });
 
     } catch (error) {

@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
+    read_count: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     video_url: DataTypes.STRING,
     slug: {
       allowNull: false,

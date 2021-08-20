@@ -22,6 +22,11 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true
           },
+          read_count: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+          },
           title: {
             type: Sequelize.STRING
           },
