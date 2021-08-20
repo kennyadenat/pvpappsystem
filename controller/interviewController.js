@@ -2,10 +2,25 @@ const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
-
+const slugify = require('slugify');
 const {
   interview
 } = models;
+
+
+const {
+  Op,
+  Sequelize
+} = require("sequelize");
+const {
+  sequelize
+} = require('../models');
+
+const {
+  successResponse,
+  errorResponse,
+  serverErrorResponsess
+} = serverResponse;
 
 
 const interviewAttr = [
@@ -142,6 +157,8 @@ class InterviewController {
         topic
       } = req.body;
 
+      console.log(req.body);
+
       const newContent = {
         title: title,
         duration: duration,
@@ -162,6 +179,7 @@ class InterviewController {
           successResponse(res, 200, 'interview', response)
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -197,6 +215,7 @@ class InterviewController {
       // });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

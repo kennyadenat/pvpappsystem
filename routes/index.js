@@ -12,6 +12,9 @@ const newsRoutes = require('./news');
 const faqRoutes = require('./faq');
 const feeRoutes = require('./fee');
 const impactRoutes = require('./impact');
+const interviewRoutes = require('./interview');
+
+
 
 /* Exports the Respective Routes */
 router.use(homeRoutes);
@@ -23,5 +26,7 @@ router.use('/news', newsRoutes);
 router.use('/faq', faqRoutes);
 router.use('/fee', feeRoutes);
 router.use('/impact', impactRoutes);
+router.use('/interview', interviewRoutes);
+
 
 module.exports = router;
