@@ -3,6 +3,10 @@ const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const slugify = require('slugify');
+const imageUploads = require('../helpers/imageUpload');
+const fs = require('fs');
+
+
 const {
   interview
 } = models;
@@ -129,8 +133,6 @@ class InterviewController {
       return next(error);
     }
   }
-
-
 
   /**
    * 
@@ -371,6 +373,43 @@ class InterviewController {
         .catch((error) => {
           res.status(400).send(error)
         });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object}
+   * @memberof InterviewController
+   */
+  static async getTrending(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return interview
+        .findAll({
+          limit: 10,
+          order: [
+            ['read_count', 'DESC'],
+            ['created_at', 'DESC'],
+            ['title', 'DESC'],
+          ]
+        }).then((response) => {
+          successResponse(res, 200, 'interview', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });;
+
 
     } catch (error) {
       return next(error);

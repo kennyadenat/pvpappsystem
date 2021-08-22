@@ -2,10 +2,27 @@ const models = require('../models');
 const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
+const imageUploads = require('../helpers/imageUpload');
+const fs = require('fs');
+
 
 const {
   gallery
 } = models;
+
+const galleryAttr = [
+  'filename',
+  'url',
+  'media_type',
+  'description',
+  'updated_at',
+];
+
+const {
+  successResponse,
+  errorResponse,
+  serverErrorResponse
+} = serverResponse;
 
 class GalleryController {
 
@@ -32,7 +49,7 @@ class GalleryController {
           order: [
             [`created_at`, 'ASC'],
           ],
-          attributes: interviewAttr,
+          attributes: galleryAttr,
           ...paginate({
             page,
             size
@@ -46,6 +63,51 @@ class GalleryController {
 
     } catch (error) {
       return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof GalleryController
+   */
+  static async uploadGallery(req, res, next) {
+    try {
+
+      const {
+        filename,
+        description,
+      } = req.body;
+
+
+      imageUploads(req.file, (image) => {
+        if (image.err) {
+          errorResponse(res, 400, 'Could not process your request')
+          //   serverErrorResponsess('Could not process your request');
+        } else {
+          const newContent = {
+            filename: filename,
+            description: description,
+            media_type: req.file.originalname.split('.').pop(),
+            url: image.data,
+          };
+
+          gallery
+            .create(newContent)
+            .then((response) => {
+              successResponse(res, 200, 'gallery', response)
+            })
+            .catch((error) => {
+              errorResponse(res, 400, error)
+            });
+        }
+      });
+
+    } catch (error) {
+
     }
   }
 
