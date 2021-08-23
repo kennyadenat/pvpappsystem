@@ -11,9 +11,13 @@ const {
 
 const {
   getAllGallery,
-  uploadGallery
+  uploadGallery,
+  getCollectibles,
+  getImages
 } = galleryController;
 
+router.post('/getcollectibles', getCollectibles);
+router.post('/getimages', getImages);
 router.post('/getallGallery', getAllGallery);
 router.post('/uploadgallery', verifyToken, multer({
   dest: 'temp/',

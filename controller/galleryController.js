@@ -4,7 +4,9 @@ const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const imageUploads = require('../helpers/imageUpload');
 const fs = require('fs');
-
+const {
+  Op
+} = require("sequelize");
 
 const {
   gallery
@@ -58,6 +60,101 @@ class GalleryController {
           successResponse(res, 200, 'gallery', paginateCount(response, page, size))
         })
         .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof GalleryController
+   */
+  static async getCollectibles(req, res, next) {
+    try {
+
+      const {
+        id,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      gallery
+        .findAndCountAll({
+          where: {
+            media_type: id
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: galleryAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'gallery', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof GalleryController
+   */
+  static async getImages(req, res, next) {
+    try {
+
+      const {
+        id,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      gallery
+        .findAndCountAll({
+          where: {
+            [Op.or]: [{
+              media_type: 'png'
+            }, {
+              media_type: 'jpeg'
+            }]
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: galleryAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'gallery', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
