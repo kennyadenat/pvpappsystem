@@ -140,6 +140,8 @@ class GalleryController {
               media_type: 'png'
             }, {
               media_type: 'jpeg'
+            }, {
+              media_type: 'JPG'
             }]
           },
           order: [

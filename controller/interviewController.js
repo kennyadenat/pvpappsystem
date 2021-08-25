@@ -307,13 +307,14 @@ class InterviewController {
       interview
         .findOne({
           where: {
-            id: id
+            slug: id
           },
           attributes: interviewOneAttr,
         }).then((response) => {
           successResponse(res, 200, 'interview', response)
         })
         .catch((error) => {
+
           errorResponse(res, 400, error)
         });
 
@@ -360,8 +361,6 @@ class InterviewController {
             return oneInterview
               .update(newContent, {
                 fields: Object.keys(newContent)
-              }, {
-                editPost
               })
               .then((updatedInter) => successResponse(res, 204, 'interview', 'Count Updated')) // Send back the updated todo.
               .catch((error) => {

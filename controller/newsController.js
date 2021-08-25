@@ -5,6 +5,10 @@ const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const imageUploads = require('../helpers/imageUpload');
 const fs = require('fs');
+const {
+  Op
+} = require("sequelize");
+
 
 
 const {
@@ -42,9 +46,6 @@ const allNews = [
   'read_time',
   'read_count',
   'blog_type',
-  'up_vote',
-  'down_vote',
-  'tags',
   'status',
   'created_at',
   'updated_at'
@@ -107,7 +108,7 @@ class NewsController {
         filter
       } = req.query;
 
-      blog
+      return blog
         .findAndCountAll({
           where: {
             blog_type: blog_type
@@ -515,7 +516,8 @@ class NewsController {
         id
       } = req.query;
 
-      return blog.findAll({
+      return blog
+        .findAll({
           limit: 10,
           where: {
             blog_type: id
@@ -524,7 +526,13 @@ class NewsController {
             ['read_count', 'DESC'],
             ['created_at', 'DESC'],
             ['title', 'DESC'],
-          ]
+          ],
+          attributes: allNews,
+          include: [{
+            model: category,
+            as: 'categories',
+            attributes: catAttr
+          }],
         }).then((response) => {
           successResponse(res, 200, 'news', response)
         })
@@ -534,6 +542,56 @@ class NewsController {
 
 
     } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {Function} next 
+   * @memberof NewsController
+   */
+  static async getSimilar(req, res, next) {
+    try {
+
+      const {
+        blog_type,
+        id,
+        category
+      } = req.query;
+
+      return blog
+        .findAll({
+          limit: 10,
+          where: {
+            blog_type: blog_type,
+            [Op.or]: [{
+              category_id: category
+            }],
+
+          },
+          order: [
+            ['created_at', 'DESC'],
+          ],
+          attributes: allNews,
+          include: [{
+            model: models.category,
+            as: 'categories',
+            attributes: catAttr
+          }],
+        }).then((response) => {
+          successResponse(res, 200, 'news', response)
+        })
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });;
+
+    } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

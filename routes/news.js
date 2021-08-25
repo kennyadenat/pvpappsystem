@@ -17,7 +17,8 @@ const {
   getPostEdit,
   updateNews,
   updateViews,
-  getTrending
+  getTrending,
+  getSimilar
 } = newsController;
 
 
@@ -43,5 +44,6 @@ router.post('/updatenews', verifyToken, multer({
   'header'
 ), updateNews);
 router.post('/gettrending', getTrending);
+router.post('/getsimilar', getSimilar);
 
 module.exports = router;
