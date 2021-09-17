@@ -71,13 +71,10 @@ class InterviewController {
         search,
         filter
       } = req.query;
-
       interview
         .findAndCountAll({
           where: {
-            [Op.or]: [{
-              status: sequelize.where(sequelize.fn('LOWER', sequelize.col('status')), 'LIKE', '%' + search + '%'),
-            }]
+            status: search
           },
           order: [
             [`created_at`, 'ASC'],
@@ -91,6 +88,7 @@ class InterviewController {
           successResponse(res, 200, 'interview', paginateCount(response, page, size))
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
 
@@ -120,6 +118,9 @@ class InterviewController {
 
       interview
         .findAndCountAll({
+          where: {
+            status: 'published'
+          },
           order: [
             [`created_at`, 'ASC'],
           ],
