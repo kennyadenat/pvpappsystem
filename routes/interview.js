@@ -15,7 +15,8 @@ const {
   getOneInterview,
   getInterviews,
   updateViews,
-  getTrending
+  getTrending,
+  destroyInterview
 } = interviewController;
 
 router.post('/getinterviews', getInterviews);
@@ -39,5 +40,6 @@ router.post('/updateinterview', verifyToken, multer({
 ), updateInterview);
 router.post('/updateviews', updateViews);
 router.post('/gettrending', getTrending);
+router.post('/destroyinterview', destroyInterview);
 
 module.exports = router;

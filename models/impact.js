@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     underscored: true,
   });

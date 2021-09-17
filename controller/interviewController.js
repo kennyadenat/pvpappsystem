@@ -35,6 +35,7 @@ const interviewAttr = [
   'interviewdate',
   'slug',
   'updated_at',
+  'read_count'
 ];
 
 const interviewOneAttr = [
@@ -73,6 +74,11 @@ class InterviewController {
 
       interview
         .findAndCountAll({
+          where: {
+            [Op.or]: [{
+              status: sequelize.where(sequelize.fn('LOWER', sequelize.col('status')), 'LIKE', '%' + search + '%'),
+            }]
+          },
           order: [
             [`created_at`, 'ASC'],
           ],
@@ -414,6 +420,38 @@ class InterviewController {
       return next(error);
     }
   }
+
+  /**
+   * @static
+   * Destroy a Examination
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} destroys an Examination
+   * @memberof CharacterController
+   */
+  static async destroyInterview(req, res, next) {
+    const {
+      id
+    } = req.query;
+
+    return interview
+      .findByPk(id)
+      .then(upInterview => {
+        const newRes = {
+          status: 'trash'
+        };
+        return upInterview
+          .update(newRes, {
+            fields: Object.keys(newRes)
+          })
+          .then((allRes) => {
+            successResponse(res, 201, 'interview', '')
+          }) // Send back the updated todo.
+
+      });
+  }
+
 
 }
 

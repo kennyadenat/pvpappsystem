@@ -44,6 +44,15 @@ module.exports = {
           video_url: {
             type: Sequelize.STRING
           },
+          status: {
+            allowNull: false,
+            type: Sequelize.ENUM('draft', 'published', 'trash'),
+            defaultValue: 'draft',
+          },
+          deleted: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
+          },
           interviewdate: {
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),

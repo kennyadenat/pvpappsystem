@@ -42,6 +42,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    events.hasMany(models.partner, {
+      foreignKey: 'event_id',
+      as: 'partners',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    });
   };
   return events;
 };

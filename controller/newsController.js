@@ -571,7 +571,9 @@ class NewsController {
             [Op.or]: [{
               category_id: category
             }],
-
+            id: {
+              [Op.ne]: id
+            }
           },
           order: [
             ['created_at', 'DESC'],
@@ -586,12 +588,10 @@ class NewsController {
           successResponse(res, 200, 'news', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });;
 
     } catch (error) {
-      console.log(error);
       return next(error);
     }
   }

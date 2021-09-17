@@ -33,6 +33,10 @@ module.exports = {
             type: Sequelize.ENUM('success', 'impact'),
             defaultValue: 'success',
           },
+          deleted: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
+          },
           story: {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],

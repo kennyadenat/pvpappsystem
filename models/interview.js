@@ -24,7 +24,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    interviewdate: DataTypes.DATE
+    status: {
+      allowNull: false,
+      type: DataTypes.ENUM('draft', 'published', 'trash'),
+      defaultValue: 'draft',
+    },
+    interviewdate: DataTypes.DATE,
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     underscored: true,
   });
