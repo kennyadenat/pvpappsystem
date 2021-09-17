@@ -49,10 +49,6 @@ module.exports = {
             type: Sequelize.ENUM('draft', 'published', 'trash'),
             defaultValue: 'draft',
           },
-          deleted: {
-            type: Sequelize.BOOLEAN,
-            defaultValue: false
-          },
           interviewdate: {
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),

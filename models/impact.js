@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('success', 'impact'),
       defaultValue: 'success',
     },
+    status: {
+      allowNull: false,
+      type: DataTypes.ENUM('draft', 'published', 'trash'),
+      defaultValue: 'draft',
+    },
     story: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
-    },
-    deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
     },
   }, {
     underscored: true,

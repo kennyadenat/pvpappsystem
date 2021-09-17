@@ -30,10 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'draft',
     },
     interviewdate: DataTypes.DATE,
-    deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
   }, {
     underscored: true,
   });
