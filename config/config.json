@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "Iremide-09",
-    "database": "pvpwebsite",
+    "username": "root",
+    "password": "Notrespectre2016!",
+    "database": "pvpserver",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "govgrrrp",
-    "password": "ZqbaYwx3q7_7MElbLErQldgobi7SS",
+    "password": "ZqbaYwx3q7_7MElbLErQldgobidFd7SS",
     "database": "govgrrrp",
     "host": "batyr.db.elephantsql.com",
     "dialect": "postgres"

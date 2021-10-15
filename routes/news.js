@@ -18,7 +18,8 @@ const {
   updateNews,
   updateViews,
   getTrending,
-  getSimilar
+  getSimilar,
+  destroyNews
 } = newsController;
 
 
@@ -45,5 +46,6 @@ router.post('/updatenews', verifyToken, multer({
 ), updateNews);
 router.post('/gettrending', getTrending);
 router.post('/getsimilar', getSimilar);
+router.post('/destroynews', destroyNews);
 
 module.exports = router;

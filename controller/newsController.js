@@ -596,6 +596,37 @@ class NewsController {
     }
   }
 
+  /**
+   * @static
+   * Destroy a Examination
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} destroys an Interview
+   * @memberof NewsController
+   */
+  static async destroyNews(req, res, next) {
+    const {
+      id
+    } = req.query;
+
+    return blog
+      .findByPk(id)
+      .then(upBlog => {
+        const newRes = {
+          status: 'trash'
+        };
+        return upBlog
+          .update(newRes, {
+            fields: Object.keys(newRes)
+          })
+          .then((allRes) => {
+            successResponse(res, 201, 'interview', '')
+          }) // Send back the updated todo.
+
+      });
+  }
+
 }
 
 module.exports = NewsController;

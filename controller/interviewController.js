@@ -428,8 +428,8 @@ class InterviewController {
    * @param {object} req express request object
    * @param {object} res express response object
    * @param {function} next
-   * @returns {object} destroys an Examination
-   * @memberof CharacterController
+   * @returns {object} destroys an Interview
+   * @memberof InterviewController
    */
   static async destroyInterview(req, res, next) {
     const {
