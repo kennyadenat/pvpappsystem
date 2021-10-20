@@ -4,9 +4,9 @@ module.exports = {
     return queryInterface.createTable('partners', {
       id: {
         allowNull: false,
-        type: Sequelize.UUID,
+        autoIncrement: true,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.INTEGER
       },
       name: {
         type: Sequelize.STRING

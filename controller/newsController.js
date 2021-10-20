@@ -4,6 +4,7 @@ const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const imageUploads = require('../helpers/imageUpload');
+const multiUpload = require('../helpers/multiUpload');
 const fs = require('fs');
 const {
   Op
@@ -158,41 +159,75 @@ class NewsController {
         body,
         read_time,
         status,
+        header,
         tags,
         category_id,
         blog_type
       } = req.body;
 
-      imageUploads(req.file, (image) => {
-        if (image.err) {
-          errorResponse(res, 400, 'Could not process your request')
-          //   serverErrorResponsess('Could not process your request');
-        } else {
+      if (req.file) {
+        multiUpload(res, req.file, (image) => {
+          if (image.err) {
+            errorResponse(res, 400, 'Could not process your request')
+            //   serverErrorResponsess('Could not process your request');
+          } else {
 
-          const newContent = {
-            authors_id: authors_id,
-            title: title,
-            body: body,
-            header: image.data,
-            read_time: read_time,
-            blog_type: blog_type,
-            category_id: category_id,
-            status: status,
-            tags: tags ? JSON.parse(tags) : [],
-            slug: slugify(title, {
-              lower: true
-            })
-          };
+            const {
+              url
+            } = image;
 
-          blog.create(newContent)
-            .then((response) => {
-              successResponse(res, 200, blog_type, response)
-            })
-            .catch((error) => {
-              errorResponse(res, 400, error)
-            });
-        }
-      });
+            const newContent = {
+              authors_id: authors_id,
+              title: title,
+              body: body,
+              header: url,
+              read_time: read_time,
+              blog_type: blog_type,
+              category_id: category_id,
+              status: status,
+              tags: tags ? JSON.parse(tags) : [],
+              slug: slugify(title, {
+                lower: true
+              })
+            };
+
+            blog.create(newContent)
+              .then((response) => {
+                successResponse(res, 200, blog_type, response)
+              })
+              .catch((error) => {
+                errorResponse(res, 400, error)
+              });
+          }
+        });
+      } else {
+
+        const newContent = {
+          authors_id: authors_id,
+          title: title,
+          body: body,
+          header: header,
+          read_time: read_time,
+          blog_type: blog_type,
+          category_id: category_id,
+          status: status,
+          tags: tags ? JSON.parse(tags) : [],
+          slug: slugify(title, {
+            lower: true
+          })
+        };
+
+        blog.create(newContent)
+          .then((response) => {
+            successResponse(res, 200, blog_type, response)
+          })
+          .catch((error) => {
+            errorResponse(res, 400, error)
+          });
+
+      }
+
+
 
     } catch (error) {
       return next(error);
@@ -236,16 +271,20 @@ class NewsController {
             if (req.file) {
 
               // to remove the previous file??
-              imageUploads(req.file, (image) => {
+              multiUpload(res, req.file, (image) => {
                 if (image.err) {
                   errorResponse(res, 400, 'Could not process your request')
                   //   serverErrorResponsess('Could not process your request');
                 } else {
 
+                  const {
+                    url
+                  } = image;
+
                   const newContent = {
                     title: title,
                     body: body,
-                    header: image.data,
+                    header: url,
                     read_time: read_time,
                     category_id: category_id,
                     status: status,
