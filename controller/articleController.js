@@ -192,8 +192,9 @@ class ArticleController {
             errorResponse(res, 404, 'Article Not Found')
           }
 
-        })
-        .catch((error) => errorResponse(res, 400, error))
+        }).catch((error) => errorResponse(res, 400, error));
+
+
     } catch (error) {
       return next(error);
     }
