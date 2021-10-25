@@ -167,38 +167,36 @@ class NewsController {
 
       if (req.file) {
         multiUpload(res, req.file, (image) => {
-          if (image.err) {
-            errorResponse(res, 400, 'Could not process your request')
-            //   serverErrorResponsess('Could not process your request');
-          } else {
+          const {
+            url
+          } = image;
 
-            const {
-              url
-            } = image;
+          console.log({
+            url
+          })
 
-            const newContent = {
-              authors_id: authors_id,
-              title: title,
-              body: body,
-              header: url,
-              read_time: read_time,
-              blog_type: blog_type,
-              category_id: category_id,
-              status: status,
-              tags: tags ? JSON.parse(tags) : [],
-              slug: slugify(title, {
-                lower: true
-              })
-            };
+          const newContent = {
+            authors_id: authors_id,
+            title: title,
+            body: body,
+            header: url,
+            read_time: read_time,
+            blog_type: blog_type,
+            category_id: category_id,
+            status: status,
+            tags: tags ? JSON.parse(tags) : [],
+            slug: slugify(title, {
+              lower: true
+            })
+          };
 
-            blog.create(newContent)
-              .then((response) => {
-                successResponse(res, 200, blog_type, response)
-              })
-              .catch((error) => {
-                errorResponse(res, 400, error)
-              });
-          }
+          blog.create(newContent)
+            .then((response) => {
+              successResponse(res, 200, blog_type, response)
+            })
+            .catch((error) => {
+              errorResponse(res, 400, error)
+            });
         });
       } else {
 
@@ -272,40 +270,34 @@ class NewsController {
 
               // to remove the previous file??
               multiUpload(res, req.file, (image) => {
-                if (image.err) {
-                  errorResponse(res, 400, 'Could not process your request')
-                  //   serverErrorResponsess('Could not process your request');
-                } else {
+                const {
+                  url
+                } = image;
 
-                  const {
-                    url
-                  } = image;
+                const newContent = {
+                  title: title,
+                  body: body,
+                  header: url,
+                  read_time: read_time,
+                  category_id: category_id,
+                  status: status,
+                  tags: tags ? JSON.parse(tags) : [],
+                  slug: slugify(title, {
+                    lower: true
+                  })
+                };
 
-                  const newContent = {
-                    title: title,
-                    body: body,
-                    header: url,
-                    read_time: read_time,
-                    category_id: category_id,
-                    status: status,
-                    tags: tags ? JSON.parse(tags) : [],
-                    slug: slugify(title, {
-                      lower: true
-                    })
-                  };
+                return oneBlog
+                  .update(newContent, {
+                    fields: Object.keys(newContent)
+                  }, {
+                    editPost
+                  })
+                  .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
+                  .catch((error) => {
+                    errorResponse(res, 400, error)
+                  });
 
-                  return oneBlog
-                    .update(newContent, {
-                      fields: Object.keys(newContent)
-                    }, {
-                      editPost
-                    })
-                    .then((updatedBlog) => successResponse(res, 200, 'news', updatedBlog)) // Send back the updated todo.
-                    .catch((error) => {
-                      errorResponse(res, 400, error)
-                    });
-
-                }
               });
 
             } else {

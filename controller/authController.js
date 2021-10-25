@@ -254,6 +254,7 @@ class AuthController {
       }
 
     } catch (error) {
+      console.log()
       return next(error);
     }
   }

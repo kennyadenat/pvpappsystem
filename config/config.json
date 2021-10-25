@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": "Notrespectre2016!",
-    "database": "pvpserver",
+    "username": "postgres",
+    "password": "Iremide-09",
+    "database": "pvpwebsite",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
     "username": "root",
