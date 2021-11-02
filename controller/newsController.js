@@ -112,7 +112,8 @@ class NewsController {
       return blog
         .findAndCountAll({
           where: {
-            blog_type: blog_type
+            blog_type: blog_type,
+            status: 'published'
           },
           order: [
             [`created_at`, 'ASC'],
@@ -362,7 +363,8 @@ class NewsController {
       blog
         .findAndCountAll({
           where: {
-            blog_type: blog_type
+            blog_type: blog_type,
+            status: 'published'
           },
           order: [
             [`created_at`, 'ASC'],
