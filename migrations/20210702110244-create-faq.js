@@ -10,6 +10,10 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
+          index: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
           tag: {
             type: Sequelize.TEXT,
             allowNull: false

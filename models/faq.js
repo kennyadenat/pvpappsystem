@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         as: 'faq_site_id'
       }
     },
+    index: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     tag: DataTypes.STRING,
     question: DataTypes.STRING,
     answer: DataTypes.TEXT,

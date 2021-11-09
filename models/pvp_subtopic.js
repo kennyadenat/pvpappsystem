@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   const pvp_subtopic = sequelize.define('pvp_subtopic', {
     pvp_topic_id: DataTypes.UUID,
     title: DataTypes.TEXT,
+    index: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     slug: {
       type: DataTypes.STRING,
       allowNull: false,

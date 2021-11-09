@@ -24,6 +24,10 @@ module.exports = {
             type: Sequelize.TEXT,
             allowNull: false
           },
+          index: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+          },
           slug: {
             type: Sequelize.STRING,
             unique: true,

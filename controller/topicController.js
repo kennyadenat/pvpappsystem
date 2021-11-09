@@ -26,6 +26,7 @@ const siteAttr = [
 const topicAttr = [
   'id',
   'title',
+  'index',
   'slug',
   'site_page_id'
 ];
@@ -38,6 +39,7 @@ const articleAttr = [
 
 const subtopicAttr = [
   'id',
+  'index',
   'title',
   'slug',
 ];
@@ -63,7 +65,7 @@ class TopicController {
       return pvp_topic
         .findAll({
           order: [
-            ['created_at', 'ASC'],
+            ['index', 'ASC'],
           ],
           attributes: topicAttr,
           include: [{
@@ -149,10 +151,19 @@ class TopicController {
                 as: 'articles',
                 attributes: articleAttr,
               }]
-            }]
-          }]
+            }],
+            order: [
+              ['pvp_subtopics', 'index', 'ASC']
+            ]
+          }],
+          order: [
+            ['pvp_topics', 'index', 'ASC']
+          ]
         }).then((response) => successResponse(res, 200, 'topic', response))
-        .catch((error) => errorResponse(res, 400, error));
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
 
     } catch (error) {
       return next(error);
@@ -178,6 +189,9 @@ class TopicController {
 
       return pvp_topic
         .findAndCountAll({
+          order: [
+            ['index', 'ASC'],
+          ],
           attributes: topicAttr,
           ...paginate({
             page,

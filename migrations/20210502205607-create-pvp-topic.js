@@ -23,6 +23,10 @@ module.exports = {
               as: 'site_page_id'
             }
           },
+          index: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
           slug: {
             type: Sequelize.STRING,
             unique: true,
