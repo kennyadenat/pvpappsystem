@@ -33,6 +33,11 @@ module.exports = {
             unique: true,
             allowNull: false
           },
+          status: {
+            allowNull: false,
+            type: Sequelize.ENUM('published', 'trash'),
+            defaultValue: 'published',
+          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,

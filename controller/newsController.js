@@ -172,10 +172,6 @@ class NewsController {
             url
           } = image;
 
-          console.log({
-            url
-          })
-
           const newContent = {
             authors_id: authors_id,
             title: title,

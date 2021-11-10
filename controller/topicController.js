@@ -256,9 +256,11 @@ class TopicController {
       const {
         title,
         site_page_id,
+        index
       } = req.body;
 
       const newTopic = {
+        index: index,
         title: title,
         site_page_id: site_page_id,
         slug: slugify(title, {
@@ -350,9 +352,11 @@ class TopicController {
       const {
         title,
         pvp_topic_id,
+        index
       } = req.body;
 
       const newSubtopic = {
+        index: index,
         pvp_topic_id: pvp_topic_id,
         title: title,
         slug: slugify(title, {

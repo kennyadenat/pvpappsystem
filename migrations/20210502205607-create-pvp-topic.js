@@ -35,6 +35,11 @@ module.exports = {
           overview: {
             type: Sequelize.TEXT
           },
+          status: {
+            allowNull: false,
+            type: Sequelize.ENUM('published', 'trash'),
+            defaultValue: 'published',
+          },
           created_at: {
             allowNull: false,
             type: Sequelize.DATE,

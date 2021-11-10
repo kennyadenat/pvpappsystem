@@ -3,6 +3,7 @@ const serverResponse = require('../modules/serverResponse');
 const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const imageUploads = require('../helpers/imageUpload');
+const multiUpload = require('../helpers/multiUpload');
 const fs = require('fs');
 const {
   Op
@@ -181,28 +182,29 @@ class GalleryController {
         description,
       } = req.body;
 
+      console.log('req', req.body);
+      console.log('file', req.file);
 
-      imageUploads(req.file, (image) => {
-        if (image.err) {
-          errorResponse(res, 400, 'Could not process your request')
-          //   serverErrorResponsess('Could not process your request');
-        } else {
-          const newContent = {
-            filename: filename,
-            description: description,
-            media_type: req.file.originalname.split('.').pop(),
-            url: image.data,
-          };
+      multiUpload(res, req.file, (image) => {
+        const {
+          url
+        } = image;
 
-          gallery
-            .create(newContent)
-            .then((response) => {
-              successResponse(res, 200, 'gallery', response)
-            })
-            .catch((error) => {
-              errorResponse(res, 400, error)
-            });
-        }
+        const newContent = {
+          filename: filename,
+          description: description,
+          media_type: req.file.originalname.split('.').pop(),
+          url: url,
+        };
+
+        gallery
+          .create(newContent)
+          .then((response) => {
+            successResponse(res, 200, 'gallery', response)
+          })
+          .catch((error) => {
+            errorResponse(res, 400, error)
+          });
       });
 
     } catch (error) {

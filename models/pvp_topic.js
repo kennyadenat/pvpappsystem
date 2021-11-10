@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     },
+    status: {
+      allowNull: false,
+      type: DataTypes.ENUM('published', 'trash'),
+      defaultValue: 'published',
+    },
     overview: DataTypes.TEXT
   }, {
     underscored: true,
