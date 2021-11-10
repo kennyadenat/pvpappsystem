@@ -117,6 +117,10 @@ class FaqController {
   static async addFaq(req, res, next) {
     try {
 
+      const allFaq = await faq.findAll();
+
+      console.log(allFaq);
+
       const {
         site,
         question,
@@ -127,6 +131,7 @@ class FaqController {
 
       const newFaq = {
         site: site,
+        index: allFaq.length + 1,
         question: question,
         faq_site_id: faq_site_id,
         answer: answer,
@@ -140,6 +145,7 @@ class FaqController {
           successResponse(res, 200, 'faq', response)
         })
         .catch((error) => {
+          console.log(error);
           errorResponse(res, 400, error)
         });
     } catch (error) {
