@@ -13,6 +13,9 @@ module.exports = {
       {
         id: "1c327d1f-9a7d-44f5-824f-ce86e0c0e3d8",
         name: "payments and fees",
+      }, {
+        id: "1c447d1f-9a7d-44f5-824f-ce86e0c0e3d8",
+        name: "general",
       }
     ], {});
   },
