@@ -261,15 +261,16 @@ class FaqController {
     try {
       return faq_site
         .findAll({
-          order: [
-            ['name', 'ASC'],
-          ],
           attributes: siteAttr,
           include: [{
             model: faq,
             as: 'faqs',
             attributes: faqAttr,
-          }]
+          }],
+          order: [
+            ['name', 'ASC'],
+            ['faqs', 'index', 'ASC']
+          ]
         })
         .then(response => {
           successResponse(res, 200, 'faq', response);
@@ -300,18 +301,20 @@ class FaqController {
 
       return faq_site
         .findOne({
+          limit: 5,
           where: {
             name: id
           },
-          order: [
-            ['name', 'ASC'],
-          ],
           attributes: siteAttr,
           include: [{
             model: faq,
             as: 'faqs',
             attributes: faqAttr,
-          }]
+          }],
+          order: [
+            ['name', 'ASC'],
+            ['faqs', 'index', 'ASC']
+          ]
         })
         .then(response => {
           if (response == null) {

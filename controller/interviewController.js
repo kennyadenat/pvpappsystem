@@ -73,9 +73,6 @@ class InterviewController {
       } = req.query;
       interview
         .findAndCountAll({
-          where: {
-            status: search
-          },
           order: [
             [`created_at`, 'ASC'],
           ],
@@ -118,9 +115,6 @@ class InterviewController {
 
       interview
         .findAndCountAll({
-          where: {
-            status: 'published'
-          },
           order: [
             [`created_at`, 'ASC'],
           ],

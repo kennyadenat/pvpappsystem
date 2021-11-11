@@ -192,6 +192,7 @@ class NewsController {
               successResponse(res, 200, blog_type, response)
             })
             .catch((error) => {
+              console.log(error);
               errorResponse(res, 400, error)
             });
         });
@@ -217,14 +218,13 @@ class NewsController {
             successResponse(res, 200, blog_type, response)
           })
           .catch((error) => {
+            console.log(error);
             errorResponse(res, 400, error)
           });
-
       }
 
-
-
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
