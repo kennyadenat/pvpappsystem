@@ -118,9 +118,6 @@ class FaqController {
     try {
 
       const allFaq = await faq.findAll();
-
-      console.log(allFaq);
-
       const {
         site,
         question,
@@ -145,7 +142,6 @@ class FaqController {
           successResponse(res, 200, 'faq', response)
         })
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
     } catch (error) {
@@ -231,7 +227,41 @@ class FaqController {
           errorResponse(res, 400, error);
         });
 
+    } catch (error) {
+      return next(error);
+    }
+  }
 
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {Array}
+   * @memberof FaqController
+   */
+  static async getAllSiteFaq(req, res, next) {
+
+    try {
+      return faq_site
+        .findAll({
+          order: [
+            ['name', 'ASC'],
+          ],
+          attributes: siteAttr,
+          include: [{
+            model: faq,
+            as: 'faqs',
+            attributes: faqAttr,
+          }]
+        })
+        .then(response => {
+          successResponse(res, 200, 'faq', response);
+        })
+        .catch(error => {
+          errorResponse(res, 400, error);
+        });
     } catch (error) {
       return next(error);
     }

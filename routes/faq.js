@@ -13,7 +13,8 @@ const {
   createSite,
   getAllSites,
   getSiteFaq,
-  getFaqName
+  getFaqName,
+  getAllSiteFaq
 } = faqController;
 
 
@@ -23,5 +24,6 @@ router.post('/getallsite', getAllSites);
 router.post('/createsite', verifyToken, createSite);
 router.post('/getsitefaq', getSiteFaq);
 router.post('/getfaqname', getFaqName);
+router.post('/getallfaq', getAllSiteFaq);
 
 module.exports = router;
