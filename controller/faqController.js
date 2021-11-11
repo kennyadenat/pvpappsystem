@@ -22,6 +22,10 @@ const faqAttr = [
   'tag',
 ];
 
+const faqsAtr = [
+  'id',
+];
+
 const {
   successResponse,
   errorResponse,
@@ -117,33 +121,44 @@ class FaqController {
   static async addFaq(req, res, next) {
     try {
 
-      const allFaq = await faq.findAll();
-      const {
-        site,
-        question,
-        answer,
-        faq_site_id,
-        ref
-      } = req.body;
-
-      const newFaq = {
-        site: site,
-        index: allFaq.length + 1,
-        question: question,
-        faq_site_id: faq_site_id,
-        answer: answer,
-        tag: getChar(7),
-        ref: ref ? ref : [],
-      };
-
-      faq
-        .create(newFaq)
-        .then((response) => {
-          successResponse(res, 200, 'faq', response)
+      return faq
+        .findAll({
+          attributes: faqsAtr,
         })
-        .catch((error) => {
-          errorResponse(res, 400, error)
+        .then(response => {
+
+          const {
+            site,
+            question,
+            answer,
+            faq_site_id,
+            ref
+          } = req.body;
+
+          const newFaq = {
+            site: site,
+            index: response.length + 1,
+            question: question,
+            faq_site_id: faq_site_id,
+            answer: answer,
+            tag: getChar(7),
+            ref: ref ? ref : [],
+          };
+
+          faq
+            .create(newFaq)
+            .then((responses) => {
+              successResponse(res, 200, 'faq', responses)
+            })
+            .catch((err) => {
+              errorResponse(res, 400, 'Couldnt process your request')
+            });
+
+        })
+        .catch(error => {
+          errorResponse(res, 200, error);
         });
+
     } catch (error) {
       return next(error);
     }
