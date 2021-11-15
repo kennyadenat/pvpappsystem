@@ -22,7 +22,9 @@ const {
   getAllSites,
   getAllTopic,
   getOneSite,
-  updateTopic
+  updateTopic,
+  removeSubTopic,
+  removeTopic
 } = topicController;
 
 
@@ -34,5 +36,8 @@ router.post('/gettopic', getTopics);
 router.post('/getalltopic', getAllTopic);
 router.post('/getallsite', getAllSites);
 router.post('/getonesite', getOneSite);
+
+router.post('/removetopic', verifyToken, removeTopic);
+router.post('/removesubtopic', verifyToken, removeSubTopic);
 
 module.exports = router;

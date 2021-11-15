@@ -7,7 +7,7 @@ const paginateCount = require('../helpers/paginateCountHelper');
 const {
   successResponse,
   errorResponse,
-  serverErrorResponsess
+  serverErrorResponses
 } = serverResponse;
 
 const {
@@ -397,7 +397,7 @@ class TopicController {
             return topicRes
               .destroy()
               .then(() => successResponse(res, 201, 'topics', 'Topic Successfully Deleted'))
-              .catch(error => serverErrorResponsess());
+              .catch(error => serverErrorResponses());
           }
         })
         .catch(error => serverErrorResponsess());
@@ -415,6 +415,7 @@ class TopicController {
    * @memberof TopicController
    */
   static async removeSubTopic(req, res, next) {
+    console.log(req.body);
     try {
       const {
         id
@@ -428,11 +429,17 @@ class TopicController {
             return topicRes
               .destroy()
               .then(() => successResponse(res, 201, 'subtopic', 'Sub Topic Successfully Deleted'))
-              .catch(error => serverErrorResponsess());
+              .catch(error => {
+                console.log(error);
+                errorResponse(res, 400, 'Could not delete')
+              });
           }
         })
-        .catch(error => serverErrorResponsess());
+        .catch(error => {
+          errorResponse(res, 400, 'Could not delete')
+        });
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
