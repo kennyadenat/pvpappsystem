@@ -150,18 +150,15 @@ class TopicController {
                 model: article,
                 as: 'articles',
                 attributes: articleAttr,
-              }]
+              }],
             }],
-            order: [
-              ['pvp_subtopics', 'index', 'ASC']
-            ]
           }],
           order: [
-            ['pvp_topics', 'index', 'ASC']
+            ['pvp_topics', 'index', 'ASC'],
+            ['pvp_topics', 'pvp_subtopics', 'index', 'ASC']
           ]
         }).then((response) => successResponse(res, 200, 'topic', response))
         .catch((error) => {
-          console.log(error);
           errorResponse(res, 400, error)
         });
 
