@@ -4,7 +4,7 @@ const paginate = require('../helpers/paginateHelper');
 const paginateCount = require('../helpers/paginateCountHelper');
 const imageUploads = require('../helpers/imageUpload');
 const multiUpload = require('../helpers/multiUpload');
-const fs = require('fs');
+
 const {
   Op
 } = require("sequelize");
@@ -28,6 +28,47 @@ const {
 } = serverResponse;
 
 class GalleryController {
+
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {object} object
+   * @memberof GalleryController
+   */
+  static async createVideoGallery(req, res, next) {
+    try {
+
+      const {
+        filename,
+        url,
+        description,
+        media_type
+       } = req.body;
+
+       const newContent = {
+         filename: filename,
+         description: description,
+         media_type: media_type,
+         url: url,
+       };
+
+      gallery
+        .create(newContent)
+        .then((response) => {
+          successResponse(res, 200, 'gallery', response)
+        })
+        .catch((error) => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
 
   /**
    * 
@@ -113,8 +154,6 @@ class GalleryController {
     }
   }
 
-
-
   /**
    * 
    * @param {object} req 
@@ -166,6 +205,99 @@ class GalleryController {
     }
   }
 
+
+   /**
+    * 
+    * @param {object} req 
+    * @param {object} res 
+    * @param {function} next 
+    * @returns {array}
+    * @memberof GalleryController
+    */
+   static async getPdfs(req, res, next) {
+     try {
+
+       const {
+         id,
+         page,
+         size,
+         search,
+         filter
+       } = req.query;
+
+       gallery
+         .findAndCountAll({
+           where: {
+            media_type: 'pdf'
+           },
+           order: [
+             [`created_at`, 'ASC'],
+           ],
+           attributes: galleryAttr,
+           ...paginate({
+             page,
+             size
+           }),
+         }).then((response) => {
+           successResponse(res, 200, 'gallery', paginateCount(response, page, size))
+         })
+         .catch((error) => {
+           console.log(error);
+           errorResponse(res, 400, error)
+         });
+
+     } catch (error) {
+       return next(error);
+     }
+   }
+
+  
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof GalleryController
+   */
+  static async getVideo(req, res, next) {
+    try {
+
+      const {
+        id,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      gallery
+        .findAndCountAll({
+          where: {
+            media_type: 'mp4'
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: galleryAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'gallery', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
   /**
    * 
    * @param {object} req 
@@ -181,9 +313,6 @@ class GalleryController {
         filename,
         description,
       } = req.body;
-
-      console.log('req', req.body);
-      console.log('file', req.file);
 
       multiUpload(res, req.file, (image) => {
         const {
