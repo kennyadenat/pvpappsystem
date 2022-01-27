@@ -45,14 +45,14 @@ class GalleryController {
         url,
         description,
         media_type
-       } = req.body;
+      } = req.body;
 
-       const newContent = {
-         filename: filename,
-         description: description,
-         media_type: media_type,
-         url: url,
-       };
+      const newContent = {
+        filename: filename,
+        description: description,
+        media_type: media_type,
+        url: url,
+      };
 
       gallery
         .create(newContent)
@@ -182,6 +182,8 @@ class GalleryController {
               media_type: 'jpeg'
             }, {
               media_type: 'JPG'
+            }, {
+              media_type: 'jpg'
             }]
           },
           order: [
@@ -206,52 +208,52 @@ class GalleryController {
   }
 
 
-   /**
-    * 
-    * @param {object} req 
-    * @param {object} res 
-    * @param {function} next 
-    * @returns {array}
-    * @memberof GalleryController
-    */
-   static async getPdfs(req, res, next) {
-     try {
+  /**
+   * 
+   * @param {object} req 
+   * @param {object} res 
+   * @param {function} next 
+   * @returns {array}
+   * @memberof GalleryController
+   */
+  static async getPdfs(req, res, next) {
+    try {
 
-       const {
-         id,
-         page,
-         size,
-         search,
-         filter
-       } = req.query;
+      const {
+        id,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
 
-       gallery
-         .findAndCountAll({
-           where: {
+      gallery
+        .findAndCountAll({
+          where: {
             media_type: 'pdf'
-           },
-           order: [
-             [`created_at`, 'ASC'],
-           ],
-           attributes: galleryAttr,
-           ...paginate({
-             page,
-             size
-           }),
-         }).then((response) => {
-           successResponse(res, 200, 'gallery', paginateCount(response, page, size))
-         })
-         .catch((error) => {
-           console.log(error);
-           errorResponse(res, 400, error)
-         });
+          },
+          order: [
+            [`created_at`, 'ASC'],
+          ],
+          attributes: galleryAttr,
+          ...paginate({
+            page,
+            size
+          }),
+        }).then((response) => {
+          successResponse(res, 200, 'gallery', paginateCount(response, page, size))
+        })
+        .catch((error) => {
+          console.log(error);
+          errorResponse(res, 400, error)
+        });
 
-     } catch (error) {
-       return next(error);
-     }
-   }
+    } catch (error) {
+      return next(error);
+    }
+  }
 
-  
+
   /**
    * 
    * @param {object} req 
