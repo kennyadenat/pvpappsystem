@@ -11,7 +11,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           title: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: false
           },
           slug: {
@@ -75,7 +75,7 @@ module.exports = {
           },
           thumbnail: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg',
           },
           tags: {

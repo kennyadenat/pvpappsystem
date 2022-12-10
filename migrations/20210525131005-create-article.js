@@ -30,7 +30,8 @@ module.exports = {
             }
           },
           body: {
-            type: Sequelize.TEXT
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
           },
           authors_id: {
             type: Sequelize.UUID,

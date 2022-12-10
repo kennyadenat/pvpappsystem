@@ -21,7 +21,6 @@ cloudinary.config({
 
 const multiUpload = (res, file, next) => {
 
-  console.log(file);
   if (file.path) {
     cloudinary.uploader.upload(file.path,
       (error, result) => {
