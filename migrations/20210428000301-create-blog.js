@@ -30,7 +30,8 @@ module.exports = {
             }
           },
           body: {
-            type: Sequelize.TEXT
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
           },
           authors_id: {
             type: Sequelize.UUID,
@@ -46,12 +47,10 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: 'http://res.cloudinary.com/dgniwrwip/image/upload/v1584245342/tqrfdrdjbtwrhokpbb1r.jpg'
           },
-          read_time: {
-            allowNull: false,
+          read_time: {            
             type: Sequelize.INTEGER,
           },
-          read_count: {
-            allowNull: false,
+          read_count: {            
             type: Sequelize.INTEGER,
             defaultValue: 0,
           },

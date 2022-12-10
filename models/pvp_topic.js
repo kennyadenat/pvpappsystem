@@ -4,12 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.TEXT,
     site_page_id: DataTypes.STRING,
     index: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    slug: {
-      type: DataTypes.STRING,
-      unique: true,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     status: {
@@ -17,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('published', 'trash'),
       defaultValue: 'published',
     },
-    overview: DataTypes.TEXT
   }, {
     underscored: true,
   });

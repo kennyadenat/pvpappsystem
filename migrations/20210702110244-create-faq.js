@@ -15,8 +15,8 @@ module.exports = {
             allowNull: false,
           },
           tag: {
-            type: Sequelize.TEXT,
-            allowNull: false
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
           },
           question: {
             type: Sequelize.TEXT,
@@ -37,7 +37,7 @@ module.exports = {
             }
           },
           ref: {
-            type: Sequelize.ARRAY(Sequelize.STRING),
+            type: Sequelize.ARRAY(Sequelize.TEXT),
             defaultValue: [],
           },
           created_at: {

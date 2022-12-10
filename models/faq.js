@@ -15,8 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    tag: DataTypes.STRING,
-    question: DataTypes.STRING,
+    tag: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    question: DataTypes.TEXT,
     answer: DataTypes.TEXT,
     ref: {
       type: DataTypes.ARRAY(DataTypes.STRING),

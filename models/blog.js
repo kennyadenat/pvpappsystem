@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    body: DataTypes.TEXT,
+    body: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
     authors_id: {
       type: DataTypes.UUID
     },

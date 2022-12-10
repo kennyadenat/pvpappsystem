@@ -27,14 +27,6 @@ module.exports = {
             type: Sequelize.INTEGER,
             allowNull: false,
           },
-          slug: {
-            type: Sequelize.STRING,
-            unique: true,
-            allowNull: false
-          },
-          overview: {
-            type: Sequelize.TEXT
-          },
           status: {
             allowNull: false,
             type: Sequelize.ENUM('published', 'trash'),
