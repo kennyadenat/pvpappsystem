@@ -11,7 +11,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           image: {
-            type: Sequelize.TEXT
+            type: Sequelize.TEXT,            
           },
           isimage: {
             type: Sequelize.BOOLEAN,
@@ -20,14 +20,15 @@ module.exports = {
           title: {
             type: Sequelize.TEXT
           },
+          slug: {
+            type: Sequelize.TEXT
+          },
           posttype: {
             type: Sequelize.STRING
           },
           status: {
-            type: Sequelize.STRING
-          },
-          visibility: {
-            type: Sequelize.STRING 
+            type: Sequelize.ENUM('draft', 'published', 'trash'),
+            defaultValue: 'draft'
           },
           views: {
             type: Sequelize.INTEGER,

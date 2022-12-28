@@ -5,8 +5,6 @@
  * @returns {object} pagination - Return pagination object
  * to query database
  */
-
-
 const paginationObject = (items, page, pageSize) => {
 
   const {
