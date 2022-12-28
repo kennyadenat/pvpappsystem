@@ -19,7 +19,8 @@ const {
 
 const {
   errorResponse,
-  successResponse
+  successResponse,
+  serverErrorResponse
 } = serverResponse;
 class PostController {
 
@@ -47,6 +48,7 @@ class PostController {
           successResponse(res, 200, 'posts', response)
         })
         .catch((error) => {
+          console.log(error);
           serverErrorResponse(error, req, res, next);
         });
 
