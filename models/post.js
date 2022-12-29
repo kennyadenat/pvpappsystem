@@ -23,7 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     views: DataTypes.INTEGER,
     likes: DataTypes.INTEGER,
     comments: DataTypes.STRING,
-    body: DataTypes.TEXT
+    body: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
+    tags: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
   }, {
     sequelize,
     modelName: 'post',

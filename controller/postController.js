@@ -48,7 +48,6 @@ class PostController {
           successResponse(res, 200, 'posts', response)
         })
         .catch((error) => {
-          console.log(error);
           serverErrorResponse(error, req, res, next);
         });
 
@@ -76,28 +75,43 @@ class PostController {
         attributes: ['id']
       });
 
+      ///
       if (onePost) {
-
         req.body.slug = slugify(req.body.title, {
           lower: true
         });
 
+        const updatedPost = {
+          id: req.body.id,
+          image: req.body.image,
+          isimage: req.body.isimage,
+          title: req.body.title,
+          slug: req.body.slug,
+          posttype: req.body.posttype,
+          status: req.body.status,
+          tags: req.body.tags ? JSON.parse(req.body.tags) : [],
+          body: req.body.body ? JSON.parse(req.body.body) : [],
+        };
+
         return onePost
-          .update(req.body, {
-            fields: Object.keys(req.body)
+          .update(updatedPost, {
+            fields: Object.keys(updatedPost)
           })
           .then((response) => {
-            successResponse(res, 200, 'posts', response);
+            successResponse(res, 204, 'posts', response);
           }) // Send back the updated todo.
           .catch((error) => {
+            console.log(error);
             errorResponse(res, 400, 'There was an error processing your request');
           });
 
       } else {
+        console.log(error);
         errorResponse(res, 400, 'The post does not exist or has been removed');
       }
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -134,7 +148,7 @@ class PostController {
           order: [
             ['created_at', 'ASC'],
           ],
-          attributes: examAttr,
+          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at'],
           ...pagination({
             page,
             size
@@ -150,6 +164,40 @@ class PostController {
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof PostController
+   */
+  static async getOnePosts(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return post
+        .findOne({
+          where: {
+            id: id
+          }
+        })
+        .then(response => {
+          successResponse(res, 200, 'posts', response)
+        })
+        .catch(error => {
+          errorResponse(res, 400, error);
+        });
+
+    } catch (err) {
+      return next(err);
     }
   }
 

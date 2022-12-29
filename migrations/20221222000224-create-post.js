@@ -11,7 +11,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           image: {
-            type: Sequelize.TEXT,            
+            type: Sequelize.TEXT,
           },
           isimage: {
             type: Sequelize.BOOLEAN,
@@ -43,6 +43,10 @@ module.exports = {
             defaultValue: [],
           },
           body: {
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
+          },
+          tags: {
             type: Sequelize.ARRAY(Sequelize.TEXT),
             defaultValue: [],
           },
