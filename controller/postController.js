@@ -83,7 +83,7 @@ class PostController {
 
         const updatedPost = {
           id: req.body.id,
-          image: req.body.image,
+          image: req.body.id + '.jpg',  
           isimage: req.body.isimage,
           title: req.body.title,
           slug: req.body.slug,
