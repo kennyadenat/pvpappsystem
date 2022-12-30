@@ -15,8 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       answers: {
-        type: Sequelize.ARRAY(Sequelize.TEXT),
-        defaultValue: [],
+        type: Sequelize.TEXT
       },
       created_at: {
         allowNull: false,

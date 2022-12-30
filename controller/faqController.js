@@ -14,7 +14,7 @@ const {
 } = require('../models');
 
 const {
-  post
+  faq
 } = models;
 
 const {
@@ -24,7 +24,7 @@ const {
 } = serverResponse;
 
 
-class PostController {
+class FaqController {
 
   /**
    * @static
@@ -35,80 +35,17 @@ class PostController {
    * @returns {object} Post body payload
    * @memberof PostController
    */
-  static async newPosts(req, res, next) {
+  static async newFaqs(req, res, next) {
     try {
-      const dates = new Date();
-      const newPosts = {
-        title: `${req.body.post}-${dates.toISOString()}`,
-        posttype: req.body.post,
-        status: 'draft',
-      };
 
-      return post
-        .create(newPosts)
+      return faq
+        .create(req.body)
         .then((response) => {
-          successResponse(res, 200, 'posts', response)
+          successResponse(res, 200, 'faq', response)
         })
         .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
-
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  /**
-   * @static
-   * Adds a new Posts
-   * @param {object} req express request object
-   * @param {object} res express response object
-   * @param {function} next
-   * @returns {object} Post body payload
-   * @memberof PostController
-   */
-  static async publishPosts(req, res, next) {
-    try {
-
-      const onePost = await post.findOne({
-        where: {
-          id: req.body.id
-        },
-        attributes: ['id']
-      });
-
-      ///
-      if (onePost) {
-        req.body.slug = slugify(req.body.title, {
-          lower: true
-        });
-
-        const updatedPost = {
-          id: req.body.id,
-          image: req.body.id + '.jpg',
-          isimage: req.body.isimage,
-          title: req.body.title,
-          slug: req.body.slug,
-          posttype: req.body.posttype,
-          status: req.body.status,
-          tags: req.body.tags ? JSON.parse(req.body.tags) : [],
-          body: req.body.body ? JSON.parse(req.body.body) : [],
-        };
-
-        return onePost
-          .update(updatedPost, {
-            fields: Object.keys(updatedPost)
-          })
-          .then((response) => {
-            successResponse(res, 204, 'posts', response);
-          }) // Send back the updated todo.
-          .catch((error) => {
-            errorResponse(res, 400, 'There was an error processing your request');
-          });
-
-      } else {
-        errorResponse(res, 400, 'The post does not exist or has been removed');
-      }
 
     } catch (error) {
       return next(error);
@@ -124,11 +61,11 @@ class PostController {
    * @returns {object} Posts body payload
    * @memberof PostController
    */
-  static async getPosts(req, res, next) {
+  static async getFaqs(req, res, next) {
     try {
 
       const {
-        posttype,
+        faqtype,
         page,
         size,
         search,
@@ -136,10 +73,10 @@ class PostController {
       } = req.query;
 
 
-      return post
+      return faq
         .findAndCountAll({
           where: {
-            posttype: posttype,
+            faqtype: faqtype,
             [Op.or]: [{
               title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
             }]
@@ -175,14 +112,14 @@ class PostController {
    * @returns {object} Posts body payload
    * @memberof PostController
    */
-  static async getOnePosts(req, res, next) {
+  static async getOneFaqs(req, res, next) {
     try {
 
       const {
         id
       } = req.query;
 
-      return post
+      return faq
         .findOne({
           where: {
             id: id
@@ -202,4 +139,4 @@ class PostController {
 
 }
 
-module.exports = PostController;
+module.exports = FaqController;
