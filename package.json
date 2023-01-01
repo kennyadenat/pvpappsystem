@@ -37,6 +37,7 @@
     "passport-remember-me": "0.0.1",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
+    "randomstring": "^1.2.3",
     "sequelize": "^6.6.2",
     "slugify": "^1.5.1",
     "underscore": "^1.13.1",

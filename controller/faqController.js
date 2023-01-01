@@ -2,7 +2,7 @@ const models = require('../models');
 const paginateCount = require('../helpers/paginationHelper');
 const pagination = require('../helpers/paginateHelper');
 const serverResponse = require('../modules/serverResponse');
-var slugify = require('slugify');
+var randomstring = require("randomstring");
 
 
 const {
@@ -38,16 +38,19 @@ class FaqController {
   static async newFaqs(req, res, next) {
     try {
 
+      req.body.tag = randomstring.generate(7);
       return faq
         .create(req.body)
         .then((response) => {
           successResponse(res, 200, 'faq', response)
         })
         .catch((error) => {
+          console.log(error);
           serverErrorResponse(error, req, res, next);
         });
 
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -78,26 +81,28 @@ class FaqController {
           where: {
             faqtype: faqtype,
             [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
+              question: sequelize.where(sequelize.fn('LOWER', sequelize.col('question')), 'LIKE', '%' + search + '%'),
             }]
           },
           order: [
             ['created_at', 'ASC'],
           ],
-          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at'],
+          attributes: ['id', 'question', 'faqtype', 'answers', 'tag', 'created_at'],
           ...pagination({
             page,
             size
           }),
         })
         .then(response => {
-          successResponse(res, 200, 'posts', paginateCount(response, page, size));
+          successResponse(res, 200, 'faq', paginateCount(response, page, size));
         })
         .catch(error => {
+          console.log(error);
           serverErrorResponse(error, req, res, next);
         });
 
     } catch (error) {
+      console.log(error);
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
@@ -126,7 +131,7 @@ class FaqController {
           }
         })
         .then(response => {
-          successResponse(res, 200, 'posts', response)
+          successResponse(res, 200, 'faq', response)
         })
         .catch(error => {
           errorResponse(res, 400, error);
@@ -136,6 +141,48 @@ class FaqController {
       return next(err);
     }
   }
+
+
+    /**
+     * @static
+     * Adds a new Posts
+     * @param {object} req express request object
+     * @param {object} res express response object
+     * @param {function} next
+     * @returns {object} Post body payload
+     * @memberof PostController
+     */
+    static async updateFaq(req, res, next) {
+      try {
+
+        const oneFaq = await faq.findOne({
+          where: {
+            id: req.body.id
+          },
+          attributes: ['id']
+        });
+
+        ///
+        if (oneFaq) {       
+          return oneFaq
+            .update(req.body, {
+              fields: Object.keys(req.body)
+            })
+            .then((response) => {
+              successResponse(res, 204, 'faq', response);
+            }) // Send back the updated todo.
+            .catch((error) => {
+              errorResponse(res, 400, 'There was an error processing your request');
+            });
+
+        } else {
+          errorResponse(res, 400, 'The post does not exist or has been removed');
+        }
+
+      } catch (error) {
+        return next(error);
+      }
+    }
 
 }
 

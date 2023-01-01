@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     resourcetype: DataTypes.STRING,
     subcategory: DataTypes.STRING,
-    pos: DataTypes.INTEGER
+    currentcount: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'category',

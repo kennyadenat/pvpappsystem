@@ -14,6 +14,9 @@ module.exports = {
       faqtype: {
         type: Sequelize.STRING
       },
+      tag: {
+        type: Sequelize.STRING
+      },
       answers: {
         type: Sequelize.TEXT
       },

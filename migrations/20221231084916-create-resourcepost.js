@@ -3,22 +3,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('categories', {
+        return queryInterface.createTable('resourceposts', {
           id: {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          title: {
-            type: Sequelize.STRING
-          },
-          resourcetype: {
-            type: Sequelize.STRING
-          },
-          subcategory: {
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-            defaultValue: [],
+          options: {
+            type: Sequelize.STRING,
           },
           currentcount: {
             type: Sequelize.INTEGER,
@@ -39,6 +32,6 @@ module.exports = {
 
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('categories');
+    await queryInterface.dropTable('resourceposts');
   }
 };
