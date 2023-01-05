@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   article.init({
     title: DataTypes.STRING,
     categoryid: DataTypes.TEXT,
-    body: DataTypes.STRING
+    body: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
   }, {
     sequelize,
     modelName: 'article',

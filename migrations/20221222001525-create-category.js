@@ -20,6 +20,10 @@ module.exports = {
             type: Sequelize.ARRAY(Sequelize.TEXT),
             defaultValue: [],
           },
+          index: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+          },
           currentcount: {
             type: Sequelize.INTEGER,
             defaultValue: 0

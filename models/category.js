@@ -16,8 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   category.init({
     title: DataTypes.STRING,
     resourcetype: DataTypes.STRING,
-    subcategory: DataTypes.STRING,
-    currentcount: DataTypes.INTEGER
+    subcategory: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
+    currentcount: DataTypes.INTEGER,
+    index: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'category',

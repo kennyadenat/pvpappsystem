@@ -38,7 +38,11 @@ class FaqController {
   static async newFaqs(req, res, next) {
     try {
 
-      req.body.tag = randomstring.generate(7);
+      req.body.tag = randomstring.generate({
+        length: 5,
+        capitalization: 'lowercase',
+        charsetz: 'alphabetic'
+      });
       return faq
         .create(req.body)
         .then((response) => {
@@ -143,46 +147,46 @@ class FaqController {
   }
 
 
-    /**
-     * @static
-     * Adds a new Posts
-     * @param {object} req express request object
-     * @param {object} res express response object
-     * @param {function} next
-     * @returns {object} Post body payload
-     * @memberof PostController
-     */
-    static async updateFaq(req, res, next) {
-      try {
+  /**
+   * @static
+   * Adds a new Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Post body payload
+   * @memberof PostController
+   */
+  static async updateFaq(req, res, next) {
+    try {
 
-        const oneFaq = await faq.findOne({
-          where: {
-            id: req.body.id
-          },
-          attributes: ['id']
-        });
+      const oneFaq = await faq.findOne({
+        where: {
+          id: req.body.id
+        },
+        attributes: ['id']
+      });
 
-        ///
-        if (oneFaq) {       
-          return oneFaq
-            .update(req.body, {
-              fields: Object.keys(req.body)
-            })
-            .then((response) => {
-              successResponse(res, 204, 'faq', response);
-            }) // Send back the updated todo.
-            .catch((error) => {
-              errorResponse(res, 400, 'There was an error processing your request');
-            });
+      ///
+      if (oneFaq) {
+        return oneFaq
+          .update(req.body, {
+            fields: Object.keys(req.body)
+          })
+          .then((response) => {
+            successResponse(res, 204, 'faq', response);
+          }) // Send back the updated todo.
+          .catch((error) => {
+            errorResponse(res, 400, 'There was an error processing your request');
+          });
 
-        } else {
-          errorResponse(res, 400, 'The post does not exist or has been removed');
-        }
-
-      } catch (error) {
-        return next(error);
+      } else {
+        errorResponse(res, 400, 'The post does not exist or has been removed');
       }
+
+    } catch (error) {
+      return next(error);
     }
+  }
 
 }
 
