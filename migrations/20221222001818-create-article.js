@@ -7,12 +7,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
-      },
-      title: {
-        type: Sequelize.TEXT
-      },
+      }, 
       categoryid: {
         type: Sequelize.TEXT
+      },
+      status: {
+        type: Sequelize.ENUM('draft', 'published', 'trash'),
+        defaultValue: 'draft'
       },
       body: {
         type: Sequelize.ARRAY(Sequelize.TEXT),

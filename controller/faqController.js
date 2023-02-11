@@ -41,20 +41,18 @@ class FaqController {
       req.body.tag = randomstring.generate({
         length: 5,
         capitalization: 'lowercase',
-        charsetz: 'alphabetic'
+        charset: 'alphabetic'
       });
       return faq
         .create(req.body)
         .then((response) => {
           successResponse(res, 200, 'faq', response)
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((error) => {          
           serverErrorResponse(error, req, res, next);
         });
 
-    } catch (error) {
-      console.log(error);
+    } catch (error) {      
       return next(error);
     }
   }
@@ -182,6 +180,43 @@ class FaqController {
       } else {
         errorResponse(res, 400, 'The post does not exist or has been removed');
       }
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof PostController
+   */
+  static async removeFaq(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+
+      return faq
+        .findByPk(id)
+        .then(faqRes => {
+          if (!faqRes) {
+            errorResponse(res, 400, 'FAQ Not Found');
+          }
+          return faqRes
+            .destroy()
+            .then(() => successResponse(res, 204, 'faq', 'FAQ deleted successfully.'))
+            .catch(error => {
+              errorResponse(res, 400, error);
+            });
+        })
+        .catch(error => {
+          errorResponse(res, 400, error)
+        });
 
     } catch (error) {
       return next(error);

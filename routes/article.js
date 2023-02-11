@@ -1,13 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const articleController = require('../controller/articleController');
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/images')
+  },
+  filename: function (req, file, cb) {
+    req.body.image = req.body.id + '.jpg';
+    cb(null, req.body.id + '.jpg');
+  }
+});
+
+const upload = multer({
+  storage: storage
+});
 
 const {
   newCategory,
   getCategory,
   updateCategory,
-  getOneCategory
+  getOneCategory,
+  newSubCategory,
+  getOneArticle,
+  publishArticle
 } = articleController;
 
 
@@ -15,6 +32,8 @@ router.post('/newcategory', newCategory);
 router.post('/getcategory', getCategory);
 router.post('/updatecategory', updateCategory);
 router.post('/getonecategory', getOneCategory);
-
+router.post('/newsubcategory', newSubCategory);
+router.post('/getonearticle', getOneArticle);
+router.post('/publisharticle', upload.single('image'), publishArticle);
 
 module.exports = router;

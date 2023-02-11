@@ -200,6 +200,44 @@ class PostController {
     }
   }
 
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof PostController
+   */
+  static async removePost(req, res, next) {
+    try {
+      const {
+        id
+      } = req.query;
+
+      return post
+        .findByPk(id)
+        .then(postRes => {
+          if (!postRes) {
+            errorResponse(res, 400, 'Post Not Found');
+          }
+          return postRes
+            .destroy()
+            .then(() => successResponse(res, 204, 'posts', 'Post deleted successfully.'))
+            .catch(error => {
+              errorResponse(res, 400, error);
+            });
+        })
+        .catch(error => {
+          errorResponse(res, 400, error)
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 }
 
 module.exports = PostController;

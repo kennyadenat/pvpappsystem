@@ -13,8 +13,6 @@ require('dotenv').config();
 const routes = require('./routes');
 var API_PREFIX = '/api/v0001';
 
-
-
 var app = express();
 app.use(compression());
 // view engine setup

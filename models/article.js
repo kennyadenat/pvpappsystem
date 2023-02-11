@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   article.init({
-    title: DataTypes.STRING,
     categoryid: DataTypes.TEXT,
+    status: DataTypes.ENUM('draft', 'published', 'trash'),
     body: {
       type: DataTypes.ARRAY(DataTypes.TEXT),
       defaultValue: [],
