@@ -24,7 +24,9 @@ const {
   getOneCategory,
   newSubCategory,
   getOneArticle,
-  publishArticle
+  publishArticle,
+  removeArticle,
+  removeCategory
 } = articleController;
 
 
@@ -35,5 +37,7 @@ router.post('/getonecategory', getOneCategory);
 router.post('/newsubcategory', newSubCategory);
 router.post('/getonearticle', getOneArticle);
 router.post('/publisharticle', upload.single('image'), publishArticle);
+router.post('/removearticle', removeArticle);
+router.post('/removecategory', removeCategory);
 
 module.exports = router;

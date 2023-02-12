@@ -6,13 +6,14 @@ const {
   newFaqs,
   getFaqs,
   getOneFaqs,
-  updateFaq
+  updateFaq,
+  removeFaq
 } = faqController;
 
 router.post('/newfaqs', newFaqs);
 router.post('/getfaqs', getFaqs);
 router.post('/getonefaqs', getOneFaqs);
 router.post('/updatefaqs', updateFaq);
-
+router.post('/removefaq', removeFaq);
 
 module.exports = router;

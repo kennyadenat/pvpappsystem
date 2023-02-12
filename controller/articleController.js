@@ -116,6 +116,8 @@ class ArticleController {
         filter
       } = req.query;
 
+      console.log('query', req.query);
+
 
       return category
         .findAndCountAll({

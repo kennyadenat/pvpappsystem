@@ -21,7 +21,8 @@ const {
   newPosts,
   publishPosts,
   getPosts,
-  getOnePosts
+  getOnePosts,
+  removePost
 } = postController;
 
 
@@ -29,6 +30,7 @@ router.post('/newposts', newPosts);
 router.post('/publishposts', upload.single('image'), publishPosts);
 router.post('/getposts', getPosts);
 router.post('/getoneposts', getOnePosts);
+router.post('/removepost', removePost);
 
 
 module.exports = router;
