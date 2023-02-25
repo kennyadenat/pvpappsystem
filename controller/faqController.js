@@ -33,7 +33,7 @@ class FaqController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Post body payload
-   * @memberof PostController
+   * @memberof FaqController
    */
   static async newFaqs(req, res, next) {
     try {
@@ -64,7 +64,7 @@ class FaqController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Posts body payload
-   * @memberof PostController
+   * @memberof FaqController
    */
   static async getFaqs(req, res, next) {
     try {
@@ -103,8 +103,7 @@ class FaqController {
           serverErrorResponse(error, req, res, next);
         });
 
-    } catch (error) {
-      console.log(error);
+    } catch (error) {      
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
@@ -117,7 +116,7 @@ class FaqController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Posts body payload
-   * @memberof PostController
+   * @memberof FaqController
    */
   static async getOneFaqs(req, res, next) {
     try {
@@ -145,6 +144,37 @@ class FaqController {
   }
 
 
+    /**
+   * @static
+   * Gets All Template Category
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {array} Template Category
+   * @memberof FaqController
+   */
+  static async getAllFaqs(req, res, next) {
+    try {
+      return faq
+        .findAll({
+          order: [
+            ['faqtype', 'ASC'],
+          ],
+            attributes: ['id', 'question', 'faqtype', 'answers', 'tag', 'created_at'],
+        })
+        .then(response => {
+          successResponse(res, 200, 'faq', response)
+        })
+        .catch(error => {
+
+          errorResponse(res, 400, error);
+        });
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+
   /**
    * @static
    * Adds a new Posts
@@ -152,7 +182,7 @@ class FaqController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Post body payload
-   * @memberof PostController
+   * @memberof FaqController
    */
   static async updateFaq(req, res, next) {
     try {
@@ -193,7 +223,7 @@ class FaqController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Posts body payload
-   * @memberof PostController
+   * @memberof FaqController
    */
   static async removeFaq(req, res, next) {
     try {

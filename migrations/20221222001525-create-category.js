@@ -13,6 +13,7 @@ module.exports = {
           title: {
             type: Sequelize.STRING
           },
+          // infringement, ip, infringement
           resourcetype: {
             type: Sequelize.STRING
           },

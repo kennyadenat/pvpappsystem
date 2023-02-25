@@ -124,6 +124,58 @@ class PostController {
    * @returns {object} Posts body payload
    * @memberof PostController
    */
+  static async getAllPosts(req, res, next) {
+    try {
+
+      const {
+        posttype,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+
+      return post
+        .findAndCountAll({
+          where: {
+            status: 'published',
+            posttype: posttype,
+            [Op.or]: [{
+              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
+            }]
+          },
+          order: [
+            ['created_at', 'DESC'],
+          ],
+          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at', 'slug'],
+          ...pagination({
+            page,
+            size
+          }),
+        })
+        .then(response => {
+          successResponse(res, 200, 'posts', paginateCount(response, page, size));
+        })
+        .catch(error => {
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      serverErrorResponse(error, req, res, next);
+      // return next(error);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof PostController
+   */
   static async getPosts(req, res, next) {
     try {
 
@@ -199,6 +251,42 @@ class PostController {
       return next(err);
     }
   }
+
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof PostController
+   */
+  static async getOneSlug(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return post
+        .findOne({
+          where: {
+            slug: id
+          }
+        })
+        .then(response => {
+          successResponse(res, 200, 'posts', response)
+        })
+        .catch(error => {
+          errorResponse(res, 400, error);
+        });
+
+    } catch (err) {
+      return next(err);
+    }
+  }
+
 
 
   /**

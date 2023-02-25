@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.ENUM('draft', 'published', 'trash'),
     views: DataTypes.INTEGER,
     likes: DataTypes.INTEGER,
+    // category: DataTypes.STRING,
     comments: DataTypes.STRING,
     body: {
       type: DataTypes.ARRAY(DataTypes.TEXT),

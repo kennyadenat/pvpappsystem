@@ -116,9 +116,6 @@ class ArticleController {
         filter
       } = req.query;
 
-      console.log('query', req.query);
-
-
       return category
         .findAndCountAll({
           where: {
@@ -161,8 +158,6 @@ class ArticleController {
   static async updateCategory(req, res, next) {
     try {
 
-      console.log(req.body);
-
       const oneCategory = await category.findOne({
         where: {
           id: req.body.id
@@ -180,12 +175,10 @@ class ArticleController {
             successResponse(res, 204, 'article', response);
           }) // Send back the updated todo.
           .catch((error) => {
-            console.log(error);
             errorResponse(res, 400, 'There was an error processing your request');
           });
 
       } else {
-        console.log(error);
         errorResponse(res, 400, 'The post does not exist or has been removed');
       }
 
@@ -382,10 +375,7 @@ class ArticleController {
    * @memberof ArticleController
    */
   static async publishArticle(req, res, next) {
-    try {
-
-      console.log(req.body);
-
+    try {    
       const oneArticle = await article.findOne({
         where: {
           id: req.body.id
@@ -431,7 +421,7 @@ class ArticleController {
    * @param {object} res express response object
    * @param {function} next
    * @returns {object} Posts body payload
-   * @memberof PostController
+   * @memberof ArticleController
    */
   static async removeArticle(req, res, next) {
     try {
@@ -461,6 +451,79 @@ class ArticleController {
     }
   }
 
+
+  /**
+   * @static
+   * Gets All Template Category
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {array} Template Category
+   * @memberof ArticleController
+   */
+  static async getAllCategory(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return category
+        .findAll({
+          where: {
+            resourcetype: id
+          },
+          order: [
+            ['index', 'ASC'],
+          ],
+          attributes: ['id', 'title', 'resourcetype', 'subcategory'],
+        })
+        .then(response => {
+          successResponse(res, 200, 'article', response)
+        })
+        .catch(error => {
+          errorResponse(res, 400, error);
+        });
+    } catch (err) {
+      console.log(err);
+      return next(err);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Template Category
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {array} Template Category
+   * @memberof ArticleController
+   */
+  static async getArticleOne(req, res, next) {
+    try {
+
+      const {
+        id
+      } = req.query;
+
+      return article
+        .findOne({
+          where: {
+            categoryid: id
+          },
+          attributes: ['id', 'categoryid', 'status', 'body']
+        })
+        .then(response => {
+          successResponse(res, 200, 'article', response)
+        })
+        .catch(error => {
+          errorResponse(res, 400, error);
+        });
+
+    } catch (error) {
+      return next(error);
+    }
+  }
 
 }
 

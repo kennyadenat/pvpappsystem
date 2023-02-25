@@ -22,14 +22,18 @@ const {
   publishPosts,
   getPosts,
   getOnePosts,
-  removePost
+  removePost,
+  getAllPosts,
+  getOneSlug
 } = postController;
 
 
 router.post('/newposts', newPosts);
 router.post('/publishposts', upload.single('image'), publishPosts);
 router.post('/getposts', getPosts);
+router.post('/getallposts', getAllPosts);
 router.post('/getoneposts', getOnePosts);
+router.post('/getoneslug', getOneSlug);
 router.post('/removepost', removePost);
 
 

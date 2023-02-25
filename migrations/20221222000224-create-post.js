@@ -26,6 +26,9 @@ module.exports = {
           posttype: {
             type: Sequelize.STRING
           },
+          // category: {
+          //   type: Sequelize.STRING
+          // },
           status: {
             type: Sequelize.ENUM('draft', 'published', 'trash'),
             defaultValue: 'draft'

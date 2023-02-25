@@ -7,11 +7,13 @@ const {
   getFaqs,
   getOneFaqs,
   updateFaq,
-  removeFaq
+  removeFaq,
+  getAllFaqs
 } = faqController;
 
 router.post('/newfaqs', newFaqs);
 router.post('/getfaqs', getFaqs);
+router.post('/getallfaqs', getAllFaqs);
 router.post('/getonefaqs', getOneFaqs);
 router.post('/updatefaqs', updateFaq);
 router.post('/removefaq', removeFaq);

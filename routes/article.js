@@ -26,7 +26,9 @@ const {
   getOneArticle,
   publishArticle,
   removeArticle,
-  removeCategory
+  removeCategory,
+  getAllCategory,
+  getArticleOne
 } = articleController;
 
 
@@ -39,5 +41,9 @@ router.post('/getonearticle', getOneArticle);
 router.post('/publisharticle', upload.single('image'), publishArticle);
 router.post('/removearticle', removeArticle);
 router.post('/removecategory', removeCategory);
+router.post('/getallcategory', getAllCategory);
+router.post('/getarticleone', getArticleOne);
+
+
 
 module.exports = router;
