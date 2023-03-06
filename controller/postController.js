@@ -23,6 +23,10 @@ const {
   serverErrorResponse
 } = serverResponse;
 
+function removeHTMLContent(content) {
+  return content.replace(/(<([^>]+)>)/gi, '');
+}
+
 
 class PostController {
 
@@ -83,12 +87,17 @@ class PostController {
           lower: true
         });
 
+        // const oneBody = JSON.parse(req.body.body)
+        // const stripped = removeHTMLContent(oneBody[0].body);
+        // console.log(stripped);
+
         const updatedPost = {
           id: req.body.id,
           image: req.body.id + '.jpg',
           isimage: req.body.isimage,
           title: req.body.title,
           slug: req.body.slug,
+          category: req.body.category,
           posttype: req.body.posttype,
           status: req.body.status,
           tags: req.body.tags ? JSON.parse(req.body.tags) : [],
@@ -135,6 +144,7 @@ class PostController {
         filter
       } = req.query;
 
+      console.log(req.query);
 
       return post
         .findAndCountAll({
@@ -148,13 +158,14 @@ class PostController {
           order: [
             ['created_at', 'DESC'],
           ],
-          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at', 'slug'],
+          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at', 'slug', 'category'],
           ...pagination({
             page,
             size
           }),
         })
         .then(response => {
+          console.log('resp', response);
           successResponse(res, 200, 'posts', paginateCount(response, page, size));
         })
         .catch(error => {

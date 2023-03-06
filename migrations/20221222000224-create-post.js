@@ -20,15 +20,18 @@ module.exports = {
           title: {
             type: Sequelize.TEXT
           },
+          summary: {
+            type: Sequelize.TEXT
+          },
           slug: {
             type: Sequelize.TEXT
           },
           posttype: {
             type: Sequelize.STRING
           },
-          // category: {
-          //   type: Sequelize.STRING
-          // },
+          category: {
+            type: Sequelize.STRING
+          },
           status: {
             type: Sequelize.ENUM('draft', 'published', 'trash'),
             defaultValue: 'draft'
