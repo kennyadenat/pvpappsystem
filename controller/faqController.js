@@ -23,7 +23,6 @@ const {
   serverErrorResponse
 } = serverResponse;
 
-
 class FaqController {
 
   /**
