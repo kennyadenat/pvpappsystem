@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   doctrack.init({
     category: DataTypes.STRING,
+    code: DataTypes.STRING,
     count: DataTypes.INTEGER
   }, {
     sequelize,
