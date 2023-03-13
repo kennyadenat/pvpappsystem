@@ -143,9 +143,6 @@ class PostController {
         search,
         filter
       } = req.query;
-
-      console.log(req.query);
-
       return post
         .findAndCountAll({
           where: {
