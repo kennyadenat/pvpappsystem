@@ -86,6 +86,60 @@ class DocController {
     }
   }
 
+
+  /**
+   * @static
+   * Adds a new Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Post body payload
+   * @memberof DocController
+   */
+  static async getAllDocs(req, res, next) {
+    try {
+
+      const {
+        category,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      return docs
+        .findAndCountAll({
+          where: {
+            category: category,
+            status: 'active',
+            [Op.or]: [{
+              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
+            }]
+          },
+          order: [
+            ['created_at', 'ASC'],
+          ],
+          attributes: ['id', 'title', 'category', 'code', 'url', 'created_at'],
+          ...pagination({
+            page,
+            size
+          }),
+        })
+        .then(response => {
+          successResponse(res, 200, 'docs', paginateCount(response, page, size));
+        })
+        .catch(error => {
+          console.log(error);
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      serverErrorResponse(error, req, res, next);
+      // return next(error);
+    }
+  }
+
+
   /**
    * @static
    * Adds a new Posts
@@ -105,7 +159,6 @@ class DocController {
         filter
       } = req.query;
 
-
       return docs
         .findAndCountAll({
           where: {
@@ -116,7 +169,7 @@ class DocController {
           order: [
             ['created_at', 'DESC'],
           ],
-          attributes: ['id', 'title', 'category', 'code', 'url', 'created_at'],
+          attributes: ['id', 'title', 'category', 'status', 'code', 'url', 'created_at'],
           ...pagination({
             page,
             size

@@ -24,7 +24,8 @@ const {
   addDocs,
   getDocs,
   getDoc,
-  removeDoc
+  removeDoc,
+  getAllDocs
 } = docController;
 
 
@@ -32,7 +33,7 @@ router.post('/adddocs', upload.single('file'), addDocs);
 router.post('/getdocs', getDocs);
 router.post('/getdoc', getDoc);
 router.post('/removedoc', removeDoc);
-
+router.post('/getalldocs', getAllDocs);
 
 
 module.exports = router;

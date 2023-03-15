@@ -15,6 +15,12 @@ module.exports = {
     }, {
       category: 'policy',
       code: 'PVPNG_POL_',
+    }, {
+      category: 'general',
+      code: 'PVPNG_GEN_',
+    }, {
+      category: 'forms',
+      code: 'PVPNG_FORMS_',
     }], {});
   },
 

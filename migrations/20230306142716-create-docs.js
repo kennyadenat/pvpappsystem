@@ -17,6 +17,10 @@ module.exports = {
       code: {
         type: Sequelize.STRING
       },
+      status: {
+        type: Sequelize.ENUM('active', 'trash'),
+        defaultValue: 'active'
+      },
       url: {
         type: Sequelize.STRING
       },
