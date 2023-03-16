@@ -19,7 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     fullname: DataTypes.STRING,
     country: DataTypes.STRING,
     subject: DataTypes.STRING,
+    title: DataTypes.STRING,
     message: DataTypes.TEXT,
+    read: DataTypes.BOOLEAN,
+    status: DataTypes.ENUM('marked', 'unmarked', 'new'),
+    options: DataTypes.ENUM('active', 'archived', 'trash'),
+    conversations: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      defaultValue: [],
+    },
     date_treated: DataTypes.DATE
   }, {
     sequelize,

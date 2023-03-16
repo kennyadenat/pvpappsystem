@@ -26,10 +26,6 @@ const {
 } = serverResponse;
 
 
-function updateDocTracker(docs, object, res, response) {
-
-}
-
 class DocController {
 
   /**
