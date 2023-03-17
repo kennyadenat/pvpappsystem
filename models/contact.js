@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      contact.hasMany(models.conversations, {
+        foreignKey: 'contact_id',
+        as: 'conversations',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
     }
   }
   contact.init({
@@ -22,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     message: DataTypes.TEXT,
     read: DataTypes.BOOLEAN,
-    status: DataTypes.ENUM('marked', 'unmarked', 'new'),
+    status: DataTypes.ENUM('marked', 'unmarked'),
     options: DataTypes.ENUM('active', 'archived', 'trash'),
     conversations: {
       type: DataTypes.ARRAY(DataTypes.TEXT),

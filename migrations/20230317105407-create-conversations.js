@@ -1,47 +1,33 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('contacts', {
+    await queryInterface.createTable('conversations', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      email: {
-        type: Sequelize.STRING
-      },
-      ticket_number: {
-        type: Sequelize.STRING,
-        unique: true
-      },
-      phone: {
-        type: Sequelize.STRING
-      },
-      fullname: {
-        type: Sequelize.STRING
-      },
-      country: {
-        type: Sequelize.STRING
-      },
-      subject: {
-        type: Sequelize.STRING
-      },
-      title: {
-        type: Sequelize.TEXT
+      contact_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'contacts',
+          key: 'id',
+          as: 'contact_id'
+        }
       },
       message: {
         type: Sequelize.TEXT
       },
-      read: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+      sender: {
+        type: Sequelize.STRING
       },
-      closed: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+      recepient: {
+        type: Sequelize.STRING
       },
-      // marked = treated, unmarked = untreated but not new, new = unmarked and not viewed
       status: {
         type: Sequelize.ENUM('marked', 'unmarked'),
         defaultValue: 'unmarked'
@@ -49,10 +35,6 @@ module.exports = {
       options: {
         type: Sequelize.ENUM('active', 'archived', 'trash'),
         defaultValue: 'active'
-      },
-      /// fullname, message, date_sent, is_marked, is_archived, admin_name
-      date_treated: {
-        type: Sequelize.DATE
       },
       created_at: {
         allowNull: false,
@@ -67,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('contacts');
+    await queryInterface.dropTable('conversations');
   }
 };
