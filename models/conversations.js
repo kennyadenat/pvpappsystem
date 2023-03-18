@@ -21,9 +21,16 @@ module.exports = (sequelize, DataTypes) => {
   }
   conversations.init({
     contact_id: DataTypes.STRING,
+    subject: DataTypes.TEXT,
     message: DataTypes.TEXT,
     sender: DataTypes.STRING,
-    email: DataTypes.STRING
+    recipient: DataTypes.STRING,
+    email: DataTypes.STRING,
+    read: DataTypes.BOOLEAN,
+    read_date: DataTypes.DATE,
+    delivery: DataTypes.ENUM('outgoing', 'incoming'),
+    status: DataTypes.ENUM('marked', 'unmarked'),
+    options: DataTypes.ENUM('active', 'archived', 'trash'),
   }, {
     sequelize,
     modelName: 'conversations',

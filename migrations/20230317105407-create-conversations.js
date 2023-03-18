@@ -19,14 +19,31 @@ module.exports = {
           as: 'contact_id'
         }
       },
+      subject: {
+        type: Sequelize.TEXT
+      },
       message: {
         type: Sequelize.TEXT
       },
       sender: {
         type: Sequelize.STRING
       },
-      recepient: {
+      recipient: {
         type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
+      },
+      read: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      read_date: {
+        type: Sequelize.DATE,
+      },
+      delivery: {
+        type: Sequelize.ENUM('outgoing', 'incoming'),
+        defaultValue: 'outgoing'
       },
       status: {
         type: Sequelize.ENUM('marked', 'unmarked'),

@@ -7,7 +7,8 @@ const {
   newSupport,
   getSubjects,
   getSupportLists,
-  readSupportMessage
+  readSupportMessage,
+  addConversations
 } = supportController;
 
 
@@ -15,7 +16,7 @@ router.post('/newsupport', newSupport);
 router.post('/getsubjects', getSubjects);
 router.post('/getsupportlists', getSupportLists);
 router.post('/readsupportmessage', readSupportMessage);
-
+router.post('/addconversations', addConversations);
 
 
 module.exports = router;

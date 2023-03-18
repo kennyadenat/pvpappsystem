@@ -30,10 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     read: DataTypes.BOOLEAN,
     status: DataTypes.ENUM('marked', 'unmarked'),
     options: DataTypes.ENUM('active', 'archived', 'trash'),
-    conversations: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
-      defaultValue: [],
-    },
     date_treated: DataTypes.DATE
   }, {
     sequelize,

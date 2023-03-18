@@ -16,7 +16,8 @@ const {
 
 const {
   subject,
-  contact
+  contact,
+  conversations
 } = models;
 
 const {
@@ -156,7 +157,7 @@ class SupportController {
         where: {
           id: id
         },
-        attributes: ['id', 'email', 'fullname', 'subject', 'title', 'message', 'read', 'status', 'options', 'conversations', 'date_treated', 'created_at']
+        attributes: ['id', 'email', 'fullname', 'subject', 'title', 'message', 'read', 'status', 'options', 'date_treated', 'created_at']
       });
 
       if (oneSupport.dataValues.read) {
@@ -166,7 +167,7 @@ class SupportController {
         const updateSupport = {
           read: true
         };
-          
+
         return oneSupport
           .update(updateSupport, {
             fields: Object.keys(updateSupport)
@@ -181,7 +182,37 @@ class SupportController {
       }
 
     } catch (error) {
+      console.log(error);
       return next(error);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof SupportController
+   */
+  static async addConversations(req, res, next) {
+    try {
+
+      return conversations
+        .create(req.body)
+        .then((response) => {
+          successResponse(res, 200, 'support', response)
+        })
+        .catch((error) => {
+          console.log(error);
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      console.log(error);
+      return next(error);
+
     }
   }
 
