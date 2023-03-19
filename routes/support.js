@@ -8,8 +8,11 @@ const {
   getSubjects,
   getSupportLists,
   readSupportMessage,
-  addConversations
+  addConversations,
+  getGroupList,
+  getSubjectSupportLists
 } = supportController;
+
 
 
 router.post('/newsupport', newSupport);
@@ -17,6 +20,7 @@ router.post('/getsubjects', getSubjects);
 router.post('/getsupportlists', getSupportLists);
 router.post('/readsupportmessage', readSupportMessage);
 router.post('/addconversations', addConversations);
-
+router.post('/getgrouplist', getGroupList);
+router.post('/getsubjectsupportlists', getSubjectSupportLists);
 
 module.exports = router;

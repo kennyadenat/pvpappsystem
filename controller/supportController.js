@@ -157,6 +157,10 @@ class SupportController {
         where: {
           id: id
         },
+        include: [{
+          model: conversations,
+          as: 'conversations',
+        }],
         attributes: ['id', 'email', 'fullname', 'subject', 'title', 'message', 'read', 'status', 'options', 'date_treated', 'created_at']
       });
 
@@ -173,7 +177,7 @@ class SupportController {
             fields: Object.keys(updateSupport)
           })
           .then((response) => {
-            successResponse(res, 201, 'support', response);
+            successResponse(res, 201, 'support', oneSupport);
           }) // Send back the updated todo.
           .catch((error) => {
             errorResponse(res, 400, 'There was an error processing your request');
@@ -186,6 +190,7 @@ class SupportController {
       return next(error);
     }
   }
+
 
   /**
    * @static
@@ -205,14 +210,88 @@ class SupportController {
           successResponse(res, 200, 'support', response)
         })
         .catch((error) => {
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      return next(error);
+
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof SupportController
+   */
+  static async getGroupList(req, res, next) {
+    try {
+
+      const access = await contact.sequelize.query("SELECT subject, COUNT(*) AS count FROM contacts GROUP BY subject", {
+        type: contact.sequelize.QueryTypes.SELECT
+      });
+
+      successResponse(res, 200, 'support', access);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof SupportController
+   */
+  static async getSubjectSupportLists(req, res, next) {
+    try {
+
+      const {
+        subject,
+        options,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      return contact
+        .findAndCountAll({
+          where: {
+            subject: subject,
+            options: options,
+            [Op.or]: [{
+              fullname: sequelize.where(sequelize.fn('LOWER', sequelize.col('fullname')), 'LIKE', '%' + search + '%'),
+            }]
+          },
+          order: [
+            ['created_at', 'ASC'],
+          ],
+          attributes: ['id', 'email', 'phone', 'fullname', 'subject', 'title', 'read', 'status', 'options', 'created_at'],
+          ...pagination({
+            page,
+            size
+          }),
+        })
+        .then(response => {
+          successResponse(res, 200, 'support', paginateCount(response, page, size));
+        })
+        .catch(error => {
           console.log(error);
           serverErrorResponse(error, req, res, next);
         });
 
     } catch (error) {
-      console.log(error);
-      return next(error);
-
+      serverErrorResponse(error, req, res, next);
+      // return next(error);
     }
   }
 
