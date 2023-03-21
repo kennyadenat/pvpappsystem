@@ -40,6 +40,15 @@ class SupportController {
   static async newSupport(req, res, next) {
     try {
 
+
+      // create a new ticket number
+      // send an email notification to user informing them that thier message has been received and to 
+      // follow the conversation, showing their ticket number
+
+      req.body.ticket_number = randomstring.generate({
+        length: 7,
+      });
+
       return contact
         .create(req.body)
         .then((response) => {
@@ -50,7 +59,7 @@ class SupportController {
         });
 
     } catch (error) {
-      return next(error);
+      serverErrorResponse(error, req, res, next);
     }
   }
 
@@ -133,7 +142,6 @@ class SupportController {
 
     } catch (error) {
       serverErrorResponse(error, req, res, next);
-      // return next(error);
     }
   }
 
@@ -214,8 +222,7 @@ class SupportController {
         });
 
     } catch (error) {
-      return next(error);
-
+      serverErrorResponse(error, req, res, next);
     }
   }
 
@@ -237,7 +244,7 @@ class SupportController {
 
       successResponse(res, 200, 'support', access);
     } catch (error) {
-      return next(error);
+      serverErrorResponse(error, req, res, next);
     }
   }
 
@@ -292,6 +299,99 @@ class SupportController {
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
+    }
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload 
+   * @memberof SupportController
+   */
+  static async getSupportByEmail(req, res, next) {
+
+    try {
+
+      const {
+        email,
+        options,
+        page,
+        size,
+        search,
+        filter
+      } = req.query;
+
+      return contact
+        .findAndCountAll({
+          where: {
+            email: email,
+            options: options,
+            [Op.or]: [{
+              fullname: sequelize.where(sequelize.fn('LOWER', sequelize.col('fullname')), 'LIKE', '%' + search + '%'),
+            }]
+          },
+          order: [
+            ['created_at', 'ASC'],
+          ],
+          attributes: ['id', 'email', 'phone', 'fullname', 'subject', 'title', 'read', 'status', 'options', 'created_at'],
+          ...pagination({
+            page,
+            size
+          }),
+        })
+        .then(response => {
+          successResponse(res, 200, 'support', paginateCount(response, page, size));
+        })
+        .catch(error => {
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      serverErrorResponse(error, req, res, next);
+    }
+
+  }
+
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof SupportController
+   */
+  static async getSupportByTicket(req, res, next) {
+    try {
+
+      const {
+        email,
+        ticket_number
+      } = req.query;
+
+      return contact
+        .findOne({
+          where: {
+            email: email,
+            ticket_number: ticket_number
+          },
+          include: [{
+            model: conversations,
+            as: 'conversations',
+          }],
+          attributes: ['id', 'email', 'fullname', 'subject', 'title', 'message', 'read', 'status', 'options', 'date_treated', 'created_at']
+        }).then((response) => {
+          successResponse(res, 200, 'support', response)
+        })
+        .catch((error) => {
+          serverErrorResponse(error, req, res, next);
+        });
+
+    } catch (error) {
+      serverErrorResponse(error, req, res, next);
     }
   }
 

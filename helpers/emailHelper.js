@@ -35,7 +35,40 @@ class EmailHelper {
    * @memberof NewSupportConversation
    * @returns {function} - returns a function call
    */
-  static async NewSupportConversation(req) {}
+  static async NewSupportConversation(req, res) {
+
+    SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = sendinblue_api;
+
+    const urls = `${FRONTEND_URL_EMAIL_VERIFICATION}?email=${email}&token=${verifyToken}`;
+
+    const contents = ``;
+
+    new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
+      'subject': req.body.title,
+      'sender': {
+        'email': 'pvpofficeng@gmail.com',
+        'name': 'Plant Variety Protection Office'
+      },
+      'replyTo': {
+        'email': 'pvpofficeng@gmail.com',
+        'name': 'Plant Variety Protection Office'
+      },
+      'to': [{
+        'name': `${req.body.fullname}`,
+        'email': `${req.body.email}`
+      }],
+      'htmlContent': `${contents}`
+    }).then((data) => {
+      // return next({
+      //   success: data
+      // });
+    }, (error) => {
+      // return next({
+      //   err: error
+      // });
+    });
+
+  }
 
 }
 
