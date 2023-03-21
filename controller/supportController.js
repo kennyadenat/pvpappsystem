@@ -126,7 +126,7 @@ class SupportController {
           order: [
             ['created_at', 'ASC'],
           ],
-          attributes: ['id', 'email', 'phone', 'fullname', 'subject', 'title', 'read', 'status', 'options', 'created_at'],
+          attributes: ['id', 'email', 'phone', 'fullname', 'ticket_number', 'subject', 'title', 'read', 'status', 'options', 'created_at'],
           ...pagination({
             page,
             size
@@ -215,7 +215,11 @@ class SupportController {
       return conversations
         .create(req.body)
         .then((response) => {
-          successResponse(res, 200, 'support', response)
+          if (req.body.avatar === 'admin') {
+            successResponse(res, 200, 'support', response);
+          } else {
+            successResponse(res, 200, 'support', response);
+          }
         })
         .catch((error) => {
           serverErrorResponse(error, req, res, next);
