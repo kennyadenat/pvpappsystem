@@ -47,11 +47,11 @@ class FaqController {
         .then((response) => {
           successResponse(res, 200, 'faq', response)
         })
-        .catch((error) => {          
+        .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
 
-    } catch (error) {      
+    } catch (error) {
       return next(error);
     }
   }
@@ -102,7 +102,7 @@ class FaqController {
           serverErrorResponse(error, req, res, next);
         });
 
-    } catch (error) {      
+    } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
@@ -143,7 +143,7 @@ class FaqController {
   }
 
 
-    /**
+  /**
    * @static
    * Gets All Template Category
    * @param {object} req express request object
@@ -159,7 +159,7 @@ class FaqController {
           order: [
             ['faqtype', 'ASC'],
           ],
-            attributes: ['id', 'question', 'faqtype', 'answers', 'tag', 'created_at'],
+          attributes: ['id', 'question', 'faqtype', 'answers', 'tag', 'created_at'],
         })
         .then(response => {
           successResponse(res, 200, 'faq', response)
@@ -214,6 +214,7 @@ class FaqController {
       return next(error);
     }
   }
+
 
   /**
    * @static

@@ -399,6 +399,23 @@ class SupportController {
     }
   }
 
+  /**
+   * @static
+   * Gets All Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Posts body payload
+   * @memberof SupportController
+   */
+  static async getConversationStats(req, res, next) {
+    try {
+
+    } catch (error) {
+      return next(error);
+    }
+  }
+
 }
 
 module.exports = SupportController;
