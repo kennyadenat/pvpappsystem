@@ -242,7 +242,15 @@ class DocController {
           }
           return docRes
             .destroy()
-            .then(() => successResponse(res, 204, 'docs', 'Docs deleted successfully.'))
+            .then(() => {
+              const path = './public/docs/' + docRes.dataValues.url;
+              fs.unlink(path, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              successResponse(res, 204, 'docs', 'Docs deleted successfully.');
+            })
             .catch(error => {
               errorResponse(res, 400, error);
             });
