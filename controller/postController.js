@@ -1,35 +1,29 @@
-const models = require('../models');
-const paginateCount = require('../helpers/paginationHelper');
-const pagination = require('../helpers/paginateHelper');
-const serverResponse = require('../modules/serverResponse');
-var slugify = require('slugify');
+const models = require("../models");
+const paginateCount = require("../helpers/paginationHelper");
+const pagination = require("../helpers/paginateHelper");
+const serverResponse = require("../modules/serverResponse");
+var slugify = require("slugify");
+require("dotenv").config();
 
+const { Client } = require("@notionhq/client");
 
-const {
-  Op,
-  Sequelize
-} = require("sequelize");
-const {
-  sequelize
-} = require('../models');
+// Initializing a client
+const notion = new Client({
+  auth: process.env.NOTION_API,
+});
 
-const {
-  post
-} = models;
+const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require("../models");
 
-const {
-  errorResponse,
-  successResponse,
-  serverErrorResponse
-} = serverResponse;
+const { post } = models;
+
+const { errorResponse, successResponse, serverErrorResponse } = serverResponse;
 
 function removeHTMLContent(content) {
-  return content.replace(/(<([^>]+)>)/gi, '');
+  return content.replace(/(<([^>]+)>)/gi, "");
 }
 
-
 class PostController {
-
   /**
    * @static
    * Adds a new Posts
@@ -45,18 +39,17 @@ class PostController {
       const newPosts = {
         title: `${req.body.post}-${dates.toISOString()}`,
         posttype: req.body.post,
-        status: 'draft',
+        status: "draft",
       };
 
       return post
         .create(newPosts)
         .then((response) => {
-          successResponse(res, 200, 'posts', response)
+          successResponse(res, 200, "posts", response);
         })
         .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       return next(error);
     }
@@ -73,18 +66,17 @@ class PostController {
    */
   static async publishPosts(req, res, next) {
     try {
-
       const onePost = await post.findOne({
         where: {
-          id: req.body.id
+          id: req.body.id,
         },
-        attributes: ['id']
+        attributes: ["id"],
       });
 
       ///
       if (onePost) {
         req.body.slug = slugify(req.body.title, {
-          lower: true
+          lower: true,
         });
 
         // const oneBody = JSON.parse(req.body.body)
@@ -93,7 +85,7 @@ class PostController {
 
         const updatedPost = {
           id: req.body.id,
-          image: req.body.id + '.jpg',
+          image: req.body.id + ".jpg",
           isimage: req.body.isimage,
           title: req.body.title,
           slug: req.body.slug,
@@ -106,19 +98,21 @@ class PostController {
 
         return onePost
           .update(updatedPost, {
-            fields: Object.keys(updatedPost)
+            fields: Object.keys(updatedPost),
           })
           .then((response) => {
-            successResponse(res, 204, 'posts', response);
+            successResponse(res, 204, "posts", response);
           }) // Send back the updated todo.
           .catch((error) => {
-            errorResponse(res, 400, 'There was an error processing your request');
+            errorResponse(
+              res,
+              400,
+              "There was an error processing your request"
+            );
           });
-
       } else {
-        errorResponse(res, 400, 'The post does not exist or has been removed');
+        errorResponse(res, 400, "The post does not exist or has been removed");
       }
-
     } catch (error) {
       return next(error);
     }
@@ -135,40 +129,51 @@ class PostController {
    */
   static async getAllPosts(req, res, next) {
     try {
-
-      const {
-        posttype,
-        page,
-        size,
-        search,
-        filter
-      } = req.query;
+      const { posttype, page, size, search, filter } = req.query;
       return post
         .findAndCountAll({
           where: {
-            status: 'published',
+            status: "published",
             posttype: posttype,
-            [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
-            }]
+            [Op.or]: [
+              {
+                title: sequelize.where(
+                  sequelize.fn("LOWER", sequelize.col("title")),
+                  "LIKE",
+                  "%" + search + "%"
+                ),
+              },
+            ],
           },
-          order: [
-            ['created_at', 'DESC'],
+          order: [["created_at", "DESC"]],
+          attributes: [
+            "id",
+            "title",
+            "image",
+            "isimage",
+            "posttype",
+            "status",
+            "created_at",
+            "slug",
+            "category",
           ],
-          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at', 'slug', 'category'],
           ...pagination({
             page,
-            size
+            size,
           }),
         })
-        .then(response => {
-          console.log('resp', response);
-          successResponse(res, 200, 'posts', paginateCount(response, page, size));
+        .then((response) => {
+          console.log("resp", response);
+          successResponse(
+            res,
+            200,
+            "posts",
+            paginateCount(response, page, size)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
@@ -186,40 +191,48 @@ class PostController {
    */
   static async getPosts(req, res, next) {
     try {
-
-      const {
-        posttype,
-        page,
-        size,
-        search,
-        filter
-      } = req.query;
-
+      const { posttype, page, size, search, filter } = req.query;
 
       return post
         .findAndCountAll({
           where: {
             posttype: posttype,
-            [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
-            }]
+            [Op.or]: [
+              {
+                title: sequelize.where(
+                  sequelize.fn("LOWER", sequelize.col("title")),
+                  "LIKE",
+                  "%" + search + "%"
+                ),
+              },
+            ],
           },
-          order: [
-            ['created_at', 'ASC'],
+          order: [["created_at", "ASC"]],
+          attributes: [
+            "id",
+            "title",
+            "image",
+            "isimage",
+            "posttype",
+            "status",
+            "created_at",
           ],
-          attributes: ['id', 'title', 'image', 'isimage', 'posttype', 'status', 'created_at'],
           ...pagination({
             page,
-            size
+            size,
           }),
         })
-        .then(response => {
-          successResponse(res, 200, 'posts', paginateCount(response, page, size));
+        .then((response) => {
+          successResponse(
+            res,
+            200,
+            "posts",
+            paginateCount(response, page, size)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
@@ -237,29 +250,24 @@ class PostController {
    */
   static async getOnePosts(req, res, next) {
     try {
-
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return post
         .findOne({
           where: {
-            id: id
-          }
+            id: id,
+          },
         })
-        .then(response => {
-          successResponse(res, 200, 'posts', response)
+        .then((response) => {
+          successResponse(res, 200, "posts", response);
         })
-        .catch(error => {
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
-
     } catch (err) {
       return next(err);
     }
   }
-
 
   /**
    * @static
@@ -272,30 +280,24 @@ class PostController {
    */
   static async getOneSlug(req, res, next) {
     try {
-
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return post
         .findOne({
           where: {
-            slug: id
-          }
+            slug: id,
+          },
         })
-        .then(response => {
-          successResponse(res, 200, 'posts', response)
+        .then((response) => {
+          successResponse(res, 200, "posts", response);
         })
-        .catch(error => {
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
-
     } catch (err) {
       return next(err);
     }
   }
-
-
 
   /**
    * @static
@@ -308,32 +310,30 @@ class PostController {
    */
   static async removePost(req, res, next) {
     try {
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return post
         .findByPk(id)
-        .then(postRes => {
+        .then((postRes) => {
           if (!postRes) {
-            errorResponse(res, 400, 'Post Not Found');
+            errorResponse(res, 400, "Post Not Found");
           }
           return postRes
             .destroy()
-            .then(() => successResponse(res, 204, 'posts', 'Post deleted successfully.'))
-            .catch(error => {
+            .then(() =>
+              successResponse(res, 204, "posts", "Post deleted successfully.")
+            )
+            .catch((error) => {
               errorResponse(res, 400, error);
             });
         })
-        .catch(error => {
-          errorResponse(res, 400, error)
+        .catch((error) => {
+          errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
   }
-
 }
 
 module.exports = PostController;
