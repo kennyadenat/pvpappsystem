@@ -12,35 +12,26 @@ module.exports = {
             type: Sequelize.UUID,
             defaultValue: Sequelize.literal("uuid_generate_v4()"),
           },
+          image: {
+            type: Sequelize.TEXT,
+          },
+          isimage: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+          },
           title: {
             type: Sequelize.TEXT,
           },
-          header: {
+          summary: {
             type: Sequelize.TEXT,
-            defaultValue: "",
-          },
-          // body: {
-          //   // type, content, date,
-          //   type: Sequelize.ARRAY(Sequelize.TEXT),
-          //   defaultValue: [],
-          // },
-          comments: {
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-            defaultValue: [],
-          },
-          tags: {
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-            defaultValue: [],
           },
           slug: {
+            type: Sequelize.TEXT,
+          },
+          posttype: {
             type: Sequelize.STRING,
           },
           category: {
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-            defaultValue: [],
-          },
-          blog_type: {
-            //news, blogs
             type: Sequelize.STRING,
           },
           status: {
@@ -55,8 +46,20 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
           },
-          blog_date: {
+          comments: {
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
+          },
+          postdate: {
             type: Sequelize.STRING,
+          },
+          body: {
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
+          },
+          tags: {
+            type: Sequelize.ARRAY(Sequelize.TEXT),
+            defaultValue: [],
           },
           created_at: {
             allowNull: false,

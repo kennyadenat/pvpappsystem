@@ -13,13 +13,19 @@ module.exports = (sequelize, DataTypes) => {
   }
   blog.init(
     {
+      image: DataTypes.TEXT,
+      isimage: DataTypes.BOOLEAN,
       title: DataTypes.TEXT,
-      header: DataTypes.TEXT,
-      // body: {
-      //   type: DataTypes.ARRAY(DataTypes.TEXT),
-      //   defaultValue: [],
-      // },
-      comments: {
+      summary: DataTypes.TEXT,
+      slug: DataTypes.TEXT,
+      posttype: DataTypes.STRING,
+      status: DataTypes.ENUM("draft", "published", "trash"),
+      views: DataTypes.INTEGER,
+      likes: DataTypes.INTEGER,
+      category: DataTypes.STRING,
+      comments: DataTypes.STRING,
+      postdate: DataTypes.STRING,
+      body: {
         type: DataTypes.ARRAY(DataTypes.TEXT),
         defaultValue: [],
       },
@@ -27,16 +33,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.TEXT),
         defaultValue: [],
       },
-      slug: DataTypes.STRING,
-      category: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
-        defaultValue: [],
-      },
-      blog_type: DataTypes.STRING,
-      status: DataTypes.ENUM("draft", "published", "trash"),
-      views: DataTypes.INTEGER,
-      likes: DataTypes.INTEGER,
-      blog_date: DataTypes.STRING,
     },
     {
       sequelize,

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class post extends Model {
     /**
@@ -13,30 +11,33 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  post.init({
-    image: DataTypes.TEXT,
-    isimage: DataTypes.BOOLEAN,
-    title: DataTypes.TEXT,
-    summary: DataTypes.TEXT,
-    slug: DataTypes.TEXT,
-    posttype: DataTypes.STRING,
-    status: DataTypes.ENUM('draft', 'published', 'trash'),
-    views: DataTypes.INTEGER,
-    likes: DataTypes.INTEGER,
-    category: DataTypes.STRING,
-    comments: DataTypes.STRING,
-    body: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
-      defaultValue: [],
+  post.init(
+    {
+      image: DataTypes.TEXT,
+      isimage: DataTypes.BOOLEAN,
+      title: DataTypes.TEXT,
+      summary: DataTypes.TEXT,
+      slug: DataTypes.TEXT,
+      posttype: DataTypes.STRING,
+      status: DataTypes.ENUM("draft", "published", "trash"),
+      views: DataTypes.INTEGER,
+      likes: DataTypes.INTEGER,
+      category: DataTypes.STRING,
+      comments: DataTypes.STRING,
+      body: {
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        defaultValue: [],
+      },
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        defaultValue: [],
+      },
     },
-    tags: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
-      defaultValue: [],
-    },
-  }, {
-    sequelize,
-    modelName: 'post',
-    underscored: true,
-  });
+    {
+      sequelize,
+      modelName: "post",
+      underscored: true,
+    }
+  );
   return post;
 };
