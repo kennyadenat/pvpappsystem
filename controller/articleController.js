@@ -1,35 +1,18 @@
-const models = require('../models');
-const paginateCount = require('../helpers/paginationHelper');
-const pagination = require('../helpers/paginateHelper');
-const serverResponse = require('../modules/serverResponse');
-var slugify = require('slugify');
-const {
-  v4: uuidv4
-} = require('uuid');
+const models = require("../models");
+const paginateCount = require("../helpers/paginationHelper");
+const pagination = require("../helpers/paginateHelper");
+const serverResponse = require("../modules/serverResponse");
+var slugify = require("slugify");
+const { v4: uuidv4 } = require("uuid");
 
-const {
-  Op,
-  Sequelize
-} = require("sequelize");
-const {
-  sequelize
-} = require('../models');
+const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require("../models");
 
-const {
-  category,
-  resourcepost,
-  article
-} = models;
+const { category, resourcepost, article, pvptopic } = models;
 
-const {
-  errorResponse,
-  successResponse,
-  serverErrorResponse
-} = serverResponse;
-
+const { errorResponse, successResponse, serverErrorResponse } = serverResponse;
 
 class ArticleController {
-
   /**
    * @static
    * Adds a new Posts
@@ -41,39 +24,36 @@ class ArticleController {
    */
   static async newCategory(req, res, next) {
     try {
-
       const oneCount = await resourcepost.findOne({
         where: {
-          options: req.body.resourcetype
+          options: req.body.resourcetype,
         },
-        attributes: ['id', 'options', 'currentcount']
+        attributes: ["id", "options", "currentcount"],
       });
 
       if (oneCount) {
         req.body.index = oneCount.dataValues.currentcount + 1;
 
         const upRes = {
-          currentcount: oneCount.dataValues.currentcount + 1
+          currentcount: oneCount.dataValues.currentcount + 1,
         };
 
-        oneCount
-          .update(upRes, {
-            fields: Object.keys(upRes)
-          })
+        oneCount.update(upRes, {
+          fields: Object.keys(upRes),
+        });
 
         return category
           .create(req.body)
           .then((response) => {
-            successResponse(res, 200, 'article', response)
+            successResponse(res, 200, "article", response);
           })
           .catch((error) => {
             serverErrorResponse(error, req, res, next);
           });
       } else {
-
         const oneNewCount = {
           options: req.body.resourcetype,
-          currentcount: 1
+          currentcount: 1,
         };
 
         const newCount = await resourcepost.create(oneNewCount);
@@ -82,15 +62,12 @@ class ArticleController {
         return category
           .create(req.body)
           .then((response) => {
-            successResponse(res, 200, 'article', response)
+            successResponse(res, 200, "article", response);
           })
           .catch((error) => {
             serverErrorResponse(error, req, res, next);
           });
-
       }
-
-
     } catch (error) {
       return next(error);
     }
@@ -107,39 +84,47 @@ class ArticleController {
    */
   static async getCategory(req, res, next) {
     try {
-
-      const {
-        resourcetype,
-        page,
-        size,
-        search,
-        filter
-      } = req.query;
+      const { resourcetype, page, size, search, filter } = req.query;
 
       return category
         .findAndCountAll({
           where: {
             resourcetype: resourcetype,
-            [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
-            }]
+            [Op.or]: [
+              {
+                title: sequelize.where(
+                  sequelize.fn("LOWER", sequelize.col("title")),
+                  "LIKE",
+                  "%" + search + "%"
+                ),
+              },
+            ],
           },
-          order: [
-            ['index', 'ASC'],
+          order: [["index", "ASC"]],
+          attributes: [
+            "id",
+            "title",
+            "resourcetype",
+            "subcategory",
+            "index",
+            "created_at",
           ],
-          attributes: ['id', 'title', 'resourcetype', 'subcategory', 'index', 'created_at'],
           ...pagination({
             page,
-            size
+            size,
           }),
         })
-        .then(response => {
-          successResponse(res, 200, 'article', paginateCount(response, page, size));
+        .then((response) => {
+          successResponse(
+            res,
+            200,
+            "article",
+            paginateCount(response, page, size)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
@@ -157,36 +142,36 @@ class ArticleController {
    */
   static async updateCategory(req, res, next) {
     try {
-
       const oneCategory = await category.findOne({
         where: {
-          id: req.body.id
+          id: req.body.id,
         },
-        attributes: ['id']
+        attributes: ["id"],
       });
 
       ///
       if (oneCategory) {
         return oneCategory
           .update(req.body, {
-            fields: Object.keys(req.body)
+            fields: Object.keys(req.body),
           })
           .then((response) => {
-            successResponse(res, 204, 'article', response);
+            successResponse(res, 204, "article", response);
           }) // Send back the updated todo.
           .catch((error) => {
-            errorResponse(res, 400, 'There was an error processing your request');
+            errorResponse(
+              res,
+              400,
+              "There was an error processing your request"
+            );
           });
-
       } else {
-        errorResponse(res, 400, 'The post does not exist or has been removed');
+        errorResponse(res, 400, "The post does not exist or has been removed");
       }
-
     } catch (error) {
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -199,25 +184,21 @@ class ArticleController {
    */
   static async getOneCategory(req, res, next) {
     try {
-
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return category
         .findOne({
           where: {
-            id: id
+            id: id,
           },
-          attributes: ['id', 'subcategory']
+          attributes: ["id", "subcategory"],
         })
-        .then(response => {
-          successResponse(res, 200, 'article', response)
+        .then((response) => {
+          successResponse(res, 200, "article", response);
         })
-        .catch(error => {
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
-
     } catch (err) {
       return next(err);
     }
@@ -234,27 +215,31 @@ class ArticleController {
    */
   static async removeCategory(req, res, next) {
     try {
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return category
         .findByPk(id)
-        .then(categoryRes => {
+        .then((categoryRes) => {
           if (!categoryRes) {
-            errorResponse(res, 400, 'Category Not Found');
+            errorResponse(res, 400, "Category Not Found");
           }
           return categoryRes
             .destroy()
-            .then(() => successResponse(res, 204, 'article', 'Category deleted successfully.'))
-            .catch(error => {
+            .then(() =>
+              successResponse(
+                res,
+                204,
+                "article",
+                "Category deleted successfully."
+              )
+            )
+            .catch((error) => {
               errorResponse(res, 400, error);
             });
         })
-        .catch(error => {
-          errorResponse(res, 400, error)
+        .catch((error) => {
+          errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
@@ -271,12 +256,11 @@ class ArticleController {
    */
   static async newSubCategory(req, res, next) {
     try {
-
       const oneCategory = await category.findOne({
         where: {
-          id: req.body.categoryid
+          id: req.body.categoryid,
         },
-        attributes: ['id', 'subcategory', 'currentcount']
+        attributes: ["id", "subcategory", "currentcount"],
       });
 
       if (oneCategory) {
@@ -284,11 +268,13 @@ class ArticleController {
           id: uuidv4(),
           categoryid: req.body.categoryid,
           title: req.body.title,
-          index: oneCategory.dataValues.currentcount + 1
+          index: oneCategory.dataValues.currentcount + 1,
         };
 
         let newSubs = [];
-        newSubs = oneCategory.dataValues.subcategory.push(JSON.stringify(items))
+        newSubs = oneCategory.dataValues.subcategory.push(
+          JSON.stringify(items)
+        );
 
         // console.log('new subs', oneCategory.dataValues.subcategory);
 
@@ -299,23 +285,25 @@ class ArticleController {
 
         return oneCategory
           .update(updatedItems, {
-            fields: Object.keys(updatedItems)
+            fields: Object.keys(updatedItems),
           })
           .then((response) => {
-            successResponse(res, 200, 'article', response);
+            successResponse(res, 200, "article", response);
           }) // Send back the updated todo.
           .catch((error) => {
             console.log(error);
-            errorResponse(res, 400, 'There was an error processing your request');
+            errorResponse(
+              res,
+              400,
+              "There was an error processing your request"
+            );
           });
       }
-
     } catch (error) {
       console.log(error);
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -327,39 +315,32 @@ class ArticleController {
    * @memberof PostController
    */
   static async getOneArticle(req, res, next) {
-
     try {
+      const { id } = req.query;
 
-      const {
-        id
-      } = req.query;
-
-      const oneArticle = await article.findOne({
+      const oneArticle = await pvptopic.findOne({
         where: {
-          categoryid: id
+          categoryid: id,
         },
-        attributes: ['id', 'categoryid', 'status', 'body']
+        attributes: ["id", "title", "categoryid", "status", "body"],
       });
 
       if (oneArticle) {
-        successResponse(res, 200, 'article', oneArticle);
+        successResponse(res, 200, "article", oneArticle);
       } else {
-
         const items = {
-          categoryid: id
+          categoryid: id,
         };
 
-        return article
+        return pvptopic
           .create(items)
           .then((response) => {
-            successResponse(res, 200, 'article', response)
+            successResponse(res, 200, "article", response);
           })
           .catch((error) => {
             serverErrorResponse(error, req, res, next);
           });
-
       }
-
     } catch (error) {
       return next(error);
     }
@@ -375,44 +356,48 @@ class ArticleController {
    * @memberof ArticleController
    */
   static async publishArticle(req, res, next) {
-    try {    
-      const oneArticle = await article.findOne({
+    try {
+      const oneArticle = await pvptopic.findOne({
         where: {
-          id: req.body.id
+          id: req.body.id,
         },
-        attributes: ['id']
+        attributes: ["id"],
       });
+
+      console.log("body", req.body);
 
       if (oneArticle) {
         const updatedArticle = {
           id: req.body.id,
           categoryid: req.body.isimage,
           status: req.body.status,
+          title: req.body.title,
           body: req.body.body ? JSON.parse(req.body.body) : [],
         };
 
         return oneArticle
           .update(updatedArticle, {
-            fields: Object.keys(updatedArticle)
+            fields: Object.keys(updatedArticle),
           })
           .then((response) => {
-            successResponse(res, 204, 'article', response);
+            successResponse(res, 204, "article", response);
           }) // Send back the updated todo.
           .catch((error) => {
             console.log(error);
-            errorResponse(res, 400, 'There was an error processing your request');
+            errorResponse(
+              res,
+              400,
+              "There was an error processing your request"
+            );
           });
-
       } else {
-        errorResponse(res, 400, 'The post does not exist or has been removed');
+        errorResponse(res, 400, "The post does not exist or has been removed");
       }
-
     } catch (error) {
       console.log(error);
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -425,32 +410,35 @@ class ArticleController {
    */
   static async removeArticle(req, res, next) {
     try {
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return category
         .findByPk(id)
-        .then(categoryRes => {
+        .then((categoryRes) => {
           if (!categoryRes) {
-            errorResponse(res, 400, 'Category Not Found');
+            errorResponse(res, 400, "Category Not Found");
           }
           return categoryRes
             .destroy()
-            .then(() => successResponse(res, 204, 'article', 'Category deleted successfully.'))
-            .catch(error => {
+            .then(() =>
+              successResponse(
+                res,
+                204,
+                "article",
+                "Category deleted successfully."
+              )
+            )
+            .catch((error) => {
               errorResponse(res, 400, error);
             });
         })
-        .catch(error => {
-          errorResponse(res, 400, error)
+        .catch((error) => {
+          errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -463,29 +451,23 @@ class ArticleController {
    */
   static async getAllCategory(req, res, next) {
     try {
-
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return category
         .findAll({
           where: {
-            resourcetype: id
+            resourcetype: id,
           },
-          order: [
-            ['index', 'ASC'],
-          ],
-          attributes: ['id', 'title', 'resourcetype', 'subcategory'],
+          order: [["index", "ASC"]],
+          attributes: ["id", "title", "resourcetype", "subcategory"],
         })
-        .then(response => {
-          successResponse(res, 200, 'article', response)
+        .then((response) => {
+          successResponse(res, 200, "article", response);
         })
-        .catch(error => {
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
     } catch (err) {
-      console.log(err);
       return next(err);
     }
   }
@@ -501,30 +483,25 @@ class ArticleController {
    */
   static async getArticleOne(req, res, next) {
     try {
+      const { id } = req.query;
 
-      const {
-        id
-      } = req.query;
-
-      return article
+      return pvptopic
         .findOne({
           where: {
-            categoryid: id
+            categoryid: id,
           },
-          attributes: ['id', 'categoryid', 'status', 'body']
+          attributes: ["id", "categoryid", "title", "status", "body"],
         })
-        .then(response => {
-          successResponse(res, 200, 'article', response)
+        .then((response) => {
+          successResponse(res, 200, "article", response);
         })
-        .catch(error => {
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
   }
-
 }
 
 module.exports = ArticleController;

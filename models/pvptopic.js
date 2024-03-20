@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class article extends Model {
+  class pvptopic extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  article.init(
+  pvptopic.init(
     {
       categoryid: DataTypes.TEXT,
       status: DataTypes.ENUM("draft", "published", "trash"),
@@ -19,12 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.TEXT),
         defaultValue: [],
       },
+      title: DataTypes.TEXT,
     },
     {
       sequelize,
-      modelName: "article",
+      modelName: "pvptopic",
       underscored: true,
     }
   );
-  return article;
+  return pvptopic;
 };
