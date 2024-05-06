@@ -1,33 +1,18 @@
-const models = require('../models');
-const paginateCount = require('../helpers/paginationHelper');
-const pagination = require('../helpers/paginateHelper');
-const serverResponse = require('../modules/serverResponse');
+const models = require("../models");
+const paginateCount = require("../helpers/paginationHelper");
+const pagination = require("../helpers/paginateHelper");
+const serverResponse = require("../modules/serverResponse");
 var randomstring = require("randomstring");
-var fs = require('fs');
+var fs = require("fs");
 
+const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require("../models");
 
-const {
-  Op,
-  Sequelize
-} = require("sequelize");
-const {
-  sequelize
-} = require('../models');
+const { docs, doctrack } = models;
 
-const {
-  docs,
-  doctrack
-} = models;
-
-const {
-  errorResponse,
-  successResponse,
-  serverErrorResponse
-} = serverResponse;
-
+const { errorResponse, successResponse, serverErrorResponse } = serverResponse;
 
 class DocController {
-
   /**
    * @static
    * Adds a new Posts
@@ -39,12 +24,11 @@ class DocController {
    */
   static async addDocs(req, res, next) {
     try {
-
       const oneDoc = await doctrack.findOne({
         where: {
-          category: req.body.category
+          category: req.body.category,
         },
-        attributes: ['id', 'category', 'code', 'count'],
+        attributes: ["id", "category", "code", "count"],
       });
 
       if (oneDoc) {
@@ -53,35 +37,90 @@ class DocController {
           title: req.body.title,
           category: req.body.category,
           url: req.body.url[0],
-          code: 'PVPNG_0001'
+          code: "PVPNG_0001",
         };
 
-        newFile['code'] = oneDoc.dataValues.code + prevCount;
+        newFile["code"] = oneDoc.dataValues.code + prevCount;
         const upTrack = {
-          count: prevCount
+          count: prevCount,
         };
 
-        oneDoc
-          .update(upTrack, {
-            fields: Object.keys(upTrack)
-          });
+        oneDoc.update(upTrack, {
+          fields: Object.keys(upTrack),
+        });
 
         return docs
           .create(newFile)
           .then((response) => {
-            successResponse(res, 204, 'docs', "processing successful");
+            successResponse(res, 204, "docs", "processing successful");
           })
           .catch((error) => {
             serverErrorResponse(error, req, res, next);
           });
-
-      } else {}
-
+      } else {
+      }
     } catch (error) {
       return next(error);
     }
   }
 
+  /**
+   * @static
+   * Adds a new Posts
+   * @param {object} req express request object
+   * @param {object} res express response object
+   * @param {function} next
+   * @returns {object} Post body payload
+   * @memberof DocController
+   */
+  static async updateDocs(req, res, next) {
+    try {
+      const oneDoc = await docs.findOne({
+        where: {
+          id: req.body.id,
+        },
+        attributes: ["id", "category"],
+      });
+
+      if (oneDoc) {
+        const updateFile = {
+          title: req.body.title,
+          category: req.body.category,
+          url: req.body.url[0],
+        };
+
+        if (req.body.isimage === "true") {
+          updateFile["url"] = req.body.url[0];
+        } else {
+          updateFile["url"] = req.body.url;
+        }
+
+        if (oneDoc.dataValues.category === req.body.category) {
+          updateFile["code"] = req.body.code;
+        } else {
+          const oneTrack = await doctrack.findOne({
+            where: {
+              category: req.body.category,
+            },
+            attributes: ["id", "category", "code", "count"],
+          });
+          const prevCount = oneTrack.dataValues.count + 1;
+          updateFile["code"] = oneTrack.dataValues.code + prevCount;
+        }
+        return oneDoc
+          .update(updateFile, {
+            fields: Object.keys(updateFile),
+          })
+          .then((response) => {
+            successResponse(res, 200, "posts", response);
+          });
+      } else {
+        errorResponse(res, 400, "Document not found");
+      }
+    } catch (error) {
+      return next(error);
+    }
+  }
 
   /**
    * @static
@@ -94,47 +133,47 @@ class DocController {
    */
   static async getAllDocs(req, res, next) {
     try {
-
-      const {
-        category,
-        page,
-        size,
-        search,
-        filter
-      } = req.query;
+      const { category, page, size, search, filter } = req.query;
 
       return docs
         .findAndCountAll({
           where: {
             category: category,
-            status: 'active',
-            [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
-            }]
+            status: "active",
+            [Op.or]: [
+              {
+                title: sequelize.where(
+                  sequelize.fn("LOWER", sequelize.col("title")),
+                  "LIKE",
+                  "%" + search + "%"
+                ),
+              },
+            ],
           },
-          order: [
-            ['created_at', 'ASC'],
-          ],
-          attributes: ['id', 'title', 'category', 'code', 'url', 'created_at'],
+          order: [["created_at", "ASC"]],
+          attributes: ["id", "title", "category", "code", "url", "created_at"],
           ...pagination({
             page,
-            size
+            size,
           }),
         })
-        .then(response => {
-          successResponse(res, 200, 'docs', paginateCount(response, page, size));
+        .then((response) => {
+          successResponse(
+            res,
+            200,
+            "docs",
+            paginateCount(response, page, size)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
   }
-
 
   /**
    * @static
@@ -147,44 +186,53 @@ class DocController {
    */
   static async getDocs(req, res, next) {
     try {
-
-      const {
-        page,
-        size,
-        search,
-        filter
-      } = req.query;
+      const { page, size, search, filter } = req.query;
 
       return docs
         .findAndCountAll({
           where: {
-            [Op.or]: [{
-              title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + search + '%'),
-            }]
+            [Op.or]: [
+              {
+                title: sequelize.where(
+                  sequelize.fn("LOWER", sequelize.col("title")),
+                  "LIKE",
+                  "%" + search + "%"
+                ),
+              },
+            ],
           },
-          order: [
-            ['created_at', 'DESC'],
+          order: [["created_at", "DESC"]],
+          attributes: [
+            "id",
+            "title",
+            "category",
+            "status",
+            "code",
+            "url",
+            "created_at",
           ],
-          attributes: ['id', 'title', 'category', 'status', 'code', 'url', 'created_at'],
           ...pagination({
             page,
-            size
+            size,
           }),
         })
-        .then(response => {
-          successResponse(res, 200, 'docs', paginateCount(response, page, size));
+        .then((response) => {
+          successResponse(
+            res,
+            200,
+            "docs",
+            paginateCount(response, page, size)
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           serverErrorResponse(error, req, res, next);
         });
-
     } catch (error) {
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
   }
-
 
   /**
    * @static
@@ -197,27 +245,21 @@ class DocController {
    */
   static async getDoc(req, res, next) {
     try {
-
       return doctrack
         .findAll({
-          order: [
-            ['category', 'ASC'],
-          ],
-          attributes: ['id', 'category'],
+          order: [["category", "ASC"]],
+          attributes: ["id", "category"],
         })
-        .then(response => {
-          successResponse(res, 200, 'docs', response)
+        .then((response) => {
+          successResponse(res, 200, "docs", response);
         })
-        .catch(error => {
-
+        .catch((error) => {
           errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
   }
-
 
   /**
    * @static
@@ -230,40 +272,36 @@ class DocController {
    */
   static async removeDoc(req, res, next) {
     try {
-      const {
-        id
-      } = req.query;
+      const { id } = req.query;
 
       return docs
         .findByPk(id)
-        .then(docRes => {
+        .then((docRes) => {
           if (!docRes) {
-            errorResponse(res, 400, 'Doc Not Found');
+            errorResponse(res, 400, "Doc Not Found");
           }
           return docRes
             .destroy()
             .then(() => {
-              const path = './public/docs/' + docRes.dataValues.url;
+              const path = "./public/docs/" + docRes.dataValues.url;
               fs.unlink(path, (err) => {
                 if (err) {
                   console.log(err);
                 }
               });
-              successResponse(res, 204, 'docs', 'Docs deleted successfully.');
+              successResponse(res, 204, "docs", "Docs deleted successfully.");
             })
-            .catch(error => {
+            .catch((error) => {
               errorResponse(res, 400, error);
             });
         })
-        .catch(error => {
-          errorResponse(res, 400, error)
+        .catch((error) => {
+          errorResponse(res, 400, error);
         });
-
     } catch (error) {
       return next(error);
     }
   }
-
 }
 
 module.exports = DocController;
