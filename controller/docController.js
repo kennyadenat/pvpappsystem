@@ -12,6 +12,8 @@ const { docs, doctrack } = models;
 
 const { errorResponse, successResponse, serverErrorResponse } = serverResponse;
 
+const imageUploads = require("../helpers/imageUpload");
+
 class DocController {
   /**
    * @static
@@ -31,34 +33,40 @@ class DocController {
         attributes: ["id", "category", "code", "count"],
       });
 
-      if (oneDoc) {
-        const prevCount = oneDoc.dataValues.count + 1;
-        const newFile = {
-          title: req.body.title,
-          category: req.body.category,
-          url: req.body.url[0],
-          code: "PVPNG_0001",
-        };
+      imageUploads(req.file, (image) => {
+        if (image.err) {
+          errorResponse(res, 400, "Could not process your request");
+        } else {
+          if (oneDoc) {
+            const prevCount = oneDoc.dataValues.count + 1;
+            const newFile = {
+              title: req.body.title,
+              category: req.body.category,
+              url: image.data,
+              code: "PVPNG_0001",
+            };
 
-        newFile["code"] = oneDoc.dataValues.code + prevCount;
-        const upTrack = {
-          count: prevCount,
-        };
+            newFile["code"] = oneDoc.dataValues.code + prevCount;
+            const upTrack = {
+              count: prevCount,
+            };
 
-        oneDoc.update(upTrack, {
-          fields: Object.keys(upTrack),
-        });
+            oneDoc.update(upTrack, {
+              fields: Object.keys(upTrack),
+            });
 
-        return docs
-          .create(newFile)
-          .then((response) => {
-            successResponse(res, 204, "docs", "processing successful");
-          })
-          .catch((error) => {
-            serverErrorResponse(error, req, res, next);
-          });
-      } else {
-      }
+            return docs
+              .create(newFile)
+              .then((response) => {
+                successResponse(res, 204, "docs", "processing successful");
+              })
+              .catch((error) => {
+                serverErrorResponse(error, req, res, next);
+              });
+          } else {
+          }
+        }
+      });
     } catch (error) {
       return next(error);
     }
@@ -90,7 +98,13 @@ class DocController {
         };
 
         if (req.body.isimage === "true") {
-          updateFile["url"] = req.body.url[0];
+          imageUploads(req.file, (image) => {
+            if (image.err) {
+              errorResponse(res, 400, "Could not process your request");
+            } else {
+              updateFile["url"] = image.data;
+            }
+          });
         } else {
           updateFile["url"] = req.body.url;
         }
