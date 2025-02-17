@@ -191,6 +191,7 @@ class PostController {
           serverErrorResponse(error, req, res, next);
         });
     } catch (error) {
+      console.log(error);
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
