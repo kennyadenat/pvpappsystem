@@ -14,10 +14,17 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "govgrrrp",
-    "password": "ZqbaYwx3q7_7MElbLErQldgobidFd7SS",
-    "database": "govgrrrp",
-    "host": "batyr.db.elephantsql.com",
-    "dialect": "postgres"
+    "username": "avnadmin",
+    "password": "AVNS_W2kD1dNKrc_B8yLniP_",
+    "database": "defaultdb",
+    "host": "pvpserver-kennyadenat09-1264.b.aivencloud.com",
+    "dialect": "postgres",
+    "port": "21218",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
