@@ -68,6 +68,7 @@ class PostController {
           serverErrorResponse(error, req, res, next);
         });
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -130,6 +131,7 @@ class PostController {
         errorResponse(res, 400, "The post does not exist or has been removed");
       }
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -188,6 +190,7 @@ class PostController {
           );
         })
         .catch((error) => {
+          console.log(error);
           serverErrorResponse(error, req, res, next);
         });
     } catch (error) {
@@ -252,6 +255,7 @@ class PostController {
           serverErrorResponse(error, req, res, next);
         });
     } catch (error) {
+      console.log(error);
       serverErrorResponse(error, req, res, next);
       // return next(error);
     }
